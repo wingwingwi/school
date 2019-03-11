@@ -180,7 +180,7 @@ export default class DateModel extends Component {
           justifyContent: "center"
         }}
       >
-        <ScrollView style={{height:size.width) / 10}}>
+        <ScrollView style={{height:size.width / 10}}>
           {hours.map((item, idx) => {
             return <Text>11</Text>;
           })}
