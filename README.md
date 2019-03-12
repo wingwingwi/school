@@ -13,3 +13,9 @@ Android 打包命令：./gradlew assembleRelease
 
 react-native link 链接项目native资源（慎用）
 
+
+界面蓝狐地址：
+https://lanhuapp.com/web/#/item/project/board?pid=a3cfbf92-81ef-44e9-8ef1-bc48631a1ae9
+
+接口文档地址：
+https://a1.hflxkj.top/campusApi/swagger-ui.html
