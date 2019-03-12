@@ -223,8 +223,8 @@ module.exports = {
     var bigM = [1, 3, 5, 7, 8, 10, 12];
     var days = 30;
     var days2 = 30;
-    console.log(dateStr);
-    console.log(dateStr2);
+    // console.log(dateStr);
+    // console.log(dateStr2);
     if (bigM.indexOf(month) > -1) {
       dateStr2 = year + "-" + month + "-31 00:01:00"; //一个月的最后一天
       days = 31;
@@ -244,7 +244,7 @@ module.exports = {
         days2 = 29;
       }
     }
-    console.log(days + "--" + days2);
+    //console.log(days + "--" + days2);
     var dateOne = getDateTime(dateStr);
     var dateTwo = getDateTime(dateStr2);
     var weekO = dateOne.getDay(); //0-6
@@ -256,7 +256,7 @@ module.exports = {
       monthDays=42;
     }
     var list = [];
-    console.log(weekO + "--" + weekT + "--" + monthDays);
+    //console.log(weekO + "--" + weekT + "--" + monthDays);
     for (var i = 0; i < monthDays; i++) {
       var item = {};
       if (i < weekO) {

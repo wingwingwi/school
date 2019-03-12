@@ -13,6 +13,7 @@ import TextBar from "../../component/TextBar";
 import NextView from "../../component/NextView";
 import ImgsView from "../../component/ImgsView";
 import CheckView from "../../component/CheckView";
+import DateModel from "../../model/DateModel";
 
 
 /**
@@ -22,7 +23,7 @@ export default class ResumeStudy extends Component<Props> {
     constructor(props) {
         super(props);
         this.state = {//设置初值
-            tab: 0,  inpatient: false
+            tab: 0, inpatient: false, showTime: false, resumeTime: ''
         };
     }
 
@@ -34,6 +35,12 @@ export default class ResumeStudy extends Component<Props> {
                     this.setState({tab: index})
                 }}/>
                 {this.state.tab == 0 ? this.leave() : this.sickLeave()}
+                <DateModel show={this.state.showTime} closeModal={(date) => {
+                    var item = {}
+                    if (date) item.resumeTime = date
+                    item.showTime = false;
+                    this.setState(item);
+                }}/>
             </View>);
     }
 
@@ -41,8 +48,7 @@ export default class ResumeStudy extends Component<Props> {
         return <ScrollView contentContainerStyle={{flex: 1, alignItems: 'center'}}>
             <View style={{height: 10}}/>
             <View style={{width: size.width}}>
-                {NextView.getSettingImgItemL(() => {
-                }, "结束时间", undefined, "请选择", true, true)}
+                {NextView.getSettingImgItemS(() => this.setState({showTime: true}), "结束时间", this.state.resumeTime, true, true, "请选择")}
                 <View style={{height: 10}}/>
                 {NextView.getSettingImgItemL(() => {
                 }, "备注", undefined, "", true, false)}
@@ -71,7 +77,7 @@ export default class ResumeStudy extends Component<Props> {
         return <ScrollView contentContainerStyle={{flex: 1, alignItems: 'center'}}>
             <View style={{width: size.width}}>
                 <CheckView title={"是否痊愈"} style={{padding: 10, marginTop: 5}}/>
-                <CheckView title={"是否有医院证明"} style={{padding: 10,paddingTop:0,marginTop:5}}
+                <CheckView title={"是否有医院证明"} style={{padding: 10, paddingTop: 0, marginTop: 5}}
                            changeCheck={(check) => this.setState({inpatient: check})}/>
                 {this.state.inpatient ?
                     <Text style={{backgroundColor: '#fff', padding: 10, width: size.width}}>上传病例以及相关材料</Text> : null}
