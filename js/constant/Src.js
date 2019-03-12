@@ -15,6 +15,7 @@ const Src = {
     banzhurenxiaoxi_btn: require('../../res/icon/banzhurenxiaoxi_btn.png'),
     gerenxiaoxi_btn: require('../../res/icon/gerenxiaoxi_btn.png'),
     xitongxiaoxi_btn: require('../../res/icon/xitongxiaoxi_btn.png'),
+    gerendangan_icon: require('../../res/icon/gerendangan_icon.png'),
 
     wodebenjing_pic: require('../../res/icon/wodebenjing_pic.png'),
     banner_pic: require('../../res/icon/banner_pic.png'),

@@ -1,0 +1,80 @@
+/*!
+ *
+ * 服务URL
+ */
+
+var PRD = 1, STG = 2;//服务器环境设置
+var BDBaseUrl = '';//基础设定
+let ENVIROMENT = PRD;//设置信息
+
+switch (ENVIROMENT) {
+    case PRD :
+        BDBaseUrl = 'https://a1.hflxkj.top/campusApi'
+        break;
+    case STG:
+        BDBaseUrl = 'https://a1.hflxkj.top/campusApi'
+        break;
+}
+
+
+
+module.exports = {
+    BDBaseUrl: BDBaseUrl,
+    IMG_URL: '',
+    /**1.关于我们 POST*/
+    URL_LIST: BDBaseUrl + "/dic/about",
+    /**2.首页广告图查询  POST*/
+    URL_: BDBaseUrl + "/dic/banners",
+    /**2.班级查询  POST*/
+    URL_: BDBaseUrl + "/dic/queryClass",
+    /**2.查询主要症状或疾病名称  POST*/
+    URL_: BDBaseUrl + "/dic/queryDisease",
+    /**2.查询班主任快捷消息模板  POST*/
+    URL_: BDBaseUrl + "/dic/queryNoteTemplate",
+    /**2. 学校查询 POST*/
+    URL_: BDBaseUrl + "/dic/querySchool",
+
+// 用户管理
+// 个人中心/学生认证/短信/登陆/注册/意见反馈等
+    /**2.意见反馈  POST*/
+    URL_: BDBaseUrl + "/member/addOpinion",
+    /**2.学生认证  POST*/
+    URL_: BDBaseUrl + "/member/addStudent",
+    /**2.用户登陆  POST*/
+    URL_: BDBaseUrl + "/member/doLogin",
+    /**2.个人账号信息  POST*/
+    URL_: BDBaseUrl + "/member/myData",
+    /**2.新用户注册  POST*/
+    URL_: BDBaseUrl + "/member/register",
+    /**2.获取手机验证码  POST*/
+    URL_: BDBaseUrl + "/member/sendCode",
+    /**2.修改个人资料  POST*/
+    URL_: BDBaseUrl + "/member/updateMember",
+    /**2.修改密码  POST*/
+    URL_: BDBaseUrl + "/member/updatePwd",
+
+// 资讯管理
+// 对资讯的管理
+    /**2.去评论  POST*/
+    URL_: BDBaseUrl + "/news/addComment",
+    /**2. 查询评论列表 POST*/
+    URL_: BDBaseUrl + "/news/queryComment",
+    /**2.查询资讯列表  POST*/
+    URL_: BDBaseUrl + "/news/queryPage",
+    /**2.点赞/取消点赞  POST*/
+    URL_: BDBaseUrl + "/news/thumbs",
+    /**2.查询资讯详情  POST*/
+    URL_: BDBaseUrl + "/news/toDetail",
+
+// 附件管理
+// File Controller
+    /**2.文件上传  POST*/
+    URL_: BDBaseUrl + "/file/upload",
+    /**2.  POST*/
+    URL_: BDBaseUrl + "",
+    /**2.  POST*/
+    URL_: BDBaseUrl + "",
+
+
+};
+
