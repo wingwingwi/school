@@ -59,7 +59,7 @@ module.exports = {
     /**2. 查询评论列表 POST*/
     URL_: BDBaseUrl + "/news/queryComment",
     /**2.查询资讯列表  POST*/
-    URL_: BDBaseUrl + "/news/queryPage",
+    URL_QUERY_PAGE: BDBaseUrl + "/news/queryPage",
     /**2.点赞/取消点赞  POST*/
     URL_: BDBaseUrl + "/news/thumbs",
     /**2.查询资讯详情  POST*/
@@ -69,6 +69,10 @@ module.exports = {
 // File Controller
     /**2.文件上传  POST*/
     URL_: BDBaseUrl + "/file/upload",
+    /**2.更新个人档案  POST*/
+    URL_: BDBaseUrl + "/archives/addArchives",
+    /**2.个人档案查询  POST*/
+    URL_MY_ARCHIVES: BDBaseUrl + "/archives/myArchives",
     /**2.  POST*/
     URL_: BDBaseUrl + "",
     /**2.  POST*/

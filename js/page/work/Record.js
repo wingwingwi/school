@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import {View, Text, StyleSheet, Image, TextInput, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, Image, TextInput, ScrollView, InteractionManager} from 'react-native';
 import {Actions} from 'react-native-router-flux';
 import {showMsg, size} from '../../utils/Util';
 import {Provider, Toast} from '@ant-design/react-native';
@@ -10,6 +10,8 @@ import EditView from "../../component/EditView";
 import Button from "../../component/Button";
 import LinearGradient from "react-native-linear-gradient";
 import NextView from "../../component/NextView";
+import {postCache} from "../../utils/Resquest";
+import {URL_MY_ARCHIVES} from "../../constant/Url";
 
 var data = [{name: '身高(cm)', value: '180', child: []},
     {name: '体重(kg)', value: '75', child: []},
@@ -68,6 +70,20 @@ export default class Record extends Component<Props> {
                     <View style={{height: 40}}/>
                 </ScrollView>
             </View>);
+    }
+
+
+    componentDidMount() {
+        InteractionManager.runAfterInteractions(() => {
+            this.loadKey = showMsg("获取个人档案中...", 3)
+            postCache(URL_MY_ARCHIVES, undefined, (data) => {
+                //this.setState({phone: data})
+                showMsg('', this.loadKey)
+            }, false, (error) => {
+                showMsg('', this.loadKey, 'error')
+            })
+        })
+
     }
 
 

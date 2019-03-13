@@ -25,9 +25,9 @@ export default class AmendPwd extends Component<Props> {
     render() {
         return (
             <View style={{flex: 1}}>
-                <NarBar title={"修改密码"} onSelect={()=>Actions.pop()}/>
+                <NarBar title={"修改密码"} onSelect={() => Actions.pop()}/>
                 <View style={{alignItems: 'center', width: size.width, flex: 1}}>
-                    <View style={{backgroundColor:'#fff'}}>
+                    <View style={{backgroundColor: '#fff'}}>
                         {this.accountView()}
                         <View style={{width: size.width, height: 1, marginTop: 10, backgroundColor: '#DBDBDB'}}/>
                         {this.codeView()}
@@ -46,12 +46,13 @@ export default class AmendPwd extends Component<Props> {
                                             justifyContent: 'center',
                                             alignItems: 'center'
                                         }}>
-                            <Text style={{color: '#fff', fontSize: 18}}>注册</Text>
+                            <Text style={{color: '#fff', fontSize: 18}}>修改密码</Text>
                         </LinearGradient>
                     </Button>
                 </View>
             </View>);
     }
+
     accountView() {
         return <View style={styles.lineView}>
             <Text style={styles.lineText}>手机号</Text>
@@ -85,6 +86,7 @@ export default class AmendPwd extends Component<Props> {
             </Button>
         </View>
     }
+
     amend() {
         let passWord = this.mPwd.text();
         let userName = this.mAccount.text();
@@ -98,13 +100,13 @@ export default class AmendPwd extends Component<Props> {
         } else {
             this.loadKey = showMsg("修改中...", 3)
             postCache(URL_UPDATE, {userName: userName, passWord: passWord}, (data) => {
-                showMsg('',this.loadKey);//关闭
+                showMsg('', this.loadKey);//关闭
                 showMsg("修改成功", 1)
                 setTimeout(() => {
                     Actions.pop()
                 }, 800)
             }, false, (error) => {
-                showMsg('',this.loadKey);//关闭
+                showMsg('', this.loadKey);//关闭
                 showMsg(error, 2)
             })
         }
@@ -115,14 +117,16 @@ export default class AmendPwd extends Component<Props> {
         if (!isNotEmpty(userName)) {
             showMsg('请输入手机号码')
         } else {
-            this.loadKey=showMsg("短信发送中...", 3)
-            postCache(URL_SEND_CODE, {mobile : userName}, (data) => {
-                showMsg('',this.loadKey);;//关闭
+            this.loadKey = showMsg("短信发送中...", 3)
+            postCache(URL_SEND_CODE, {mobile: userName}, (data) => {
+                showMsg('', this.loadKey);
+                ;//关闭
                 showMsg("短信发送成功", 1)
-                this.smsCode=data
+                this.smsCode = data
                 this.startTimeCount()
             }, false, (error) => {
-                showMsg('',this.loadKey);;//关闭
+                showMsg('', this.loadKey);
+                ;//关闭
                 showMsg(error, 2)
             })
         }

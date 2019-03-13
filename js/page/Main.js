@@ -14,7 +14,7 @@ import BListView from "../component/BListView";
 import Swiper from 'react-native-swiper'
 import src from '../constant/Src'
 import {size} from '../utils/Util'
-import {URL_LIST, URL_BANNERS} from "../constant/Url";
+import {URL_LIST, URL_BANNERS, URL_QUERY_PAGE} from "../constant/Url";
 
 /**
  *
@@ -44,11 +44,31 @@ export default class Main extends Component<Props> {
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
             this.request();
+            this.requestList(true, 1)
         })
     }
-    request(){
+
+    request() {
         postCache(URL_BANNERS, undefined, (data) => {
             this.setState({phone: data})
+        })
+    }
+
+    requestList(isShow, page) {
+        this.page = page;
+        if (isShow)
+            this.loadKey = showMsg("加载中...", 3)
+        postCache(URL_QUERY_PAGE, {limit: 20, page: this.page}, (data) => {
+            this.setState({list: data})
+            if (isShow)
+                showMsg('', this.loadKey)
+            this.listView.setRefreshing(false);
+        }, this.page == 1, (error) => {
+            if (isShow)
+                showMsg('', this.loadKey, error)
+            else
+                showMsg(error)
+            this.listView.setRefreshing(false);
         })
     }
 
@@ -149,9 +169,7 @@ export default class Main extends Component<Props> {
 
     /**头部请求*/
     _get(isShow) {
-        setTimeout(() => {
-            this.listView.setRefreshing(false);
-        }, 1000);
+        this.requestList(isShow, 1)
     }
 
     /**即将挂载-处理参数*/

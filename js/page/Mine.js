@@ -63,6 +63,5 @@ export default class Mine extends Component<Props> {
             }, true, (error) => {
             })
         })
-
     }
 }
