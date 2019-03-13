@@ -2,14 +2,15 @@ import React, {Component} from 'react';
 
 import {
     View, Text, StyleSheet, ScrollView, RefreshControl, Image,
-    TouchableOpacity, ImageBackground, NativeModules
+    TouchableOpacity, ImageBackground, NativeModules, InteractionManager
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
 import Button from "../component/Button";
 import {size, showMsg, post} from '../utils/Util'
-import {URL_LIST} from '../constant/Url'
+import {URL_LIST, URL_MY_DATA} from '../constant/Url'
 import src from '../constant/Src'
 import NextView from "../component/NextView";
+import {postCache} from "../utils/Resquest";
 
 /**
  *
@@ -54,9 +55,14 @@ export default class Mine extends Component<Props> {
     }
 
     componentDidMount() {
-        post(URL_LIST, {type: '1'}, (data) => {
-            var str = data.length == 11 ? (data.substring(0, 3) + '-' + data.substring(3, 7) + '-' + data.substring(7, 11)) : data;
-            this.setState({phone: str})
+        InteractionManager.runAfterInteractions(() => {
+            postCache(URL_LIST, {type: '1'}, (data) => {
+                this.setState({phone: data})
+            }, true)
+            postCache(URL_MY_DATA, undefined, (data) => {
+            }, true, (error) => {
+            })
         })
+
     }
 }

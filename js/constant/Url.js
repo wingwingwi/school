@@ -17,41 +17,40 @@ switch (ENVIROMENT) {
 }
 
 
-
 module.exports = {
     BDBaseUrl: BDBaseUrl,
     IMG_URL: '',
     /**1.关于我们 POST*/
     URL_LIST: BDBaseUrl + "/dic/about",
     /**2.首页广告图查询  POST*/
-    URL_: BDBaseUrl + "/dic/banners",
+    URL_BANNERS: BDBaseUrl + "/dic/banners",
     /**2.班级查询  POST*/
-    URL_: BDBaseUrl + "/dic/queryClass",
+    URL_QUERY_CLASS: BDBaseUrl + "/dic/queryClass",
     /**2.查询主要症状或疾病名称  POST*/
     URL_: BDBaseUrl + "/dic/queryDisease",
     /**2.查询班主任快捷消息模板  POST*/
     URL_: BDBaseUrl + "/dic/queryNoteTemplate",
     /**2. 学校查询 POST*/
-    URL_: BDBaseUrl + "/dic/querySchool",
+    URL_QUERY_SCHOOL: BDBaseUrl + "/dic/querySchool",
 
 // 用户管理
 // 个人中心/学生认证/短信/登陆/注册/意见反馈等
     /**2.意见反馈  POST*/
-    URL_: BDBaseUrl + "/member/addOpinion",
+    URL_ADD_OPINION: BDBaseUrl + "/member/addOpinion",
     /**2.学生认证  POST*/
-    URL_: BDBaseUrl + "/member/addStudent",
+    URL_ADD_STUDENT: BDBaseUrl + "/member/addStudent",
     /**2.用户登陆  POST*/
-    URL_: BDBaseUrl + "/member/doLogin",
+    URL_DOLOGIN: BDBaseUrl + "/member/doLogin",
     /**2.个人账号信息  POST*/
-    URL_: BDBaseUrl + "/member/myData",
+    URL_MY_DATA: BDBaseUrl + "/member/myData",
     /**2.新用户注册  POST*/
-    URL_: BDBaseUrl + "/member/register",
+    URL_REGISTER: BDBaseUrl + "/member/register",
     /**2.获取手机验证码  POST*/
-    URL_: BDBaseUrl + "/member/sendCode",
+    URL_SEND_CODE: BDBaseUrl + "/member/sendCode",
     /**2.修改个人资料  POST*/
-    URL_: BDBaseUrl + "/member/updateMember",
+    URL_UPDATE_MENBER: BDBaseUrl + "/member/updateMember",
     /**2.修改密码  POST*/
-    URL_: BDBaseUrl + "/member/updatePwd",
+    URL_UPDATE: BDBaseUrl + "/member/updatePwd",
 
 // 资讯管理
 // 对资讯的管理

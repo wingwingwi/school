@@ -30,7 +30,7 @@ export default class PickerModel extends Component {
         super(props);
         this.state = {
             isVisible: this.props.show,
-            list: this.props.list, value: undefined
+            list: [[{label: '选择', value: '0'}]], value: undefined
         };
         this.key = 1000;
     }
@@ -65,7 +65,10 @@ export default class PickerModel extends Component {
                             color: "#0099FF",
                             fontSize: 15
                         }}
-                        onPress={() => this.state.value ? this.props.closeModal(this.state.value[0]) : null}
+                        onPress={() => {
+                            var index = this.state.value[0];
+                            this.props.closeModal(index)
+                        }}
                     >
                         确认
                     </Text>
@@ -73,18 +76,7 @@ export default class PickerModel extends Component {
                 <View style={{width: null, height: 1, backgroundColor: "#eee"}}/>
 
                 <PickerView
-                    data={
-                        [[
-                            {label: "医院A", value: "医院A"},
-                            {label: "医院B", value: "医院B"},
-                            {label: "医院C", value: "医院C"},
-                            {label: "医院D", value: "医院D"},
-                            {label: "医院E", value: "医院E"},
-                            {label: "医院F", value: "医院F"},
-                            {label: "医院D", value: "医院D"},
-                            {label: "医院P", value: "医院P"},
-                        ]]
-                    }
+                    data={this.state.list}
                     value={this.state.value}
                     onChange={value => {
                         this.setState({value: value})
@@ -143,7 +135,13 @@ export default class PickerModel extends Component {
     /**跟新状态*/
     componentWillReceiveProps(nextProps) {
         if (nextProps.show) {
-            this.setState({isVisible: nextProps.show});
+            var listNew = nextProps.list;
+            var list = [[]];
+            listNew.map((item, idx) => {
+                list[0].push({label: `${item.name}`, value: `${idx}`})
+            })
+            console.log(JSON.stringify(list))
+            this.setState({isVisible: nextProps.show, list: list, value: [list[0][0].value]});
         } else {
             this.setState({isVisible: false});
         }

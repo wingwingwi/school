@@ -2,8 +2,10 @@ import React, {Component} from 'react';
 
 import {View, Text, StyleSheet, Image, TextInput, Platform} from 'react-native';
 import {Actions} from 'react-native-router-flux';
-import {showMsg, size} from '../../utils/Util';
+import {isNotEmpty, showMsg, size} from '../../utils/Util';
 import {Provider, Toast} from '@ant-design/react-native';
+import {postCache} from '../../utils/Resquest'
+import {URL_DOLOGIN, URL_REGISTER, URL_SEND_CODE} from '../../constant/Url'
 import EditView from "../../component/EditView";
 import Button from "../../component/Button";
 import LinearGradient from "react-native-linear-gradient";
@@ -14,6 +16,8 @@ import LinearGradient from "react-native-linear-gradient";
 export default class Register extends Component<Props> {
     constructor(props) {
         super(props);
+        this.state = {isEnable: true, smsText: '发送验证码'}
+        this.smsCode = ''
     }
 
     render() {
@@ -29,6 +33,7 @@ export default class Register extends Component<Props> {
                     {this.pwdView()}
                     <View style={{width: size.width, height: 1, marginTop: 10, backgroundColor: '#DBDBDB'}}/>
                     <Button onPress={() => {
+                        this.register()
                     }} style={{marginTop: 50, marginLeft: 15, marginRight: 15}}>
                         <LinearGradient colors={["#00C6FF", "#0082FF"]} start={{x: 0, y: 0}} end={{x: 1, y: 0}}
                                         style={{
@@ -78,10 +83,86 @@ export default class Register extends Component<Props> {
         return <View style={styles.lineView}>
             <Text style={styles.lineText}>验证码</Text>
             <EditView ref={ref => (this.mCode = ref)} style={styles.lineEdit} placeholder={'请输入短信验证码'}/>
-            <Button style={{backgroundColor: '#0099FF', borderRadius: 5}}>
-                <Text style={{padding: 5, fontSize: 12, color: '#fff'}}>发送验证码</Text>
+            <Button style={{backgroundColor: this.state.isEnable ? '#0099FF' : '#aaa', borderRadius: 5}}
+                    onPress={() => {
+                        if (this.state.isEnable) this.sendSms()
+                    }}>
+                <Text style={{
+                    padding: 5,
+                    fontSize: 12,
+                    width: 90,
+                    textAlign: 'center',
+                    color: '#fff'
+                }}>{this.state.smsText}</Text>
             </Button>
         </View>
+    }
+
+    register() {
+        let passWord = this.mPwd.text();
+        let userName = this.mAccount.text();
+        let code = this.mCode.text();
+        if (!isNotEmpty(userName)) {
+            showMsg('请输入账号信息')
+        } else if (!isNotEmpty(passWord) && passWord.length > 2) {
+            showMsg('请输入3至20位密码')
+        } else if (!isNotEmpty(this.smsCode) || this.smsCode != code) {
+            showMsg('短信验证失败')
+        } else {
+            this.loadKey = showMsg("注册中...", 3)
+            postCache(URL_REGISTER, {userName: userName, passWord: passWord}, (data) => {
+                showMsg('',this.loadKey);//关闭
+                showMsg("注册成功", 1)
+                setTimeout(() => {
+                    Actions.pop()
+                }, 800)
+            }, false, (error) => {
+                showMsg('',this.loadKey);//关闭
+                showMsg(error, 2)
+            })
+        }
+    }
+
+    sendSms() {
+        let userName = this.mAccount.text();
+        if (!isNotEmpty(userName)) {
+            showMsg('请输入手机号码')
+        } else {
+            this.loadKey = showMsg("短信发送中...", 3)
+            postCache(URL_SEND_CODE, {mobile : userName}, (data) => {
+                showMsg('',this.loadKey);//关闭
+                showMsg("短信发送成功", 1)
+                this.smsCode=data
+                this.startTimeCount()
+            }, false, (error) => {
+                showMsg('',this.loadKey);//关闭
+                showMsg(error, 2)
+            })
+        }
+    }
+
+    startTimeCount() {
+        this.timeCount = 60
+        this.timeCountView(this.timeCount)
+        this.interval = setInterval(() => {
+            this.timeCount = this.timeCount - 1
+            if (this.timeCount <= 0) {
+                this.interval && clearInterval(this.interval)
+            }
+            this.timeCountView(this.timeCount)
+        }, 1000);
+    }
+
+    timeCountView(num) {
+        this.setState({isEnable: num < 1, smsText: num < 1 ? '发送验证码' : (`${num}S再次点击`)})
+    }
+
+
+    componentWillUnmount() {
+        this.interval && clearInterval(this.interval)
+        this.setState = (state, callback) => {
+            return;
+        };
     }
 }
 const styles = StyleSheet.create({

@@ -13,10 +13,12 @@ import React, {
     AsyncStorage,
     Platform
 } from "react-native";
-import {Toast} from "@ant-design/react-native";
+import {Toast, Portal} from "@ant-design/react-native";
 import Log from "./Log.js";
 import {_token} from '../constant/Constants';
 import {getDateTime} from "./DateUtil";
+import {save, getValue} from "./FileUtil";
+
 
 module.exports = {
     /*最小线宽*/
@@ -39,27 +41,29 @@ module.exports = {
         return -1;
     },
     /**快速弹出*/
-    showMsg(msg, type) {
+    showMsg(msg, type, defaultMsg) {
         if (msg != undefined && msg != "") {
             Log.m("msg:" + msg);
             if (type == undefined)
             //普通提示
-                Toast.show(msg, 1.5);
+                return Toast.show(msg, 1.5);
             else if (type == 1) {
                 //成功提示
-                Toast.success(msg, 2);
+                return Toast.success(msg, 2);
             } else if (type == 2) {
                 //失败提示
-                Toast.fail(msg, 2);
+                return Toast.fail(msg, 2);
             } else if (type == 3) {
                 //loading提示，需要主动关闭
-                Toast.loading(msg, 0);
-            } else if (type == 4) {
-                //主动关闭
-                Toast.hide();
+                return Toast.loading(msg, 0);
             }
-        } else Toast.hide();
+        } else if (type != undefined) {
+            Portal.remove(type)
+            if (defaultMsg)
+                Toast.show(msg, 1.5);
+        }
     },
+
     /**得到分数*/
     getStore(num) {
         if (num == undefined) return "";
@@ -394,7 +398,6 @@ module.exports = {
                 failCallback(err);
             });
     },
-
     /**
      * 基于fetch的post方法
      * @method post
@@ -416,17 +419,18 @@ module.exports = {
      */
     post: function (url, formData, successCallback, failCallback) {
         var formDataMap = new FormData();
-        var params = url + "?";
-        Object.keys(formData).forEach((key) => {
-            formDataMap.append(key, formData[key]);
-            params = params + key + '=' + params[key] + '&'
-        });
+        var params = `${url}?token=${_token.t}&`;
+        if (formData)
+            Object.keys(formData).forEach((key) => {
+                formDataMap.append(key, formData[key]);
+                params = params + key + '=' + formData[key] + '&'
+            });
+        else formDataMap.append("token", _token.t);
         Log.m("请求:" + params);
         fetch(url, {
             method: "POST",
             headers: {
-                Authorization: _token.t,
-                "Content-Type": "application/json"
+                token: _token.t
             },
             body: formDataMap
         })

@@ -2,13 +2,18 @@ import React, {Component} from 'react';
 
 import {View, Text, StyleSheet, Image, TextInput} from 'react-native';
 import {Actions} from 'react-native-router-flux';
-import {showMsg, size} from '../../utils/Util';
+import {showMsg, size, isNotEmpty} from '../../utils/Util';
+import {save, getValue} from '../../utils/FileUtil'
+import {postCache} from '../../utils/Resquest'
+import {URL_DOLOGIN} from '../../constant/Url'
+
 import {Provider, Toast} from '@ant-design/react-native';
 import src from '../../constant/Src';
 import NarBar from '../../component/Narbar';
 import EditView from "../../component/EditView";
 import Button from "../../component/Button";
 import LinearGradient from "react-native-linear-gradient";
+import {_token} from "../../constant/Constants";
 
 /**
  * @class Login 注册登录
@@ -30,7 +35,7 @@ export default class Login extends Component<Props> {
                     {this.pwdView()}
                     <View style={{width: size.width - 20, height: 1, marginTop: 10, backgroundColor: '#DBDBDB'}}/>
                     <Button onPress={() => {
-                        Actions.pop()
+                        this.login()
                     }} style={{marginTop: 50, marginLeft: 15, marginRight: 15}}>
                         <LinearGradient colors={["#00C6FF", "#0082FF"]} start={{x: 0, y: 0}} end={{x: 1, y: 0}}
                                         style={{
@@ -44,7 +49,12 @@ export default class Login extends Component<Props> {
                         </LinearGradient>
                     </Button>
                     <View
-                        style={{flexDirection: 'row', width: size.width-30, margin: 15, justifyContent: 'space-between'}}>
+                        style={{
+                            flexDirection: 'row',
+                            width: size.width - 30,
+                            margin: 15,
+                            justifyContent: 'space-between'
+                        }}>
                         <Text style={{color: '#333', fontSize: 13}} onPress={() => {
                             Actions.register();
                         }}>注册</Text>
@@ -69,8 +79,36 @@ export default class Login extends Component<Props> {
         return <View style={styles.lineView}>
             <Image style={styles.lineImage} source={src.mima_icon}/>
             <Text style={styles.lineText}>密码</Text>
-            <EditView ref={ref => (this.mPwd = ref)} style={styles.lineEdit} placeholder={'请输入您的密码'}/>
+            <EditView ref={ref => (this.mPwd = ref)} style={styles.lineEdit} secureTextEntry={true}
+                      placeholder={'请输入您的密码'}/>
         </View>
+    }
+
+    login() {
+        let passWord = this.mPwd.text();
+        let userName = this.mAccount.text();
+        if (!isNotEmpty(userName)) {
+            showMsg('请输入账号信息')
+        } else if (!isNotEmpty(passWord) && passWord.length > 2) {
+            showMsg('请输入3至20位密码')
+        } else {
+            this.loadKey = showMsg("登录中...", 3)
+            postCache(URL_DOLOGIN, {userName: userName, passWord: passWord}, (data) => {
+                showMsg('', this.loadKey)
+                //isPerfect:’是否完善了学生信息 0未完善 1已完善,如果bySource=2可忽略’
+                showMsg("登录成功", 1)
+                save('token', data.token);//获取到数据
+                _token.t = data.token;
+                _token.isPerfect = data.isPerfect
+                _token.bySource = data.bySource
+                setTimeout(() => {
+                    Actions.replace('main')
+                }, 800);
+            }, false, (error) => {
+                showMsg('', this.loadKey);//关闭
+                showMsg(error, 2)
+            })
+        }
     }
 }
 const styles = StyleSheet.create({
@@ -84,6 +122,6 @@ const styles = StyleSheet.create({
         fontSize: 17, color: '#333', marginLeft: 10
     },
     lineEdit: {
-        flex: 1, width: null, marginLeft: 10, fontSize: 17, textAlign: 'center', paddingRight: 100
+        flex: 1, width: null, marginLeft: 10, fontSize: 17, textAlign: 'left', paddingRight: 100,
     }
 });

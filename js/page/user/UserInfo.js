@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 
-import {View, Text, StyleSheet, Image, TextInput} from 'react-native';
+import {View, Text, StyleSheet, Image, TextInput, InteractionManager} from 'react-native';
 import {Actions} from 'react-native-router-flux';
-import {showMsg, size} from '../../utils/Util';
+import {post, showMsg, size} from '../../utils/Util';
 import {Provider, Toast} from '@ant-design/react-native';
 import src from '../../constant/Src';
 import NarBar from '../../component/Narbar';
@@ -10,6 +10,9 @@ import EditView from "../../component/EditView";
 import Button from "../../component/Button";
 import LinearGradient from "react-native-linear-gradient";
 import NextView from "../../component/NextView";
+import {save} from "../../utils/FileUtil";
+import {URL_ADD_STUDENT, URL_LIST, URL_MY_DATA, URL_UPDATE_MENBER} from "../../constant/Url";
+import {postCache} from "../../utils/Resquest";
 
 /**
  * @class
@@ -27,6 +30,7 @@ export default class UserInfo extends Component<Props> {
                 {NextView.getSettingImgItemL(() => Actions.pop(), "昵称", undefined, "王大锤", true, true)}
                 {NextView.getSettingImgItemL(() => Actions.pop(), "性别", undefined, "女", true, true)}
                 <Button onPress={() => {
+                    save('token', '')
                     Actions.login()
                 }} style={{marginTop: 50, marginLeft: 15, marginRight: 15}}>
                     <LinearGradient colors={["#00C6FF", "#0082FF"]} start={{x: 0, y: 0}} end={{x: 1, y: 0}}
@@ -41,5 +45,18 @@ export default class UserInfo extends Component<Props> {
                     </LinearGradient>
                 </Button>
             </View>);
+    }
+
+    componentDidMount() {
+        InteractionManager.runAfterInteractions(() => {
+            postCache(URL_MY_DATA, undefined, (data) => {
+            }, true, (data) => {
+            })
+        })
+    }
+
+    amendInfo() {
+        postCache(URL_UPDATE_MENBER, {},)
+
     }
 }
