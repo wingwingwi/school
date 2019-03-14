@@ -37,6 +37,8 @@ import Health from "./js/page/work/Health";
 import Record from "./js/page/work/Record";
 import WebPage from "./js/page/work/WebPage";
 import ResumeStudy from "./js/page/work/ResumeStudy";
+import TeachMain from "./js/page/teach/TeachMain";
+
 
 const prefix = Platform.OS === 'android' ? 'coustom://coustom/' : 'coustom://';//外部应用打开使用到的链接；
 
@@ -51,7 +53,8 @@ export default class App extends Component<Props> {
             <Overlay key="overlay">
                 <Modal key="modal" hideNavBar>
                     <Scene tabBarPosition="bottom" key="root" hideNavBar panHandlers={null} initial={true}>
-                        <Scene key="test" component={Test} title="测试中心" hideNavBar={false}/>
+                        {/*<Scene key="test" component={Test} title="测试中心" hideNavBar={false}/>*/}
+                        <Scene key="teachMain" component={TeachMain} title="刘德华老师" hideNavBar={true}/>
                         <Tabs key="tabbar" swipeEnabled showLabel={false}
                               tabBarStyle={[styles.tabBarStyle, {backgroundColor: '#fff'}]}>
                             <Scene key="main" component={Main} title="首页" hideNavBar icon={TabIcon}/>
@@ -77,7 +80,13 @@ export default class App extends Component<Props> {
                         <Scene key="record" component={Record} hideNavBar={true}/>
                         <Scene key="resumeStudy" component={ResumeStudy} hideNavBar={true}/>
                         <Scene key="webPage" component={WebPage} hideNavBar={true}/>
-                        
+
+
+                        {/*老师端页面*/}
+
+                        {/*<Scene key="teachMain" component={TeachMain} title="刘德华老师" hideNavBar={false}/>*/}
+
+
                     </Scene>
                 </Modal>
             </Overlay>

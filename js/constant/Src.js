@@ -40,6 +40,11 @@ const Src = {
     shanchu_btn: require('../../res/icon/shanchu_btn.png'),
 
 
+   /**老师端**/
+
+   teachbingjia: require('../../res/main/bingjia_btn.png'),
+   teachshijia: require('../../res/main/shijia_btn.png'),
+   teachnotice: require('../../res/main/tongzhi_icon.png'),
 }
 
 export default Src;//导出，用于其他地方调用
