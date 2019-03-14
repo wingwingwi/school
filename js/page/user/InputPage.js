@@ -28,17 +28,20 @@ export default class InputPage extends Component<Props> {
                         var item = {}
                         var eventName = this.props.eventName ? this.props.eventName : 'name'
                         item[`${eventName}`] = text
+                        item.key = eventName;
+                        item.text = text
                         DeviceEventEmitter.emit(this.props.event, item)
                         Actions.pop()
                     }
                 }}/>
                 <View style={{height: 5}}/>
                 <EditView style={{padding: 10, backgroundColor: '#fff', textAlign: 'auto'}}
+                          placeholder={'请输入编辑内容'}
                           ref={ref => (this.editView = ref)}/>
             </View>);
     }
 
     componentDidMount() {
-        this.editView && this.editView.text(this.props.text)
+        this.editView && this.editView.text(this.props.text ? this.props.text : '')
     }
 }

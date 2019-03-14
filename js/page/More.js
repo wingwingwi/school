@@ -10,6 +10,8 @@ import Button from "../component/Button";
 import {size, showMsg} from '../utils/Util'
 import src from '../constant/Src'
 import TextBar from "../component/TextBar";
+import {postCache} from "../utils/Resquest";
+import {URL_QUERY_PAGE} from "../constant/Url";
 
 /**
  *
@@ -22,27 +24,22 @@ export default class More extends Component<Props> {
     constructor(props) {
         super(props);
         this.state = {isRefreshing: false, list: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]}; //定义属性
-        this.listener = DeviceEventEmitter.addListener('event', (item) => {
-            this.textBar.tab(1)
-        });
+        this.page = 1;
     }
 
     render() {
         return <View style={{flex: 1, backgroundColor: '#fff'}}>
             <NarBar title={'资讯'}/>
-            <TextBar ref={ref => (this.textBar = ref)} changeTab={(index) => {
-            }}/>
+            {/*<TextBar ref={ref => (this.textBar = ref)} changeTab={(index) => {*/}
+            {/*}}/>*/}
             <BListView ref={ref => (this.listView = ref)}
                        ListEmptyComponent={this._listEmptyComponent}
                        list={this.state.list}
-                       renderRefresh={() => this._get(false)}
-                       itemView={this._renderItem}/>
+                       renderRefresh={() => this.requestList(1)}
+                       itemView={this._renderItem}
+                       renderLoad={() => this.requestList(this.page + 1)}
+            />
         </View>;
-    }
-
-    componentWillUnmount() {
-        console.log("componentWillUnmount")
-        this.listener && this.listener.remove();
     }
 
     /**空数据时候展示*/
@@ -92,11 +89,33 @@ export default class More extends Component<Props> {
         );
     };
 
-    /**头部请求*/
-    _get(isShow) {
-        setTimeout(() => {
+
+    requestList(page) {
+        this.page = page;
+        postCache(URL_QUERY_PAGE, {limit: 20, page: this.page, ishome: 2}, (data) => {
+            if (page == 1) {
+                this.setState({list: data})
+            } else {
+                var list = this.state.list;
+                list = list.concat(data);
+                this.setState({list: data})
+            }
+            this.refreshing()
+        }, false, (error) => {
+            showMsg(error)
+            this.refreshing()
+        })
+    }
+
+    refreshing() {
+        if (this.listView) {
             this.listView.setRefreshing(false);
-        }, 1000);
+            if (this.state.list.length >= this.page * 20) {
+                this.listView.setLoading(true);
+            } else {
+                this.listView.setLoading(false);
+            }
+        }
     }
 
     /**即将挂载-处理参数*/
@@ -105,6 +124,8 @@ export default class More extends Component<Props> {
 
     /**已经挂载-处理耗时操作*/
     componentDidMount() {
+        this.listView.setRefreshing(true)
+        this.requestList(1)
     }
 
     /**卸载*/

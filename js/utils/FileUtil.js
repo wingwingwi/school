@@ -37,7 +37,7 @@ module.exports = {
         });
     },
     /**删除信息*/
-    delete(key) {
+    deleteKey(key) {
         return AsyncStorage.removeItem(key);
     },
 };

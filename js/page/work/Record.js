@@ -1,8 +1,17 @@
 import React, {Component} from 'react';
 
-import {View, Text, StyleSheet, Image, TextInput, ScrollView, InteractionManager} from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    Image,
+    TextInput,
+    ScrollView,
+    InteractionManager,
+    DeviceEventEmitter
+} from 'react-native';
 import {Actions} from 'react-native-router-flux';
-import {showMsg, size} from '../../utils/Util';
+import {isNotEmpty, showMsg, size} from '../../utils/Util';
 import {Provider, Toast} from '@ant-design/react-native';
 import src from '../../constant/Src';
 import NarBar from '../../component/Narbar';
@@ -12,14 +21,6 @@ import LinearGradient from "react-native-linear-gradient";
 import NextView from "../../component/NextView";
 import {postCache} from "../../utils/Resquest";
 import {URL_MY_ARCHIVES} from "../../constant/Url";
-
-var data = [{name: '身高(cm)', value: '180', child: []},
-    {name: '体重(kg)', value: '75', child: []},
-    {name: '视力', value: '', child: [{name: '左眼', value: '5.0'}, {name: '右眼', value: '5.0'}]},
-    {name: '口腔', value: '', child: [{name: '左眼', value: ''}, {name: '右眼', value: ''}]},
-    {name: '内科', value: '', child: [{name: '左眼', value: ''}, {name: '右眼', value: ''}]},
-    {name: '外科', value: '', child: [{name: '左眼', value: ''}, {name: '右眼', value: ''}]},
-]
 
 /**
  * @class
@@ -47,7 +48,7 @@ export default class Record extends Component<Props> {
                             if (item.isShowList)
                                 item.child.map((ib, index) => {
                                     var cIndex = index;
-                                    view.push(this.itemView(ib.name, ib.value, gIndex, cIndex))
+                                    view.push(this.itemView(ib, gIndex, cIndex))
                                 })
                             return view;
                         } else {
@@ -77,22 +78,33 @@ export default class Record extends Component<Props> {
         InteractionManager.runAfterInteractions(() => {
             this.loadKey = showMsg("获取个人档案中...", 3)
             postCache(URL_MY_ARCHIVES, undefined, (data) => {
-                //this.setState({phone: data})
                 showMsg('', this.loadKey)
             }, false, (error) => {
                 showMsg('', this.loadKey, 'error')
             })
         })
-
     }
 
-
-    itemView(name, value, group, index) {
-        return <View style={{width: size.width}} key={this.key++}><Button
-            style={[styles.itemView, {marginTop: 0}]}><Text
-            style={styles.leftText}>{name}</Text>
-            <Text style={styles.editStyle}>{value}</Text></Button>
-            <View style={styles.line}/></View>
+    itemView(item, group, index) {
+        var str = isNotEmpty(item.value) ? item.value : '请输入'
+        if (item.isChoose)
+            str = isNotEmpty(item.value) ? item.value == 1 ? '正常' : '不良' : '请选择'
+        return (<View style={{width: size.width}} key={this.key++}>
+            <Button onPress={() => {
+                if (item.isChoose) {
+                    this.chooseIndex = [group, index]
+                    this.setState({showModal: true})
+                } else {
+                    Actions.inputPage({
+                        event: eventType, eventName: item.key,
+                        text: value
+                    })
+                }
+            }} style={[styles.itemView, {marginTop: 0}]}>
+                <Text style={styles.leftText}>{item.name}</Text>
+                <Text style={styles.editStyle}>{item.value}</Text>
+            </Button>
+            <View style={styles.line}/></View>);
     }
 
     titleView(item, index) {
@@ -109,36 +121,44 @@ export default class Record extends Component<Props> {
         </Button><View style={styles.line}/></View>
     }
 
-    //
-    // statureView() {
-    //     return <View style={styles.itemView}>
-    //         <Text style={styles.leftText}>身高(cm)</Text>
-    //         <EditView style={styles.editStyle} ref={ref => (this.mStature = ref)}/>
-    //     </View>
-    // }
-    //
-    // weightView() {
-    //     return <View style={styles.itemView}>
-    //         <Text style={styles.leftText}>体重(kg)</Text>
-    //         <EditView style={styles.editStyle} ref={ref => (this.mWeight = ref)}/>
-    //     </View>
-    // }
-    //
-    // eyeLView() {
-    //     return <View style={styles.itemView}>
-    //         <Text style={styles.leftText}>左眼</Text>
-    //         <EditView style={styles.editStyle} ref={ref => (this.mEyeL = ref)}/>
-    //     </View>
-    // }
-    //
-    // eyeRView() {
-    //     return <View style={styles.itemView}>
-    //         <Text style={styles.leftText}>右眼</Text>
-    //         <EditView style={styles.editStyle} ref={ref => (this.mEyeR = ref)}/>
-    //     </View>
-    // }
+    componentWillMount() {
+        this.listener = DeviceEventEmitter.addListener(eventType, (item) => {
+
+        });
+    }
+
+    componentWillUnmount() {
+        this.listener && this.listener.remove();
+    }
 }
 
+var data = [{name: '身高(cm)', value: '180', key: 'height', child: []},
+    {name: '体重(kg)', value: '75', key: 'weight', child: []},
+    {
+        name: '五官', child: [{name: '左眼', key: 'lefteye', value: '5.0'}
+            , {name: '右眼', key: 'righteye', value: '5.0'}
+            , {name: '口腔', key: 'oralcavity', value: '', isChose: true}
+            , {name: '皮肤', key: 'skin', value: '', isChose: true}
+        ]
+    },
+    {
+        name: '内科', child: [{name: '心', key: 'heart', value: '', isChose: true}
+            , {name: '肝', key: 'liver', value: '', isChose: true}
+            , {name: '肺', key: 'lung', value: '', isChose: true}
+            , {name: '淋巴结', key: 'lymphaden', value: '', isChose: true}
+            , {name: '脾', key: 'taste', value: '', isChose: true}
+        ]
+    },
+    {
+        name: '外科', child: [{name: '四肢', key: 'allfours', value: '', isChose: true}
+            , {name: '胸部', key: 'chest', value: '', isChose: true}
+            , {name: '头部', key: 'head', value: '', isChose: true}
+            , {name: '颈部', key: 'neck', value: '', isChose: true}
+            , {name: '脊柱', key: 'spine', value: '', isChose: true}
+        ]
+    },
+]
+const eventType = 'record'
 const styles = StyleSheet.create({
     leftText: {
         color: '#262626', fontSize: 17, marginLeft: 10

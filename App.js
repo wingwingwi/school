@@ -24,7 +24,7 @@ import Login from './js/page/user/Login';
 import Test from './js/page/other/Test';
 import Message from './js/page/user/Message';
 import Log from './js/utils/Log';
-import Util from './js/utils/Util';
+import Util, {isNotEmpty} from './js/utils/Util';
 import {Provider} from '@ant-design/react-native';
 import Register from "./js/page/user/Register";
 import SetPwd from "./js/page/user/SetPwd";
@@ -55,7 +55,7 @@ export default class App extends Component<Props> {
             <Overlay key="overlay">
                 <Modal key="modal" hideNavBar>
                     <Scene tabBarPosition="bottom" key="root" hideNavBar panHandlers={null} initial={true}>
-                        <Tabs key="tabbar" swipeEnabled showLabel={false}
+                        <Tabs key="tabbar" swipeEnabled={true} showLabel={false}
                               tabBarStyle={[styles.tabBarStyle, {backgroundColor: '#fff'}]}>
                             <Scene key="main" component={Main} title="首页" hideNavBar icon={TabIcon}/>
                             <Scene key="other" component={Other} title="消息" hideNavBar icon={TabIcon}/>
@@ -89,16 +89,17 @@ export default class App extends Component<Props> {
     }
 
     componentWillMount() {
-    }
-
-    componentDidMount() {
         getValue('token', (token) => {
-            if (token && token != '') {
+            console.log('token=' + token)
+            if (isNotEmpty(token)) {
                 _token.t = token;
             } else {
                 Actions.replace('login')
             }
         });
+    }
+
+    componentDidMount() {
     }
 
     /**卸载*/

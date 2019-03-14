@@ -10,6 +10,7 @@ import {
     View,
 } from 'react-native';
 import Src from '../constant/Src'
+import {isNotEmpty} from "../utils/Util";
 
 export default class NextView {
     static getSettingItem(callBack, text) {
@@ -112,7 +113,7 @@ export default class NextView {
         )
     }
 
-    static getSettingImgItemS(callBack, text,  rightText, isLine, isNext, defultValue) {
+    static getSettingImgItemS(callBack, text, rightText, isLine, isNext, defultValue) {
         return (
             <TouchableHighlight
                 onPress={callBack}>
@@ -120,15 +121,15 @@ export default class NextView {
                     <View style={[styles.setting_item_container]}>
                         <View style={{alignItems: 'center', flexDirection: 'row'}}>
                             {/*{img ? <Image source={img}*/}
-                                          {/*style={{width: 25, height: 25}}/> : null}*/}
+                            {/*style={{width: 25, height: 25}}/> : null}*/}
                             <Text
                                 style={{color: '#333', fontSize: 15, marginLeft: 5}}>{text}</Text>
                         </View>
                         <View style={{alignItems: 'center', flexDirection: 'row'}}>
                             <Text style={{
-                                color: rightText && rightText != '' ? '#333' : '#999',
+                                color: isNotEmpty(rightText) ? '#333' : '#999',
                                 fontSize: 14
-                            }}>{rightText && rightText != '' ? rightText : defultValue}</Text>
+                            }}>{isNotEmpty(rightText) ? rightText : defultValue}</Text>
                             {isNext ? <Image source={Src.gengduo_btn}
                                              style={{
                                                  marginRight: 5,

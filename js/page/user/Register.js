@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 
-import {View, Text, StyleSheet, Image, TextInput, Platform} from 'react-native';
+import {View, Text, StyleSheet, Image, TextInput, Platform, KeyboardAvoidingView} from 'react-native';
 import {Actions} from 'react-native-router-flux';
-import {isNotEmpty, showMsg, size} from '../../utils/Util';
+import {isIos, isNotEmpty, showMsg, size} from '../../utils/Util';
 import {Provider, Toast} from '@ant-design/react-native';
 import {postCache} from '../../utils/Resquest'
 import {URL_DOLOGIN, URL_REGISTER, URL_SEND_CODE} from '../../constant/Url'
@@ -22,44 +22,51 @@ export default class Register extends Component<Props> {
 
     render() {
         return (
-            <View style={{flex: 1}}>
-                <Text style={{color: '#000', fontSize: 22, marginTop: Platform.OS == 'ios' ? 100 : 80, marginLeft: 15}}
+            <View style={{height: size.height}}>
+                <Text style={{
+                    color: '#000',
+                    fontSize: 22,
+                    marginTop: Platform.OS == 'ios' ? size.width / 5 + 20 : size.width / 5,
+                    marginLeft: 15
+                }}
                       onPress={() => Actions.pop()}>注册</Text>
-                <View style={{alignItems: 'center', width: size.width, flex: 1, marginTop: 50}}>
-                    {this.accountView()}
-                    <View style={{width: size.width, height: 1, marginTop: 10, backgroundColor: '#DBDBDB'}}/>
-                    {this.codeView()}
-                    <View style={{width: size.width, height: 1, marginTop: 10, backgroundColor: '#DBDBDB'}}/>
-                    {this.pwdView()}
-                    <View style={{width: size.width, height: 1, marginTop: 10, backgroundColor: '#DBDBDB'}}/>
-                    <Button onPress={() => {
-                        this.register()
-                    }} style={{marginTop: 50, marginLeft: 15, marginRight: 15}}>
-                        <LinearGradient colors={["#00C6FF", "#0082FF"]} start={{x: 0, y: 0}} end={{x: 1, y: 0}}
-                                        style={{
-                                            height: 45,
-                                            width: size.width - 30,
-                                            borderRadius: 5,
-                                            justifyContent: 'center',
-                                            alignItems: 'center'
-                                        }}>
-                            <Text style={{color: '#fff', fontSize: 18}}>注册</Text>
-                        </LinearGradient>
-                    </Button>
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            position: 'absolute',
-                            bottom: 10,
-                            width: size.width,
-                            margin: 15,
-                            justifyContent: 'center'
-                        }}>
-                        <Text style={{color: '#A9A9A9', fontSize: 13}}>注册即代表你已同意</Text>
-                        <Text style={{color: '#0082ff', fontSize: 13}} onPress={() => {
-                        }}>《平台用户协议》</Text>
+                {/*<KeyboardAvoidingView behavior="padding" enabled keyboardVerticalOffset={100}>*/}
+                    <View style={{alignItems: 'center', width: size.width, flex: 1, marginTop: 50}}>
+                        {this.accountView()}
+                        <View style={{width: size.width, height: 1, marginTop: 10, backgroundColor: '#DBDBDB'}}/>
+                        {this.codeView()}
+                        <View style={{width: size.width, height: 1, marginTop: 10, backgroundColor: '#DBDBDB'}}/>
+                        {this.pwdView()}
+                        <View style={{width: size.width, height: 1, marginTop: 10, backgroundColor: '#DBDBDB'}}/>
+                        <Button onPress={() => {
+                            this.register()
+                        }} style={{marginTop: 50, marginLeft: 15, marginRight: 15}}>
+                            <LinearGradient colors={["#00C6FF", "#0082FF"]} start={{x: 0, y: 0}} end={{x: 1, y: 0}}
+                                            style={{
+                                                height: 45,
+                                                width: size.width - 30,
+                                                borderRadius: 5,
+                                                justifyContent: 'center',
+                                                alignItems: 'center'
+                                            }}>
+                                <Text style={{color: '#fff', fontSize: 18}}>注册</Text>
+                            </LinearGradient>
+                        </Button>
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                position: 'absolute',
+                                paddingBottom: isIos ? 20 : 40,
+                                width: size.width,
+                                bottom: 0,
+                                justifyContent: 'center'
+                            }}>
+                            <Text style={{color: '#A9A9A9', fontSize: 13}}>注册即代表你已同意</Text>
+                            <Text style={{color: '#0082ff', fontSize: 13}} onPress={() => {
+                            }}>《平台用户协议》</Text>
+                        </View>
                     </View>
-                </View>
+                        {/*</KeyboardAvoidingView>*/}
             </View>
         );
     }
@@ -74,8 +81,8 @@ export default class Register extends Component<Props> {
     pwdView() {
         return <View style={styles.lineView}>
             <Text style={styles.lineText}>密码</Text>
-            <EditView ref={ref => (this.mPwd = ref)} style={styles.lineEdit} placeholder={'密码（6-20位字符/符号/数字不限）'}/>
-
+            <EditView ref={ref => (this.mPwd = ref)} style={styles.lineEdit} placeholder={'密码（6-20位字符/符号/数字不限）'}
+                      secureTextEntry={true}/>
         </View>
     }
 
@@ -111,13 +118,13 @@ export default class Register extends Component<Props> {
         } else {
             this.loadKey = showMsg("注册中...", 3)
             postCache(URL_REGISTER, {userName: userName, passWord: passWord}, (data) => {
-                showMsg('',this.loadKey);//关闭
+                showMsg('', this.loadKey);//关闭
                 showMsg("注册成功", 1)
                 setTimeout(() => {
                     Actions.pop()
                 }, 800)
             }, false, (error) => {
-                showMsg('',this.loadKey);//关闭
+                showMsg('', this.loadKey);//关闭
                 showMsg(error, 2)
             })
         }
@@ -129,13 +136,13 @@ export default class Register extends Component<Props> {
             showMsg('请输入手机号码')
         } else {
             this.loadKey = showMsg("短信发送中...", 3)
-            postCache(URL_SEND_CODE, {mobile : userName}, (data) => {
-                showMsg('',this.loadKey);//关闭
+            postCache(URL_SEND_CODE, {mobile: userName}, (data) => {
+                showMsg('', this.loadKey);//关闭
                 showMsg("短信发送成功", 1)
-                this.smsCode=data
+                this.smsCode = data
                 this.startTimeCount()
             }, false, (error) => {
-                showMsg('',this.loadKey);//关闭
+                showMsg('', this.loadKey);//关闭
                 showMsg(error, 2)
             })
         }
