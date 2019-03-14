@@ -23,7 +23,7 @@ import {URL_QUERY_PAGE} from "../constant/Url";
 export default class More extends Component<Props> {
     constructor(props) {
         super(props);
-        this.state = {isRefreshing: false, list: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]}; //定义属性
+        this.state = {isRefreshing: false, list: []}; //定义属性
         this.page = 1;
     }
 
@@ -112,6 +112,8 @@ export default class More extends Component<Props> {
             this.listView.setRefreshing(false);
             if (this.state.list.length >= this.page * 20) {
                 this.listView.setLoading(true);
+            } else if (this.state.list.length == 0) {
+                this.listView.setStopLoading()
             } else {
                 this.listView.setLoading(false);
             }
@@ -120,6 +122,7 @@ export default class More extends Component<Props> {
 
     /**即将挂载-处理参数*/
     componentWillMount() {
+
     }
 
     /**已经挂载-处理耗时操作*/

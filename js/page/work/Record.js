@@ -21,6 +21,7 @@ import LinearGradient from "react-native-linear-gradient";
 import NextView from "../../component/NextView";
 import {postCache} from "../../utils/Resquest";
 import {URL_MY_ARCHIVES} from "../../constant/Url";
+import BottomCModel from "../../model/BottomCModel";
 
 /**
  * @class
@@ -30,7 +31,7 @@ export default class Record extends Component<Props> {
         super(props);
         this.state = {
             stature: '180', vision: '', weight: '75', eyeL: "", eyeR: "", oral: '', internal: '', surgery: '',
-            list: data,
+            list: data, showModal: false
         }
         this.key = 0;
     }
@@ -39,7 +40,7 @@ export default class Record extends Component<Props> {
         return (
             <View style={{flex: 1}}>
                 <NarBar title={"个人档案"} onSelect={() => Actions.pop()}/>
-                <ScrollView contentContainerStyle={{flex: 1, alignItems: 'center'}}>
+                <ScrollView contentContainerStyle={{}} style={{flex: 1}}>
                     {this.state.list.map((item, idx) => {
                         var gIndex = idx;
                         if (item.child.length != 0) {
@@ -52,10 +53,11 @@ export default class Record extends Component<Props> {
                                 })
                             return view;
                         } else {
-                            return this.itemView(item.name, item.value, gIndex, 0)
+                            return this.itemView(item, gIndex, 0)
                         }
                     })}
                     <Button onPress={() => {
+                        this.commit();
                     }} style={{marginTop: 70, marginLeft: 15, marginRight: 15}}>
                         <LinearGradient colors={["#00C6FF", "#0082FF"]} start={{x: 0, y: 0}} end={{x: 1, y: 0}}
                                         style={{
@@ -68,8 +70,15 @@ export default class Record extends Component<Props> {
                             <Text style={{color: '#fff', fontSize: 18}}>保存</Text>
                         </LinearGradient>
                     </Button>
-                    <View style={{height: 40}}/>
+                    <View style={{height: 60}}/>
                 </ScrollView>
+                <BottomCModel list={[{name: '正常'}, {name: '不良'}]} show={this.state.showModal}
+                              closeModal={(data) => {
+                                  if (data) {
+                                      var list = this.changeValue(chooseKey, data.name == '正常' ? '1' : '2')
+                                      this.setState({showModal: false, list: list})
+                                  } else this.setState({showModal: false})
+                              }}/>
             </View>);
     }
 
@@ -87,22 +96,23 @@ export default class Record extends Component<Props> {
 
     itemView(item, group, index) {
         var str = isNotEmpty(item.value) ? item.value : '请输入'
-        if (item.isChoose)
-            str = isNotEmpty(item.value) ? item.value == 1 ? '正常' : '不良' : '请选择'
+        if (item.isChose)
+            str = isNotEmpty(item.value) ? item.value == '1' ? '正常' : '不良' : '请选择'
+        //console.log(JSON.stringify(item)+'===='+);
         return (<View style={{width: size.width}} key={this.key++}>
             <Button onPress={() => {
-                if (item.isChoose) {
-                    this.chooseIndex = [group, index]
+                if (item.isChose) {
+                    chooseKey = item.key
                     this.setState({showModal: true})
                 } else {
                     Actions.inputPage({
                         event: eventType, eventName: item.key,
-                        text: value
+                        text: item.value
                     })
                 }
             }} style={[styles.itemView, {marginTop: 0}]}>
                 <Text style={styles.leftText}>{item.name}</Text>
-                <Text style={styles.editStyle}>{item.value}</Text>
+                <Text style={styles.editStyle}>{str}</Text>
             </Button>
             <View style={styles.line}/></View>);
     }
@@ -123,12 +133,45 @@ export default class Record extends Component<Props> {
 
     componentWillMount() {
         this.listener = DeviceEventEmitter.addListener(eventType, (item) => {
-
+            var list = this.changeValue(item.key, item.text)
+            this.setState({list: list})
         });
+    }
+
+    changeValue(key, value) {
+        var data = this.state.list
+        console.log(key + '/' + value)
+        for (var i = 0; i < data.length; i++) {
+            if (key == data[i].key) {
+                data[i].value = value;
+                return data;
+            } else
+                for (var j = 0; j < data[i].child.length; j++) {
+                    if (key == data[i].child[j].key) {
+                        data[i].child[j].value = value;
+                        return data;
+                    }
+                }
+        }
     }
 
     componentWillUnmount() {
         this.listener && this.listener.remove();
+    }
+
+    /***/
+    commit() {
+        var list = this.state.list
+        var param = {}
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].child.length == 0) {
+                param[data[i].key] = data[i].value
+            } else
+                for (var j = 0; j < data[i].child.length; j++) {
+                    param[data[i].child[j].key] = data[i].child[j].value
+                }
+        }
+        console.log(JSON.stringify(param))
     }
 }
 
@@ -136,28 +179,30 @@ var data = [{name: '身高(cm)', value: '180', key: 'height', child: []},
     {name: '体重(kg)', value: '75', key: 'weight', child: []},
     {
         name: '五官', child: [{name: '左眼', key: 'lefteye', value: '5.0'}
-            , {name: '右眼', key: 'righteye', value: '5.0'}
-            , {name: '口腔', key: 'oralcavity', value: '', isChose: true}
-            , {name: '皮肤', key: 'skin', value: '', isChose: true}
-        ]
+        , {name: '右眼', key: 'righteye', value: '5.0'}
+        , {name: '口腔', key: 'oralcavity', value: '', isChose: true}
+        , {name: '皮肤', key: 'skin', value: '', isChose: true}
+    ]
     },
     {
         name: '内科', child: [{name: '心', key: 'heart', value: '', isChose: true}
-            , {name: '肝', key: 'liver', value: '', isChose: true}
-            , {name: '肺', key: 'lung', value: '', isChose: true}
-            , {name: '淋巴结', key: 'lymphaden', value: '', isChose: true}
-            , {name: '脾', key: 'taste', value: '', isChose: true}
-        ]
+        , {name: '肝', key: 'liver', value: '', isChose: true}
+        , {name: '肺', key: 'lung', value: '', isChose: true}
+        , {name: '淋巴结', key: 'lymphaden', value: '', isChose: true}
+        , {name: '脾', key: 'taste', value: '', isChose: true}
+    ]
     },
     {
         name: '外科', child: [{name: '四肢', key: 'allfours', value: '', isChose: true}
-            , {name: '胸部', key: 'chest', value: '', isChose: true}
-            , {name: '头部', key: 'head', value: '', isChose: true}
-            , {name: '颈部', key: 'neck', value: '', isChose: true}
-            , {name: '脊柱', key: 'spine', value: '', isChose: true}
-        ]
-    },
+        , {name: '胸部', key: 'chest', value: '', isChose: true}
+        , {name: '头部', key: 'head', value: '', isChose: true}
+        , {name: '颈部', key: 'neck', value: '', isChose: true}
+        , {name: '脊柱', key: 'spine', value: '', isChose: true}
+    ]
+    }
 ]
+
+var chooseKey = ""
 const eventType = 'record'
 const styles = StyleSheet.create({
     leftText: {

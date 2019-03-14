@@ -11,7 +11,7 @@ import {
     TextInput,
     TouchableWithoutFeedback
 } from 'react-native';
-import PropTypes from 'prop-types'; 
+import PropTypes from 'prop-types';
 import {size, showMsg, isIos} from '../utils/Util';
 
 
@@ -41,14 +41,21 @@ export default class BottomCModel extends Component {
                     {this._getViewList()}
                 </ScrollView>
             </View>
-            <TouchableOpacity style={{
+            <View style={{
                 width: null, backgroundColor: '#fff', marginBottom: 15, marginTop: 10,
                 alignItems: 'center', justifyContent: 'center', borderRadius: 5
-            }} onPress={() => {
-                this.closeModal();
             }}>
-                <Text style={{padding: 15}}>取消</Text>
-            </TouchableOpacity>
+                <TouchableOpacity style={{
+                    width: null, backgroundColor: '#fff',
+                    alignItems: 'center', justifyContent: 'center', borderRadius: 5
+                }} onPress={() => {
+                    this.closeModal();
+                }}>
+                    <Text style={{padding: 15}}>取消</Text>
+                </TouchableOpacity>
+
+            </View>
+
         </View>
     }
 
@@ -59,21 +66,23 @@ export default class BottomCModel extends Component {
             return;
         }
         this.state.list.map((item, idx) => {
-            view.push(this.viewItem(item));
+            view.push(this.viewItem(item, idx));
         });
         return view;
     }
 
     /**item 数据*/
-    viewItem(item) {
-        return <TouchableOpacity style={{
+    viewItem(item, idx) {
+        return <View style={{width: null}} key={this.key++}><TouchableOpacity style={{
             width: null,
             alignItems: 'center', justifyContent: 'center'
-        }} key={this.key++} onPress={() => {
+        }} onPress={() => {
             this.props.closeModal(item)
         }}>
             <Text style={{padding: 15}}>{item.name}</Text>
         </TouchableOpacity>
+            {idx != this.state.list.length ? <View style={{width: null, height: 1, backgroundColor: '#eee'}}/> : null}
+        </View>
     }
 
 
@@ -128,6 +137,8 @@ export default class BottomCModel extends Component {
     sureModal(isOk) {
         this.props.closeModal(isOk);
     }
+
+
 
 }
 

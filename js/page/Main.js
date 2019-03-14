@@ -26,7 +26,7 @@ import {URL_LIST, URL_BANNERS, URL_QUERY_PAGE} from "../constant/Url";
 export default class Main extends Component<Props> {
     constructor(props) {
         super(props);
-        this.state = {isRefreshing: false, list: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]}; //定义属性
+        this.state = {isRefreshing: false, list: []}; //定义属性
     }
 
     render() {

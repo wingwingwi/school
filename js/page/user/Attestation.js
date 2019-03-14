@@ -90,7 +90,7 @@ export default class Attestation extends Component<Props> {
         for (var i = 3; i < 15 ; i++) {
             this.ages.push({name: `${i}周岁`, value: `${i}`});
         }
-        this.sex = [{name: '男', value: '1'}, {name: '女', value: '2'}]
+        this.sex = [{name: '男', value: '男'}, {name: '女', value: '女'}]
     }
 
     showModal(type, list) {

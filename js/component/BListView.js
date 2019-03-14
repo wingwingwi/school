@@ -56,7 +56,7 @@ export default class BListView extends React.Component {
         this.setState({refreshing: true})//开始刷新
         setTimeout(() => {
             this.props.renderRefresh();//处理刷新信息
-        }, 500);
+        }, 1000);
 
     };
 
@@ -68,6 +68,11 @@ export default class BListView extends React.Component {
     setLoading(isLoading) {
         this.setState({showFoot: isLoading ? 2 : 1});
     }
+
+    setStopLoading() {
+        this.setState({showFoot: 0});
+    }
+
 
     /**item-view*/
     _renderItem = ({item}) => {
