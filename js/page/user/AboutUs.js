@@ -33,7 +33,8 @@ export default class AboutUs extends Component<Props> {
                 {/*source={src.banzhurenxiaoxi_btn}/>*/}
                 {/*<Text style={{color: '#262626', fontSize: 15, padding: 15, lineHeight: 30}} multiline={true}>{this.state.text}</Text>*/}
                 {/*</ScrollView>*/}
-                {this.state.isShow ? <CWebView url={this.state.url} scrollEnabled={true}/> : null}
+                {this.state.isShow ? <CWebView url={this.state.url} scrollEnabled={true}
+                                               loadFinish={() => showMsg('', this.loadKey)}/> : null}
             </View>);
     }
 
@@ -43,13 +44,10 @@ export default class AboutUs extends Component<Props> {
                 if (t)
                     this.setState({text: t})
             })
+            this.loadKey = showMsg('加载中...', 3)
             post(URL_LIST, {type: '2'}, (data) => {
-                var html = h1 + data.replace('<img','<img width=200px height=200px') + h2
+                var html = h1 + data.replace('<img', '<img width=200px height=200px') + h2
                 this.setState({isShow: true, url: isIos ? {html: html} : {html: html, baseUrl: ''}})
-                // if (data != this.state.text) {
-                //     this.setState({text: data})
-                //     save('aboutUs', data)
-                // }
             })
         })
     }

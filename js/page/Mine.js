@@ -46,7 +46,7 @@ export default class Mine extends Component<Props> {
                 Actions.attestation()
             }}>< ImageBackground
                 style={{width: size.width - 30, margin: 15, height: (size.width - 30) * 85 / 345}}
-                source={src.banner_pic}></ImageBackground></Button> : null}
+                source={src.banner_pic}></ImageBackground></Button> : <View style={{height:20}}/>}
             <View style={{backgroundColor: '#fff'}}>
                 {NextView.getSettingImgItemL(() => Actions.attestation(), "认证学生", src.renzhengxuesheng_icon, "", true, true)}
                 {NextView.getSettingImgItemL(() => Actions.record(), "个人档案", src.gerendangan_icon, "", true, true)}

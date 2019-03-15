@@ -40,6 +40,7 @@ export default class CWebView extends React.Component {
                     }}
                     onLoadEnd={syntheticEvent => {
                         this.setState({loadEnd: true});
+                        if (this.props.loadFinish) this.props.loadFinish()
                     }}
                     onMessage={event => {
                         var height = event.nativeEvent.data

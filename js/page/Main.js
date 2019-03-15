@@ -54,7 +54,7 @@ export default class Main extends BasePage {
 
     request() {
         postCache(URL_BANNERS, undefined, (data) => {
-            this.setState({phone: data})
+            //this.setState({phone: data})
         })
     }
 

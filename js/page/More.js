@@ -4,6 +4,7 @@ import {
     View, Text, StyleSheet, ScrollView, RefreshControl, Image,
     TouchableOpacity, ImageBackground, NativeModules, DeviceEventEmitter
 } from 'react-native';
+import {Actions} from 'react-native-router-flux';
 import NarBar from "../component/Narbar";
 import BListView from "../component/BListView";
 import Button from "../component/Button";

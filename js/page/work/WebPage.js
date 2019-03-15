@@ -18,7 +18,7 @@ import Button from "../../component/Button";
 import NarBar from "../../component/Narbar";
 import CWebView from "../../component/CWebView";
 import {postCache} from "../../utils/Resquest";
-import {URL_NEWS_DETAIL} from "../../constant/Url";
+import {URL_NEWS_DETAIL, URL_QUERY_PAGE} from "../../constant/Url";
 
 export default class WebPage extends Component<Props> {
     constructor(props) {
@@ -33,19 +33,18 @@ export default class WebPage extends Component<Props> {
                     <NarBar
                         title={this.state.titleName} isHasNotState={true}
                         onSelect={() => {
-                            // if (this.webView.canGoBack) {
-                            //     this.webView.goBack();
-                            // } else
-                            Actions.pop();
+                            if (this.webView.canGoBack) {
+                                this.webView.goBack();
+                            } else
+                                Actions.pop();
                         }}
                     />
                     <ScrollView style={{flex: 1}}>
-                        {/*{this.state.isShow ? this._getWeb() : null}*/}
-                        {/*{this.state.isShow ? this._getWeb() : null}*/}
                         {this.state.isShow ? <CWebView
                             style={{height: this.state.height, width: size.width}}
                             url={this.state.url}
                             ref={ref => (this.webView = ref)}
+                            loadFinish={() => showMsg('', this.loadKey)}
                             setHeight={(height) => {
                                 this.setState({height: height})
                             }}
@@ -55,36 +54,6 @@ export default class WebPage extends Component<Props> {
         );
     }
 
-    _getWeb() {
-        return isIos ? <WebView automaticallyAdjustContentInsets={false}
-                                contentInset={{top: 0, left: 0, bottom: 0, right: 0}}
-                                mediaPlaybackRequiresUserAction={false}
-                                scalesPageToFit={true}
-                                startInLoadingState={false}
-                                originWhitelist={isIos ? ['*'] : undefined}
-                                domStorageEnabled={false}
-                                javaScriptEnabled={false}
-                                mixedContentMode={'always'}
-                                allowsInlineMediaPlayback={false}
-                                bounces={false}
-                                scrollEnabled={true}
-                                onLoad={(e) => {
-                                    console.log(e);
-                                }}
-                                onLoadEnd={(e) => {
-                                    console.log(e);
-                                    this.setState({show: false});
-                                }}
-                                renderError={() => {
-                                    console.log(e);
-                                    return <Text style={{marginTop: 30}}>网页错误</Text>
-                                }}
-                                style={{width: '100%', height: '100%'}}
-                                source={this.state.url}
-        /> : <WebView style={{width: '100%', height: '100%'}}
-                      source={this.state.url}/>
-    }
-
     /**即将挂载-处理参数*/
     componentWillMount() {
     }
@@ -92,17 +61,18 @@ export default class WebPage extends Component<Props> {
     request() {
         this.loadKey = showMsg('加载中...', 3)
         postCache(URL_NEWS_DETAIL, {id: this.props.id}, (data) => {
-            showMsg('', this.loadKey)
-            var html = '<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>标题</title></head><body><div>' + data.cnts + '</div></body></html>'
-            html=h1+data.cnts+h2
+            var html = h1 + data.cnts + h2
             this.setState({
                 titleName: data.title, isShow: true,
                 url: isIos ? {html: html} : {html: html, baseUrl: ''}
             })
             setTimeout(() => {
                 this.webView && this.webView.injectJavaScript(runFirst)
-            }, 1000)
+            }, 1200)
         }, false, (error => showMsg('', this.loadKey, error)))
+        postCache(URL_QUERY_PAGE, {id: this.props.id}, (data) => {
+
+        })
 
     }
 
