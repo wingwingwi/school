@@ -95,6 +95,7 @@ export default class More extends Component<Props> {
             </View>)
         }
         return (<Button style={{backgroundColor: "#fff", paddingLeft: 10, paddingRight: 10}} onPress={() => {
+                Actions.webPage({id: item.id})
             }}>
                 <Text style={{color: '#000', fontSize: 15, paddingTop: 10, paddingBottom: 10}}
                       numberOfLines={1}>{item.title}</Text>

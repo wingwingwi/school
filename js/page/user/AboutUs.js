@@ -33,7 +33,7 @@ export default class AboutUs extends Component<Props> {
                 {/*source={src.banzhurenxiaoxi_btn}/>*/}
                 {/*<Text style={{color: '#262626', fontSize: 15, padding: 15, lineHeight: 30}} multiline={true}>{this.state.text}</Text>*/}
                 {/*</ScrollView>*/}
-                {this.state.isShow ? <CWebView url={this.state.url}/> : null}
+                {this.state.isShow ? <CWebView url={this.state.url} scrollEnabled={true}/> : null}
             </View>);
     }
 
@@ -44,7 +44,7 @@ export default class AboutUs extends Component<Props> {
                     this.setState({text: t})
             })
             post(URL_LIST, {type: '2'}, (data) => {
-                var html = '<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>标题</title></head><body><div>' + data + '</div></body></html>'
+                var html = h1 + data.replace('<img','<img width=200px height=200px') + h2
                 this.setState({isShow: true, url: isIos ? {html: html} : {html: html, baseUrl: ''}})
                 // if (data != this.state.text) {
                 //     this.setState({text: data})
@@ -54,3 +54,12 @@ export default class AboutUs extends Component<Props> {
         })
     }
 }
+
+const h1 = '<!DOCTYPE html><html><head><meta charset=\"UTF-8\">' +
+    '<meta name=\"viewport\" content=\"width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0\">' +
+    '<meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />' +
+    '<meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black-translucent\" />' +
+    '<meta name=\"format-detection\" content=\"telephone=yes\" />' +
+    '<meta name=\"msapplication-tap-highlight\" content=\"no\" />' +
+    '<meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge，chrome=1\"><title>标题</title></head><body><div>'
+const h2 = '</div></body></html>'
