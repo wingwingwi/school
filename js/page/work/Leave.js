@@ -65,7 +65,7 @@ export default class Leave extends Component<Props> {
                     if (data) {
                         if (this.state.timeType == 4) {//症状
                             this.zyzzIds = data.id
-                            if (isNotEmpty(data.id)) {
+                            if (!isNotEmpty(data.id)) {
                                 this.setState({showC: false, bState: ''})
                                 Actions.inputPage({
                                     event: eventType,
@@ -74,7 +74,7 @@ export default class Leave extends Component<Props> {
                             } else this.setState({showC: false, bState: data.name})
                         } else if (this.state.timeType == 5) {//疾病名称
                             this.jbmcIds = data.id
-                            if (isNotEmpty(data.id)) {//自定义数据
+                            if (!isNotEmpty(data.id)) {//自定义数据
                                 this.setState({showC: false, bName: ''})
                                 Actions.inputPage({
                                     event: eventType,
@@ -158,6 +158,7 @@ export default class Leave extends Component<Props> {
                 }), "就诊医院", this.state.hospital, true, true, "请输入") : null}
             </View>
             <Button onPress={() => {
+                this.commitSickLeave();
             }} style={{marginTop: 70, marginLeft: 15, marginRight: 15}}>
                 <LinearGradient colors={["#00C6FF", "#0082FF"]} start={{x: 0, y: 0}} end={{x: 1, y: 0}}
                                 style={{
@@ -239,11 +240,11 @@ export default class Leave extends Component<Props> {
     requestList() {
         //症状
         postCache(URL_QUERY_DISEASE, {lb: 1}, (data) => {
-            this.disease1 = data;
+            disease1 = data;
         }, true)
         //疾病
         postCache(URL_QUERY_DISEASE, {lb: 2}, (data) => {
-            this.disease2 = data;
+            disease2 = data;
         }, false)
     }
 }
