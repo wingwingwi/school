@@ -101,7 +101,7 @@ export default class Other extends Component<Props> {
     componentDidMount() {
         postCache(URL_MSG_MYMSG, undefined, (data) => {
             var mList = list;
-            mList[0].text = data.mycount == 0 ? '暂无个人消息' : `收到${data.mycount}条消息，注意查看`
+            mList[0].text = data.mycount == 0 ? '暂无个人消息' : `收到${data.myCount}条消息，注意查看`
             mList[1].text = data.bzrCount == 0 ? '暂无班主任消息' : `收到班主任${data.bzrCount}条消息，注意查看`
             mList[2].text = data.sysCount == 0 ? '暂无系统消息' : `系统发送${data.sysCount}条消息，注意查看`
             this.setState({list: mList})

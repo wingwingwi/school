@@ -27,7 +27,7 @@ module.exports = {
     /**2.班级查询  POST*/
     URL_QUERY_CLASS: BDBaseUrl + "/dic/queryClass",
     /**2.查询主要症状或疾病名称  POST*/
-    URL_: BDBaseUrl + "/dic/queryDisease",
+    URL_QUERY_DISEASE: BDBaseUrl + "/dic/queryDisease",
     /**2.查询班主任快捷消息模板  POST*/
     URL_QUERY_NETE_TEMPLATE: BDBaseUrl + "/dic/queryNoteTemplate",
     /**2. 学校查询 POST*/
@@ -70,7 +70,7 @@ module.exports = {
     /**2.文件上传  POST*/
     URL_: BDBaseUrl + "/file/upload",
     /**2.更新个人档案  POST*/
-    URL_: BDBaseUrl + "/archives/addArchives",
+    URL_ADD_ARCHIVES: BDBaseUrl + "/archives/addArchives",
     /**2.个人档案查询  POST*/
     URL_MY_ARCHIVES: BDBaseUrl + "/archives/myArchives",
     // 消息
@@ -80,10 +80,22 @@ module.exports = {
     URL_MSG_DOREAD: BDBaseUrl + "/msg/doRead",
     /**2.查询消息数  POST*/
     URL_MSG_MYMSG: BDBaseUrl + "/msg/myMsg",
+
+    //请假管理
+    // 请假流程管理
+    /**2. 请病假 POST*/
+    URL_LEAVE_ILLNESS: BDBaseUrl + "/leave/addIllnessLeave",
+    /**2. 请事假 POST*/
+    URL_LEAVE_MATTER: BDBaseUrl + "/leave/addMatterLeave",
+    /**2.【班主任端】班主任发送通知  POST*/
+    URL_: BDBaseUrl + "/leave/sendNote",
     /**2.  POST*/
     URL_: BDBaseUrl + "",
     /**2.  POST*/
     URL_: BDBaseUrl + "",
+    /**2.  POST*/
+    URL_: BDBaseUrl + "",
+
 
 };
 
