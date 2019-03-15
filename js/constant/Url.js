@@ -29,7 +29,7 @@ module.exports = {
     /**2.查询主要症状或疾病名称  POST*/
     URL_: BDBaseUrl + "/dic/queryDisease",
     /**2.查询班主任快捷消息模板  POST*/
-    URL_: BDBaseUrl + "/dic/queryNoteTemplate",
+    URL_QUERY_NETE_TEMPLATE: BDBaseUrl + "/dic/queryNoteTemplate",
     /**2. 学校查询 POST*/
     URL_QUERY_SCHOOL: BDBaseUrl + "/dic/querySchool",
 
@@ -52,8 +52,8 @@ module.exports = {
     /**2.修改密码  POST*/
     URL_UPDATE: BDBaseUrl + "/member/updatePwd",
 
-// 资讯管理
-// 对资讯的管理
+    // 资讯管理
+    // 对资讯的管理
     /**2.去评论  POST*/
     URL_: BDBaseUrl + "/news/addComment",
     /**2. 查询评论列表 POST*/
@@ -65,19 +65,25 @@ module.exports = {
     /**2.查询资讯详情  POST*/
     URL_: BDBaseUrl + "/news/toDetail",
 
-// 附件管理
-// File Controller
+    // 附件管理
+    // File Controller
     /**2.文件上传  POST*/
     URL_: BDBaseUrl + "/file/upload",
     /**2.更新个人档案  POST*/
     URL_: BDBaseUrl + "/archives/addArchives",
     /**2.个人档案查询  POST*/
     URL_MY_ARCHIVES: BDBaseUrl + "/archives/myArchives",
+    // 消息
+    /**2.查询消息列表  POST*/
+    URL_MSG_LIST: BDBaseUrl + "/msg/list",
+    /**2.消息已读操作  POST*/
+    URL_MSG_DOREAD: BDBaseUrl + "/msg/doRead",
+    /**2.查询消息数  POST*/
+    URL_MSG_MYMSG: BDBaseUrl + "/msg/myMsg",
     /**2.  POST*/
     URL_: BDBaseUrl + "",
     /**2.  POST*/
     URL_: BDBaseUrl + "",
-
 
 };
 

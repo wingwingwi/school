@@ -60,7 +60,7 @@ module.exports = {
         } else if (type != undefined) {
             Portal.remove(type)
             if (defaultMsg)
-                Toast.show(msg, 1.5);
+                Toast.show(defaultMsg, 1.5);
         }
     },
 

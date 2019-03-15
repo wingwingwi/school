@@ -13,7 +13,7 @@ import NextView from "../../component/NextView";
 import BottomCModel from "../../model/BottomCModel";
 import PickerModel from "../../model/PickerModel";
 import {postCache} from "../../utils/Resquest";
-import {URL_LIST, URL_MY_DATA, URL_QUERY_CLASS, URL_QUERY_SCHOOL} from "../../constant/Url";
+import {URL_ADD_STUDENT, URL_LIST, URL_MY_DATA, URL_QUERY_CLASS, URL_QUERY_SCHOOL} from "../../constant/Url";
 
 /**
  * @class
@@ -31,7 +31,7 @@ export default class Attestation extends Component<Props> {
             sexName: '',
             userName: ''
         }
-        this.attestationItem = {schoolId: '', classId: '', ageId: '', sexId: ''};
+        this.attestationItem = {schoolId: '', classId: '', gender: '', age: ''};
         this.school = [];
         this.classes = []
     }
@@ -45,9 +45,23 @@ export default class Attestation extends Component<Props> {
                     text: this.state.userName
                 }), "姓名", this.state.userName, true, true, "请输入学生真实姓名")}
                 {NextView.getSettingImgItemS(() => this.showModal(1, this.school), "学校", this.state.schoolName, true, true, "请选择学生学校")}
-                {NextView.getSettingImgItemS(() => this.showModal(2, this.classes), "班级", this.state.className, true, true, "请选择学生班级")}
+                {NextView.getSettingImgItemS(() => this.showModal(2, this.classes), "班级", this.state.chassName, true, true, "请选择学生班级")}
                 {NextView.getSettingImgItemS(() => this.showModal(3, this.ages), "年龄", this.state.ageName, true, true, "请选择")}
                 {NextView.getSettingImgItemS(() => this.showModal(4, this.sex), "性别", this.state.sexName, true, true, "请选择")}
+                <Button onPress={() => {
+                    this.attestation()
+                }} style={{marginTop: 70, marginLeft: 15, marginRight: 15}}>
+                    <LinearGradient colors={["#00C6FF", "#0082FF"]} start={{x: 0, y: 0}} end={{x: 1, y: 0}}
+                                    style={{
+                                        height: 45,
+                                        width: size.width - 30,
+                                        borderRadius: 5,
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }}>
+                        <Text style={{color: '#fff', fontSize: 18}}>提交认证</Text>
+                    </LinearGradient>
+                </Button>
                 <PickerModel list={this.state.list} closeModal={(index) => {
                     if (index) {
                         var idx = parseInt(index)
@@ -56,14 +70,15 @@ export default class Attestation extends Component<Props> {
                             this.attestationItem.schoolId = this.school[idx].id
                             this.queryClass(false, this.attestationItem.schoolId)
                         } else if (this.state.showType == 2) {
+                            console.log(this.classes[idx].name + JSON.stringify(this.classes))
                             this.setState({chassName: this.classes[idx].name, showModel: false});
                             this.attestationItem.classId = this.classes[idx].id
                         } else if (this.state.showType == 3) {
                             this.setState({ageName: this.ages[idx].name, showModel: false});
-                            this.attestationItem.ageId = this.ages[idx].value
+                            this.attestationItem.age = this.ages[idx].value
                         } else if (this.state.showType == 4) {
                             this.setState({sexName: this.sex[idx].name, showModel: false});
-                            this.attestationItem.sexId = this.sex[idx].value
+                            this.attestationItem.gender = this.sex[idx].value
                         } else this.setState({showModel: false})
                     } else this.setState({showModel: false})
                 }} show={this.state.showModel}/>
@@ -72,10 +87,10 @@ export default class Attestation extends Component<Props> {
 
     componentWillMount() {
         this.ages = [];
-        for (var i = 5; i < 20; i++) {
+        for (var i = 3; i < 15 ; i++) {
             this.ages.push({name: `${i}周岁`, value: `${i}`});
         }
-        this.sex = [{name: '男', value: '1'}, {name: '女', value: '2'}]
+        this.sex = [{name: '男', value: '男'}, {name: '女', value: '女'}]
     }
 
     showModal(type, list) {
@@ -83,7 +98,7 @@ export default class Attestation extends Component<Props> {
             this.setState({showModel: true, list: list, showType: type})
         } else {
             if (type == 1) this.querySchool(true)
-            if (type == 2) this.queryClass(true, this.attestationItem.schoolId)
+            if (type == 2) this.queryClass(true, this.attestationItem.schoolId, type)
         }
     }
 
@@ -110,7 +125,7 @@ export default class Attestation extends Component<Props> {
         }, true)
     }
 
-    queryClass(isShow, id) {
+    queryClass(isShow, id, isShowModal) {
         if (!isNotEmpty(id)) {
             showMsg("请选择学校后选择班级")
         } else {
@@ -119,9 +134,36 @@ export default class Attestation extends Component<Props> {
             postCache(URL_QUERY_CLASS, {schoolId: id}, (data) => {
                 if (isShow)
                     showMsg("", this.loadKey)
-                if (data.list.length > 0) {
-                    this.setState({showType: 2, list: data, showModel: true})
+                if (data && data.length > 0) {
+                    this.classes = data
+                    if (isShowModal)
+                        this.setState({showType: 2, list: data, showModel: true})
                 } else showMsg("尚未查询到班级信息")
+            }, false, (error) => {
+                showMsg("", this.loadKey, error)
+            })
+        }
+    }
+
+    attestation() {
+        if (!isNotEmpty(this.attestationItem.schoolId)) {
+            showMsg("选择学校")
+        } else if (!isNotEmpty(this.attestationItem.classId)) {
+            showMsg("选择班级")
+        } else if (!isNotEmpty(this.attestationItem.age)) {
+            showMsg("选择年龄")
+        } else if (!isNotEmpty(this.attestationItem.gender)) {
+            showMsg("选择性别")
+        } else if (!isNotEmpty(this.state.userName)) {
+            showMsg("输入姓名")
+        } else {
+            this.loadKey = showMsg("正在提交...", 3)
+            this.attestationItem.realName = this.state.userName;
+            postCache(URL_ADD_STUDENT, this.attestationItem, (data) => {
+                showMsg("", this.loadKey, "提交成功")
+                setTimeout(() => {
+                    Actions.pop()
+                }, 800)
             }, false, (error) => {
                 showMsg("", this.loadKey, error)
             })

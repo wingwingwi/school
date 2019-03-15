@@ -24,7 +24,7 @@ import Login from './js/page/user/Login';
 import Test from './js/page/other/Test';
 import Message from './js/page/user/Message';
 import Log from './js/utils/Log';
-import Util from './js/utils/Util';
+import Util, {isNotEmpty} from './js/utils/Util';
 import {Provider} from '@ant-design/react-native';
 import Register from "./js/page/user/Register";
 import SetPwd from "./js/page/user/SetPwd";
@@ -39,6 +39,7 @@ import Record from "./js/page/work/Record";
 import WebPage from "./js/page/work/WebPage";
 import ResumeStudy from "./js/page/work/ResumeStudy";
 import TeachMain from "./js/page/teach/TeachMain";
+import ListPage from "./js/page/teach/ListPage";
 import InputPage from "./js/page/user/InputPage";
 import {_token} from "./js/constant/Constants";
 import {postCache} from "./js/utils/Resquest";
@@ -58,7 +59,7 @@ export default class App extends Component<Props> {
                     <Scene tabBarPosition="bottom" key="root" hideNavBar panHandlers={null} initial={true}>
                         {/*<Scene key="test" component={Test} title="测试中心" hideNavBar={false}/>*/}
                         <Scene key="teachMain" component={TeachMain} title="刘德华老师" hideNavBar={true}/>
-                        <Tabs key="tabbar" swipeEnabled showLabel={false}
+                        <Tabs key="tabbar" swipeEnabled={true} showLabel={false}
                               tabBarStyle={[styles.tabBarStyle, {backgroundColor: '#fff'}]}>
                             <Scene key="main" component={Main} title="首页" hideNavBar icon={TabIcon}/>
                             <Scene key="other" component={Other} title="消息" hideNavBar icon={TabIcon}/>
@@ -87,8 +88,7 @@ export default class App extends Component<Props> {
 
                         {/*老师端页面*/}
 
-                        {/*<Scene key="teachMain" component={TeachMain} title="刘德华老师" hideNavBar={false}/>*/}
-
+                        <Scene key="listPage" component={ListPage} title="请假列表" hideNavBar={true}/>
 
                         <Scene key="inputPage" component={InputPage} hideNavBar={true}/>
                         <Scene key="test" component={Test} title="测试中心" hideNavBar={false}/>
@@ -99,16 +99,17 @@ export default class App extends Component<Props> {
     }
 
     componentWillMount() {
-    }
-
-    componentDidMount() {
         getValue('token', (token) => {
-            if (token && token != '') {
+            console.log('token=' + token)
+            if (isNotEmpty(token)) {
                 _token.t = token;
             } else {
                 Actions.replace('login')
             }
         });
+    }
+
+    componentDidMount() {
     }
 
     /**卸载*/

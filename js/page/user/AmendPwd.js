@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import {View, Text, StyleSheet, Image, TextInput} from 'react-native';
+import {View, Text, StyleSheet, Image, KeyboardAvoidingView, TextInput} from 'react-native';
 import {Actions} from 'react-native-router-flux';
 import {isNotEmpty, showMsg, size} from '../../utils/Util';
 import {Provider, Toast} from '@ant-design/react-native';
@@ -26,30 +26,32 @@ export default class AmendPwd extends Component<Props> {
         return (
             <View style={{flex: 1}}>
                 <NarBar title={"修改密码"} onSelect={() => Actions.pop()}/>
-                <View style={{alignItems: 'center', width: size.width, flex: 1}}>
-                    <View style={{backgroundColor: '#fff'}}>
-                        {this.accountView()}
-                        <View style={{width: size.width, height: 1, marginTop: 10, backgroundColor: '#DBDBDB'}}/>
-                        {this.codeView()}
-                        <View style={{width: size.width, height: 1, marginTop: 10, backgroundColor: '#DBDBDB'}}/>
-                        {this.pwdView()}
-                        <View style={{width: size.width, height: 1, marginTop: 10, backgroundColor: '#DBDBDB'}}/>
+                {/*<KeyboardAvoidingView behavior="padding" enabled keyboardVerticalOffset={100}>*/}
+                    <View style={{alignItems: 'center', width: size.width, flex: 1}}>
+                        <View style={{backgroundColor: '#fff'}}>
+                            {this.accountView()}
+                            <View style={{width: size.width, height: 1, marginTop: 10, backgroundColor: '#DBDBDB'}}/>
+                            {this.codeView()}
+                            <View style={{width: size.width, height: 1, marginTop: 10, backgroundColor: '#DBDBDB'}}/>
+                            {this.pwdView()}
+                            <View style={{width: size.width, height: 1, marginTop: 10, backgroundColor: '#DBDBDB'}}/>
+                        </View>
+                        <Button onPress={() => {
+                            this.amend()
+                        }} style={{marginTop: 90, marginLeft: 15, marginRight: 15}}>
+                            <LinearGradient colors={["#00C6FF", "#0082FF"]} start={{x: 0, y: 0}} end={{x: 1, y: 0}}
+                                            style={{
+                                                height: 45,
+                                                width: size.width - 30,
+                                                borderRadius: 5,
+                                                justifyContent: 'center',
+                                                alignItems: 'center'
+                                            }}>
+                                <Text style={{color: '#fff', fontSize: 18}}>修改密码</Text>
+                            </LinearGradient>
+                        </Button>
                     </View>
-                    <Button onPress={() => {
-                        this.amend()
-                    }} style={{marginTop: 90, marginLeft: 15, marginRight: 15}}>
-                        <LinearGradient colors={["#00C6FF", "#0082FF"]} start={{x: 0, y: 0}} end={{x: 1, y: 0}}
-                                        style={{
-                                            height: 45,
-                                            width: size.width - 30,
-                                            borderRadius: 5,
-                                            justifyContent: 'center',
-                                            alignItems: 'center'
-                                        }}>
-                            <Text style={{color: '#fff', fontSize: 18}}>修改密码</Text>
-                        </LinearGradient>
-                    </Button>
-                </View>
+                            {/*</KeyboardAvoidingView>*/}
             </View>);
     }
 

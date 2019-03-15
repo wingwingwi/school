@@ -1,11 +1,20 @@
 import React, {Component} from 'react';
 
-import {View, Text, StyleSheet, Image, TextInput} from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    Image,
+    KeyboardAvoidingView,
+    TextInput,
+    InteractionManager,
+    BackHandler
+} from 'react-native';
 import {Actions} from 'react-native-router-flux';
-import {showMsg, size, isNotEmpty} from '../../utils/Util';
-import {save, getValue} from '../../utils/FileUtil'
+import {showMsg, size, isNotEmpty, isIos} from '../../utils/Util';
+import {save, getValue, deleteKey} from '../../utils/FileUtil'
 import {postCache} from '../../utils/Resquest'
-import {URL_DOLOGIN} from '../../constant/Url'
+import {URL_DOLOGIN, URL_LIST} from '../../constant/Url'
 
 import {Provider, Toast} from '@ant-design/react-native';
 import src from '../../constant/Src';
@@ -23,17 +32,49 @@ export default class Login extends Component<Props> {
         super(props);
     }
 
+    componentWillMount() {
+        if (!isIos)
+            BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
+    }
+
+    componentDidMount() {
+        InteractionManager.runAfterInteractions(() => {//清空数据
+            console.log('清理数据信息')
+            deleteKey(URL_LIST)
+            deleteKey('token')
+            deleteKey('isPerfect')
+            _token.t = ''
+        })
+    }
+
+    componentWillUnmount() {
+        if (!isIos)
+            BackHandler.removeEventListener('hardwareBackPress', this.onBackAndroid);
+    }
+
+    onBackAndroid = () => {
+        console.log('退出APP')
+        BackHandler.exitApp();
+    }
+
     render() {
         return (
             <View style={{flex: 1, backgroundColor: '#fff'}}>
                 <NarBar title={""}/>
                 <View style={{alignItems: 'center', width: size.width, flex: 1}}>
-                    <Image style={{width: 100, height: 100, marginTop: 80, marginBottom: 30}}
+                    <Image style={{
+                        width: size.width / 4,
+                        height: size.width / 4,
+                        marginTop: size.width / 10,
+                        marginBottom: 30
+                    }}
                            source={src.banzhurenxiaoxi_btn}/>
-                    {this.accountView()}
-                    <View style={{width: size.width - 20, height: 1, marginTop: 10, backgroundColor: '#DBDBDB'}}/>
-                    {this.pwdView()}
-                    <View style={{width: size.width - 20, height: 1, marginTop: 10, backgroundColor: '#DBDBDB'}}/>
+                    <KeyboardAvoidingView behavior="padding" enabled keyboardVerticalOffset={100}>
+                        {this.accountView()}
+                        <View style={{width: size.width - 20, height: 1, marginTop: 10, backgroundColor: '#DBDBDB'}}/>
+                        {this.pwdView()}
+                        <View style={{width: size.width - 20, height: 1, marginTop: 10, backgroundColor: '#DBDBDB'}}/>
+                    </KeyboardAvoidingView>
                     <Button onPress={() => {
                         this.login()
                     }} style={{marginTop: 50, marginLeft: 15, marginRight: 15}}>
@@ -98,6 +139,7 @@ export default class Login extends Component<Props> {
                 //isPerfect:’是否完善了学生信息 0未完善 1已完善,如果bySource=2可忽略’
                 showMsg("登录成功", 1)
                 save('token', data.token);//获取到数据
+                save('isPerfect', data.bySource == 2 ? -1 : data.isPerfect);//获取到数据 0未完善 1已完善,-1忽略
                 _token.t = data.token;
                 _token.isPerfect = data.isPerfect
                 _token.bySource = data.bySource

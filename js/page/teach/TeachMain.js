@@ -55,8 +55,8 @@ export default class TeachMain extends Component<Props> {
                 <Text style={{color: '#333333', fontSize: 11, marginLeft: 10}}>近期学生生病人数较多，请老师注意学生健康状况</Text>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'space-around', margin:10}}>
-                {this.itemView(src.teachbingjia, "病假", () => Actions.resumeStudy())}
-                {this.itemView(src.teachshijia, "事假", () => Actions.message())}
+                {this.itemView(src.teachbingjia, "病假", () => Actions.listPage())}
+                {this.itemView(src.teachshijia, "事假", () => Actions.listPage())}
             </View>
             <View style={{backgroundColor: '#f5f5f5', height: 12}}/>
             <View style={{flexDirection: 'row', padding: 10, alignItems: 'center'}}>

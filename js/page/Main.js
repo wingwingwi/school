@@ -26,7 +26,7 @@ import {URL_LIST, URL_BANNERS, URL_QUERY_PAGE} from "../constant/Url";
 export default class Main extends Component<Props> {
     constructor(props) {
         super(props);
-        this.state = {isRefreshing: false, list: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]}; //定义属性
+        this.state = {isRefreshing: false, list: []}; //定义属性
     }
 
     render() {
@@ -42,10 +42,12 @@ export default class Main extends Component<Props> {
     }
 
     componentDidMount() {
-        InteractionManager.runAfterInteractions(() => {
-            this.request();
-            this.requestList(true, 1)
-        })
+        setTimeout(() => {
+            if (this.listView) {
+                this.request();
+                this.requestList(true, 1)
+            }
+        }, 100)
     }
 
     request() {
@@ -58,17 +60,17 @@ export default class Main extends Component<Props> {
         this.page = page;
         if (isShow)
             this.loadKey = showMsg("加载中...", 3)
-        postCache(URL_QUERY_PAGE, {limit: 20, page: this.page}, (data) => {
+        postCache(URL_QUERY_PAGE, {limit: 20, page: this.page, ishome: 1}, (data) => {
             this.setState({list: data})
             if (isShow)
                 showMsg('', this.loadKey)
-            this.listView.setRefreshing(false);
+            this.listView && this.listView.setRefreshing(false);
         }, this.page == 1, (error) => {
             if (isShow)
                 showMsg('', this.loadKey, error)
             else
                 showMsg(error)
-            this.listView.setRefreshing(false);
+            this.listView && this.listView.setRefreshing(false);
         })
     }
 
@@ -89,9 +91,6 @@ export default class Main extends Component<Props> {
                 {this.itemView(src.woyaofuke_btn, "我要复课", () => Actions.resumeStudy())}
                 {this.itemView(src.jiankangjiaoyu_btn, "健康教育", () => {
                     Actions.more()
-                    setTimeout(() => {
-                        DeviceEventEmitter.emit('event', {})
-                    }, 100);
                 })}
                 {this.itemView(src.gerendangan_btn, "个人档案", () => Actions.record())}
                 {this.itemView(src.gerenxiaoxi_btn, "个人消息", () => Actions.message())}
@@ -179,6 +178,7 @@ export default class Main extends Component<Props> {
 
     /**卸载*/
     componentWillUnmount() {
+        this.listView = undefined
         this.setState = (state, callback) => {
             return;
         };
