@@ -14,6 +14,7 @@ import {
     Scene, Router, Actions, Reducer, Overlay, Tabs, Modal,
     Drawer, Stack, Lightbox,
 } from 'react-native-router-flux';
+import {getValue} from './js/utils/FileUtil'
 import Main from "./js/page/Main";
 import Mine from "./js/page/Mine";
 import Other from "./js/page/Other";
@@ -38,7 +39,9 @@ import Record from "./js/page/work/Record";
 import WebPage from "./js/page/work/WebPage";
 import ResumeStudy from "./js/page/work/ResumeStudy";
 import TeachMain from "./js/page/teach/TeachMain";
-
+import InputPage from "./js/page/user/InputPage";
+import {_token} from "./js/constant/Constants";
+import {postCache} from "./js/utils/Resquest";
 
 const prefix = Platform.OS === 'android' ? 'coustom://coustom/' : 'coustom://';//外部应用打开使用到的链接；
 
@@ -87,6 +90,8 @@ export default class App extends Component<Props> {
                         {/*<Scene key="teachMain" component={TeachMain} title="刘德华老师" hideNavBar={false}/>*/}
 
 
+                        <Scene key="inputPage" component={InputPage} hideNavBar={true}/>
+                        <Scene key="test" component={Test} title="测试中心" hideNavBar={false}/>
                     </Scene>
                 </Modal>
             </Overlay>
@@ -97,7 +102,13 @@ export default class App extends Component<Props> {
     }
 
     componentDidMount() {
-
+        getValue('token', (token) => {
+            if (token && token != '') {
+                _token.t = token;
+            } else {
+                Actions.replace('login')
+            }
+        });
     }
 
     /**卸载*/

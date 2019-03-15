@@ -55,8 +55,8 @@ export default class TeachMain extends Component<Props> {
                 <Text style={{color: '#333333', fontSize: 11, marginLeft: 10}}>近期学生生病人数较多，请老师注意学生健康状况</Text>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'space-around', margin:10}}>
-                {this.itemView(src.teachbingjia, "我要复课", () => Actions.resumeStudy())}
-                {this.itemView(src.teachshijia, "个人消息", () => Actions.message())}
+                {this.itemView(src.teachbingjia, "病假", () => Actions.resumeStudy())}
+                {this.itemView(src.teachshijia, "事假", () => Actions.message())}
             </View>
             <View style={{backgroundColor: '#f5f5f5', height: 12}}/>
             <View style={{flexDirection: 'row', padding: 10, alignItems: 'center'}}>
@@ -86,8 +86,8 @@ export default class TeachMain extends Component<Props> {
 
             <ImageBackground style={{width: (size.width - 45)/2, height: ((size.width - 45)/2)*75/165}}
                              source={pic}>
-                    <Text style={{color: '#fff', fontSize: 14, right:38,top:23,position:'absolute'}}>王大锤</Text>
-                    <Text style={{color: '#fff', fontSize: 11, right:28,top:43,position:'absolute'}}>点击查看 ></Text>
+                    <Text style={{color: '#fff', fontSize: 14, right:58,top:23,position:'absolute'}}>{text}</Text>
+                    <Text style={{color: '#fff', fontSize: 11, right:32,top:43,position:'absolute'}}>点击查看 ></Text>
             </ImageBackground>
         </TouchableOpacity>
     }
@@ -96,27 +96,21 @@ export default class TeachMain extends Component<Props> {
     _renderItem = item => {
         var h = (size.width - 30) * 73 / 3 / 112
         return (<View style={{backgroundColor: "#fff", paddingLeft: 10, paddingRight: 10}}>
-                <Text style={{color: '#000', fontSize: 15, paddingTop: 10, paddingBottom: 10}}>为什么要给宝宝进行安全教育</Text>
-                {item.index % 2 == 1 ? <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <View style={{height: h, flex: 2}}>
-                            <Text style={{color: '#888', fontSize: 10, lineHeight: 15, flex: 1, marginTop: 5}}
-                                  multiline={true}
-                                  numberOfLines={3}>{content}</Text>
-                            <Text style={{color: '#333', fontSize: 10, marginTop: 5}}>教育热点</Text>
-                        </View>
 
-                        <View style={{width: 5, height: 1}}/>
-                        <Image style={{flex: 1, height: h, borderRadius: 5}} source={src.banner_pic2}/>
-                    </View> : <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <Image style={{flex: 1, height: h, borderRadius: 5}} source={src.banner_pic2}/>
-                        <View style={{width: 5, height: 1}}/>
-                        <Image style={{flex: 1, height: h, borderRadius: 5}} source={src.banner_pic2}/>
-                        <View style={{width: 5, height: 1}}/>
-                        <Image style={{flex: 1, height: h, borderRadius: 5}} source={src.banner_pic2}/>
-                    </View>}
-                {item.index % 2 == 1 ? null :
-                    <Text style={{color: '#333', fontSize: 10, marginTop: 10}}>教育热点</Text>
-                }
+                <Button onPress={() => {
+                Actions.message();
+            }}>
+                    <View style={{width: size.width, padding: 10, flexDirection: 'row'}}>
+                        <Image style={{width: 55, height: 55}} source={src.gerenxiaoxi_btn}/>
+                        <View style={{height: 44, flex: 1, marginLeft: 10, justifyContent: 'center'}}>
+                            <Text style={{color: '#111111', fontSize: 15,fontWeight:'bold',marginTop:15}}>
+                                张大大
+                            </Text>
+                            <Text style={{color: '#0099FF', fontSize: 12, marginTop: 5}} numberOfLines={1}>事假申请</Text>
+                            <Text style={{color: '#82868B', fontSize: 12, marginTop: 5}} numberOfLines={1}>感冒   发烧咳嗽</Text>
+                        </View>
+                    </View>
+                </Button>
                 <View style={{width: null, height: 1, marginTop: 10, backgroundColor: '#eee'}}/>
             </View>
         );

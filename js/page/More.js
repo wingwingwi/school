@@ -28,7 +28,6 @@ export default class More extends Component<Props> {
     }
 
     render() {
-
         return <View style={{flex: 1, backgroundColor: '#fff'}}>
             <NarBar title={'资讯'}/>
             <TextBar ref={ref => (this.textBar = ref)} changeTab={(index) => {

@@ -2,13 +2,15 @@ import React, {Component} from 'react';
 
 import {
     View, Text, StyleSheet, ScrollView, RefreshControl, Image,
-    TouchableOpacity, ImageBackground, NativeModules
+    TouchableOpacity, ImageBackground, NativeModules, InteractionManager
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
 import Button from "../component/Button";
-import {size, showMsg} from '../utils/Util'
+import {size, showMsg, post} from '../utils/Util'
+import {URL_LIST, URL_MY_DATA} from '../constant/Url'
 import src from '../constant/Src'
 import NextView from "../component/NextView";
+import {postCache} from "../utils/Resquest";
 
 /**
  *
@@ -20,6 +22,7 @@ import NextView from "../component/NextView";
 export default class Mine extends Component<Props> {
     constructor(props) {
         super(props);
+        this.state = {phone: ''}
     }
 
     render() {
@@ -43,10 +46,22 @@ export default class Mine extends Component<Props> {
                              source={src.banner_pic}></ImageBackground>
             <View style={{backgroundColor: '#fff'}}>
                 {NextView.getSettingImgItemL(() => Actions.attestation(), "认证学生", src.renzhengxuesheng_icon, "", true, true)}
+                {NextView.getSettingImgItemL(() => Actions.record(), "个人档案", src.gerendangan_icon, "", true, true)}
                 {NextView.getSettingImgItemL(() => Actions.amendPwd(), "修改密码", src.xiugaimima_icon, "", true, true)}
                 {NextView.getSettingImgItemL(() => Actions.feedback(), "意见反馈", src.yijianfankui_icon, "", true, true)}
-                {NextView.getSettingImgItemL(() => Actions.aboutUs(), "关于我们", src.guanyuwomen_icon, "400-1234-5678", false, true)}
+                {NextView.getSettingImgItemL(() => Actions.aboutUs(), "关于我们", src.guanyuwomen_icon, this.state.phone, false, false)}
             </View>
         </View>
+    }
+
+    componentDidMount() {
+        InteractionManager.runAfterInteractions(() => {
+            postCache(URL_LIST, {type: '1'}, (data) => {
+                this.setState({phone: data})
+            }, true)
+            postCache(URL_MY_DATA, undefined, (data) => {
+            }, true, (error) => {
+            })
+        })
     }
 }

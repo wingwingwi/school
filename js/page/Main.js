@@ -2,16 +2,19 @@ import React, {Component} from 'react';
 
 import {
     View, Text, StyleSheet, ScrollView, RefreshControl, Image,
-    TouchableOpacity, ImageBackground, NativeModules, StatusBar, DeviceEventEmitter
+    TouchableOpacity, ImageBackground, NativeModules, StatusBar, DeviceEventEmitter, InteractionManager
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
-import {showMsg} from '../utils/Util'
+import {post, showMsg} from '../utils/Util'
+import {postCache} from '../utils/Resquest'
+
 import Button from '../component/Button';
 import NarBar from '../component/Narbar';
 import BListView from "../component/BListView";
 import Swiper from 'react-native-swiper'
 import src from '../constant/Src'
 import {size} from '../utils/Util'
+import {URL_LIST, URL_BANNERS, URL_QUERY_PAGE} from "../constant/Url";
 
 /**
  *
@@ -38,14 +41,47 @@ export default class Main extends Component<Props> {
         </View>;
     }
 
+    componentDidMount() {
+        InteractionManager.runAfterInteractions(() => {
+            this.request();
+            this.requestList(true, 1)
+        })
+    }
+
+    request() {
+        postCache(URL_BANNERS, undefined, (data) => {
+            this.setState({phone: data})
+        })
+    }
+
+    requestList(isShow, page) {
+        this.page = page;
+        if (isShow)
+            this.loadKey = showMsg("加载中...", 3)
+        postCache(URL_QUERY_PAGE, {limit: 20, page: this.page}, (data) => {
+            this.setState({list: data})
+            if (isShow)
+                showMsg('', this.loadKey)
+            this.listView.setRefreshing(false);
+        }, this.page == 1, (error) => {
+            if (isShow)
+                showMsg('', this.loadKey, error)
+            else
+                showMsg(error)
+            this.listView.setRefreshing(false);
+        })
+    }
+
     headerComponent() {
         var h = (size.width - 20) * 290 / 690
         return <View style={{backgroundColor: '#fff'}}>
             <View style={{marginLeft: 10, marginRight: 10}}>
                 <Swiper style={{width: null, height: h}}>
-                <Button onPress={()=>{Actions.webPage()}}>
-                <Image style={{width: null, height: h}} source={src.banner_pic2}/>
-                </Button>
+                    <Button onPress={() => {
+                        Actions.webPage()
+                    }}>
+                        <Image style={{width: null, height: h}} source={src.banner_pic2}/>
+                    </Button>
                 </Swiper>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
@@ -133,18 +169,13 @@ export default class Main extends Component<Props> {
 
     /**头部请求*/
     _get(isShow) {
-        setTimeout(() => {
-            this.listView.setRefreshing(false);
-        }, 1000);
+        this.requestList(isShow, 1)
     }
 
     /**即将挂载-处理参数*/
     componentWillMount() {
     }
 
-    /**已经挂载-处理耗时操作*/
-    componentDidMount() {
-    }
 
     /**卸载*/
     componentWillUnmount() {

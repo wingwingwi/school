@@ -15,6 +15,7 @@ const Src = {
     banzhurenxiaoxi_btn: require('../../res/icon/banzhurenxiaoxi_btn.png'),
     gerenxiaoxi_btn: require('../../res/icon/gerenxiaoxi_btn.png'),
     xitongxiaoxi_btn: require('../../res/icon/xitongxiaoxi_btn.png'),
+    gerendangan_icon: require('../../res/icon/gerendangan_icon.png'),
 
     wodebenjing_pic: require('../../res/icon/wodebenjing_pic.png'),
     banner_pic: require('../../res/icon/banner_pic.png'),
@@ -38,6 +39,9 @@ const Src = {
     anniunormal_btn: require('../../res/icon/anniunormal_btn.png'),
     shangchuan_btn: require('../../res/icon/shangchuan_btn.png'),
     shanchu_btn: require('../../res/icon/shanchu_btn.png'),
+    /**个人档案*/
+    gengduo_down_btn: require('../../res/icon/gengduo_down_btn.png'),
+    gengduo_up_btn: require('../../res/icon/gengduo_up_btn.png'),
 
 
    /**老师端**/

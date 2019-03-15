@@ -2,13 +2,15 @@ import React, {Component} from 'react';
 
 import {View, Text, StyleSheet, Image, TextInput} from 'react-native';
 import {Actions} from 'react-native-router-flux';
-import {showMsg, size} from '../../utils/Util';
+import {isNotEmpty, showMsg, size} from '../../utils/Util';
 import {Provider, Toast} from '@ant-design/react-native';
 import src from '../../constant/Src';
 import NarBar from '../../component/Narbar';
 import EditView from "../../component/EditView";
 import Button from "../../component/Button";
 import LinearGradient from "react-native-linear-gradient";
+import {postCache} from "../../utils/Resquest";
+import {URL_ADD_OPINION, URL_MY_DATA} from "../../constant/Url";
 
 /**
  * @class
@@ -30,6 +32,7 @@ export default class Feedback extends Component<Props> {
                 </View>
 
                 <Button onPress={() => {
+                    this.feedback();
                 }} style={{marginTop: 120, marginLeft: 15, marginRight: 15}}>
                     <LinearGradient colors={["#00C6FF", "#0082FF"]} start={{x: 0, y: 0}} end={{x: 1, y: 0}}
                                     style={{
@@ -44,6 +47,24 @@ export default class Feedback extends Component<Props> {
                 </Button>
             </View>);
     }
+
+    feedback() {
+        const remk = this.mContent.text();
+        if (isNotEmpty(remk)) {
+            this.loadKey = showMsg("正在发送中...", 3)
+            postCache(URL_ADD_OPINION, {remk: remk}, (data) => {
+                showMsg('', this.loadKey);
+                showMsg("意见发送成功", 1)
+                setTimeout(() => {
+                    Actions.pop()
+                }, 800)
+            }, false, (error) => {
+                showMsg('', this.loadKey);
+                showMsg(error, 2)
+            })
+        } else showMsg('请输入反馈意见')
+
+    }
 }
 const styles = StyleSheet.create({
     lineText: {
@@ -54,7 +75,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
         backgroundColor: '#fff',
         padding: 10,
-        marginTop:5,
+        marginTop: 5,
         height: 100,
         lineHeight: 22,
         textAlign: 'left'

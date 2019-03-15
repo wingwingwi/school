@@ -156,7 +156,7 @@ export default class NarBar extends Component<Props> {
             }}
           >
             <View style={{ flexDirection: "row", alignItems: "flex-end" }}>
-              <Text style={{ color: "#fff", fontSize: 15 }}>
+              <Text style={{ color: "#333", fontSize: 15 }}>
                 {this.props.rightText}
               </Text>
             </View>
