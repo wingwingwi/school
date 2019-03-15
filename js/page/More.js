@@ -127,8 +127,10 @@ export default class More extends Component<Props> {
 
     /**已经挂载-处理耗时操作*/
     componentDidMount() {
-        this.listView.setRefreshing(true)
-        this.requestList(1)
+        setTimeout(() => {
+            this.listView.setRefreshing(true)
+            this.requestList(1)
+        }, 100)
     }
 
     /**卸载*/

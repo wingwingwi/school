@@ -20,13 +20,14 @@ import Button from "../../component/Button";
 import LinearGradient from "react-native-linear-gradient";
 import NextView from "../../component/NextView";
 import {postCache} from "../../utils/Resquest";
-import {URL_MY_ARCHIVES} from "../../constant/Url";
+import {URL_ADD_ARCHIVES, URL_MY_ARCHIVES} from "../../constant/Url";
 import BottomCModel from "../../model/BottomCModel";
+import BasePage from "../BasePage";
 
 /**
  * @class
  */
-export default class Record extends Component<Props> {
+export default class Record extends BasePage {
     constructor(props) {
         super(props);
         this.state = {
@@ -88,6 +89,8 @@ export default class Record extends Component<Props> {
             this.loadKey = showMsg("获取个人档案中...", 3)
             postCache(URL_MY_ARCHIVES, undefined, (data) => {
                 showMsg('', this.loadKey)
+                if (isNotEmpty(data))
+                    this.setValue(data)
             }, false, (error) => {
                 showMsg('', this.loadKey, 'error')
             })
@@ -132,6 +135,7 @@ export default class Record extends Component<Props> {
     }
 
     componentWillMount() {
+        super.componentWillMount()
         this.listener = DeviceEventEmitter.addListener(eventType, (item) => {
             var list = this.changeValue(item.key, item.text)
             this.setState({list: list})
@@ -155,7 +159,25 @@ export default class Record extends Component<Props> {
         }
     }
 
+    setValue(result) {
+        var data = this.state.list
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].child.length == 0) {
+                // console.log(data[i].key)
+                // console.log(result[data[i].key])
+                data[i].value = result[data[i].key];
+            } else
+                for (var j = 0; j < data[i].child.length; j++) {
+                    // console.log(data[i].child[j].key)
+                    // console.log(result[data[i].child[j].key])
+                    data[i].child[j].value = result[data[i].child[j].key];
+                }
+        }
+        this.setState({list: data})
+    }
+
     componentWillUnmount() {
+        super.componentWillUnmount()
         this.listener && this.listener.remove();
     }
 
@@ -165,13 +187,21 @@ export default class Record extends Component<Props> {
         var param = {}
         for (var i = 0; i < data.length; i++) {
             if (data[i].child.length == 0) {
-                param[data[i].key] = data[i].value
+                var it = data[i]
+                param[it.key] = isNotEmpty(it.value) ? it.value : it.isChose ? '0' : ''
             } else
                 for (var j = 0; j < data[i].child.length; j++) {
-                    param[data[i].child[j].key] = data[i].child[j].value
+                    var item = data[i].child[j]
+                    param[item.key] = isNotEmpty(item.value) ? item.value : item.isChose ? '0' : ''
                 }
         }
-        console.log(JSON.stringify(param))
+        this.loadKey = showMsg('正在提交...', 3)
+        postCache(URL_ADD_ARCHIVES, param, (data) => {
+            showMsg('', this.loadKey, '提交成功')
+            this.timeout = setTimeout(() => {
+                Actions.pop()
+            }, 500)
+        }, false, (err) => showMsg('', this.loadKey, err))
     }
 }
 
@@ -179,26 +209,26 @@ var data = [{name: '身高(cm)', value: '180', key: 'height', child: []},
     {name: '体重(kg)', value: '75', key: 'weight', child: []},
     {
         name: '五官', child: [{name: '左眼', key: 'lefteye', value: '5.0'}
-        , {name: '右眼', key: 'righteye', value: '5.0'}
-        , {name: '口腔', key: 'oralcavity', value: '', isChose: true}
-        , {name: '皮肤', key: 'skin', value: '', isChose: true}
-    ]
+            , {name: '右眼', key: 'righteye', value: '5.0'}
+            , {name: '口腔', key: 'oralcavity', value: '', isChose: true}
+            , {name: '皮肤', key: 'skin', value: '', isChose: true}
+        ]
     },
     {
         name: '内科', child: [{name: '心', key: 'heart', value: '', isChose: true}
-        , {name: '肝', key: 'liver', value: '', isChose: true}
-        , {name: '肺', key: 'lung', value: '', isChose: true}
-        , {name: '淋巴结', key: 'lymphaden', value: '', isChose: true}
-        , {name: '脾', key: 'taste', value: '', isChose: true}
-    ]
+            , {name: '肝', key: 'liver', value: '', isChose: true}
+            , {name: '肺', key: 'lung', value: '', isChose: true}
+            , {name: '淋巴结', key: 'lymphaden', value: '', isChose: true}
+            , {name: '脾', key: 'taste', value: '', isChose: true}
+        ]
     },
     {
         name: '外科', child: [{name: '四肢', key: 'allfours', value: '', isChose: true}
-        , {name: '胸部', key: 'chest', value: '', isChose: true}
-        , {name: '头部', key: 'head', value: '', isChose: true}
-        , {name: '颈部', key: 'neck', value: '', isChose: true}
-        , {name: '脊柱', key: 'spine', value: '', isChose: true}
-    ]
+            , {name: '胸部', key: 'chest', value: '', isChose: true}
+            , {name: '头部', key: 'head', value: '', isChose: true}
+            , {name: '颈部', key: 'neck', value: '', isChose: true}
+            , {name: '脊柱', key: 'spine', value: '', isChose: true}
+        ]
     }
 ]
 

@@ -15,6 +15,7 @@ import Swiper from 'react-native-swiper'
 import src from '../constant/Src'
 import {size} from '../utils/Util'
 import {URL_LIST, URL_BANNERS, URL_QUERY_PAGE} from "../constant/Url";
+import BasePage from "./BasePage";
 
 /**
  *
@@ -23,7 +24,7 @@ import {URL_LIST, URL_BANNERS, URL_QUERY_PAGE} from "../constant/Url";
  * @class Main
  * @extends {Component<Props>}
  */
-export default class Main extends Component<Props> {
+export default class Main extends BasePage {
     constructor(props) {
         super(props);
         this.state = {isRefreshing: false, list: []}; //定义属性
@@ -93,7 +94,7 @@ export default class Main extends Component<Props> {
                     Actions.more()
                 })}
                 {this.itemView(src.gerendangan_btn, "个人档案", () => Actions.record())}
-                {this.itemView(src.gerenxiaoxi_btn, "个人消息", () => Actions.message())}
+                {this.itemView(src.gerenxiaoxi_btn, "个人消息", () => Actions.message({typeNum: 1}))}
             </View>
             <View style={{backgroundColor: '#f5f5f5', height: 12}}/>
             <View style={{flexDirection: 'row', padding: 10, alignItems: 'center'}}>

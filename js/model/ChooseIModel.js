@@ -14,7 +14,7 @@ import {
     TouchableWithoutFeedback
 } from "react-native";
 import PropTypes from "prop-types";
-import {size, showMsg, isIos} from "../utils/Util";
+import {size, showMsg, isIos, isNotEmpty} from "../utils/Util";
 
 export default class ChooseIModel extends Component {
     /**定义基本的数据类型，props，*/
@@ -54,16 +54,10 @@ export default class ChooseIModel extends Component {
                                 item.isC = false
                             })
                             this.setState({list: list});
-                        }}
-                    >
-                        清除
-                    </Text>
+                        }}>清除</Text>
                     <Text
                         style={{padding: 10, paddingRight: 15, color: "#0099FF", fontSize: 15}}
-                        onPress={() => this.closeModal()}
-                    >
-                        确认
-                    </Text>
+                        onPress={() => this.sure()}>确认</Text>
                 </View>
                 <View style={{width: null, height: 1, backgroundColor: "#eee"}}/>
                 <View
@@ -112,15 +106,46 @@ export default class ChooseIModel extends Component {
                     borderColor: !item.isC ? "#eee" : '#0099FF'
                 }}
                 key={this.key++}
-                onPress={() => {
-                    var list = this.state.list;
-                    list[index].isC = !list[index].isC;
-                    this.setState({list: list});
-                }}
-            >
+                onPress={() => this.changeList(index)}>
                 <Text style={{padding: 8, fontSize: 13, color: item.isC ? '#fff' : '#888'}}>{item.name}</Text>
             </TouchableOpacity>
         );
+    }
+
+    changeList(index) {
+        var list = this.state.list;
+        list[index].isC = !list[index].isC;
+        if (!isNotEmpty(list[index].id) && list[index].isC) {//清空其他
+            for (var i = 0; i < list.length; i++) {
+                if (index != i)
+                    list[i].isC = false
+            }
+        } else {
+            for (var i = 0; i < list.length; i++) {
+                if (!isNotEmpty(list[index].id))
+                    list[i].isC = false
+            }
+        }
+        this.setState({list: list})
+    }
+
+    sure() {
+        var name = ''
+        var id = ''
+        for (var i = 0; i < list.length; i++) {
+            if (list[i].isC) {
+                if (isNotEmpty(list[i].id)) {
+                    name = '自定义'
+                    id = ''
+                } else {
+                    name = isNotEmpty(name) ? list[i].name : `${name},${list[i].name}`
+                    id = isNotEmpty(id) ? list[i].id : `${id},${list[i].id}`
+                }
+            }
+        }
+        if (isNotEmpty(name)) {
+            this.props.closeModal({name: name, id: id})
+        } else showMsg('请选择')
     }
 
     /**配置布局*/
@@ -166,6 +191,7 @@ export default class ChooseIModel extends Component {
     componentWillReceiveProps(nextProps) {
         if (nextProps.show) {
             var list = nextProps.list;
+            list.push({name: '自定义', id: ''})
             if (list != undefined && list.length > 0) {
                 this.setState({isVisible: nextProps.show, list: list});
             } else this.setState({isVisible: nextProps.show});

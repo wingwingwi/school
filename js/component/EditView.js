@@ -11,7 +11,7 @@ export default class EditView extends React.Component {
         text: PropTypes.string,
         placeholder: PropTypes.string,
         style: PropTypes.object,
-        keyboardType:PropTypes.oneOf(['default', 'numeric','visible-password'])
+        keyboardType: PropTypes.oneOf(['default', 'numeric', 'visible-password'])
     };
 
     constructor(props) {
@@ -23,6 +23,7 @@ export default class EditView extends React.Component {
 
     render() {
         return (<TextInput style={[{padding: 0}, this.props.style]}
+                           ref={ref => (this.textInput = ref)}
                            multiline={this.props.multiline}
                            secureTextEntry={this.props.secureTextEntry}
                            numberOfLines={this.props.numberOfLines ? this.props.numberOfLines : 1}
@@ -33,6 +34,10 @@ export default class EditView extends React.Component {
                            underlineColorAndroid='transparent'>
             </TextInput>
         )
+    }
+
+    focus() {
+        this.textInput && this.textInput.focus()
     }
 
     /**获取数据*/
