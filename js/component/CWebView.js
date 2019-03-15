@@ -28,7 +28,7 @@ export default class CWebView extends React.Component {
         return (
             <View style={{flex: 1, width: null}}>
                 <WebView
-                    source={{html}}
+                    source={this.props.url}
                     style={this.props.style}
                     onLoadProgress={({nativeEvent}) =>
                         this._loadProgress(nativeEvent.progress)

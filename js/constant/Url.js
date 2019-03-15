@@ -63,7 +63,7 @@ module.exports = {
     /**2.点赞/取消点赞  POST*/
     URL_: BDBaseUrl + "/news/thumbs",
     /**2.查询资讯详情  POST*/
-    URL_: BDBaseUrl + "/news/toDetail",
+    URL_NEWS_DETAIL: BDBaseUrl + "/news/toDetail",
 
     // 附件管理
     // File Controller

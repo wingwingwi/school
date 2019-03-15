@@ -82,7 +82,7 @@ export default class Main extends BasePage {
             <View style={{marginLeft: 10, marginRight: 10}}>
                 <Swiper style={{width: null, height: h}}>
                     <Button onPress={() => {
-                        Actions.webPage()
+                        Actions.webPage({url: 'https://www.baidu.com'})
                     }}>
                         <Image style={{width: null, height: h}} source={src.banner_pic2}/>
                     </Button>
@@ -154,8 +154,10 @@ export default class Main extends BasePage {
             </View>)
         }
         return (<Button style={{backgroundColor: "#fff", paddingLeft: 10, paddingRight: 10}} onPress={() => {
+                Actions.webPage({id: item.id})
             }}>
-                <Text style={{color: '#000', fontSize: 15, paddingTop: 10, paddingBottom: 10}} numberOfLines={1}>{item.title}</Text>
+                <Text style={{color: '#000', fontSize: 15, paddingTop: 10, paddingBottom: 10}}
+                      numberOfLines={1}>{item.title}</Text>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>{view}
                 </View>
                 {!item.fileList || item.fileList.length < 3 ? null :
