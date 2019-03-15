@@ -53,6 +53,7 @@ export default class BListView extends React.Component {
 
     /**下拉刷新*/
     _renderRefresh = () => {
+        console.log('下拉刷新')
         this.setState({refreshing: true})//开始刷新
         setTimeout(() => {
             this.props.renderRefresh();//处理刷新信息

@@ -181,6 +181,7 @@ export default class Leave extends Component<Props> {
         if (!isNotEmpty(param.startTime) || !isNotEmpty(param.remk)) {
             showMsg('请提交完整假单')
         } else {
+            param.startTime = param.startTime + ':00'
             this.request(URL_LEAVE_MATTER, param)
         }
 
@@ -202,8 +203,12 @@ export default class Leave extends Component<Props> {
             !isNotEmpty(this.state.bState) || !isNotEmpty(this.state.bName)) {
             showMsg(!isNotEmpty(param.fallTime) ? '选择时间' : !isNotEmpty(param.startTime) ? '选择时间' :
                 !isNotEmpty(this.state.bState) ? '输入病状信息' : '输入病理名称')
-        } else
+        } else {
+            param.fallTime = param.fallTime + ':00'
+            param.startTime = param.startTime + ':00'
             this.request(URL_LEAVE_ILLNESS, param)
+        }
+
     }
 
     request(url, param) {
