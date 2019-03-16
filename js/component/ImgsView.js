@@ -3,13 +3,16 @@ import PropTypes from 'prop-types';
 import {
     View, ActivityIndicator, Text, Image, TouchableOpacity
 } from 'react-native';
-import {size, isIos} from '../utils/Util'
+import {size, isIos, showMsg} from '../utils/Util'
 import src from '../constant/Src'
 import Button from "./Button";
-//import ImagePicker from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-picker';
 
 var options = {
     title: '选择图片',
+    cancelButtonTitle: '取消',
+    takePhotoButtonTitle: '拍照',
+    chooseFromLibraryButtonTitle: '图片库',
     customButtons: [
         {name: 'fb', title: '相册选择图片'},
     ],
@@ -27,7 +30,7 @@ export default class ImgsView extends Component<Props> {
     constructor(props) {
         super(props);
         this.state = {
-            arr: [{img: src.banner_pic2}]
+            arr: []
         }
         this.key = 1;
     }
@@ -56,6 +59,7 @@ export default class ImgsView extends Component<Props> {
         var views = [];
         if (this.state.arr.length > 0) {
             this.state.arr.map((item, idx) => {
+                let index = idx
                 views.push(<View key={this.key++}
                                  style={{
                                      marginLeft: idx == 0 ? 0 : 10,
@@ -66,6 +70,9 @@ export default class ImgsView extends Component<Props> {
                     <Image source={item.img}
                            style={{width: w - 5, marginTop: 5, height: w - 5}}/>
                     <Button style={{position: 'absolute', right: 0}} onPress={() => {
+                        var list = this.state.arr;
+                        list.splice(index, 1)
+                        this.setState({arr: list})
                     }}>
                         <Image source={src.shanchu_btn}
                                style={{width: 14, height: 14}}/>
@@ -79,25 +86,29 @@ export default class ImgsView extends Component<Props> {
     }
 
     _choose() {
-        // ImagePicker.launchImageLibrary(options, (response) => {
-        //     console.log('Response = ', response);
-        //     if (response.didCancel) {
-        //         console.log('User cancelled image picker');
-        //     } else if (response.error) {
-        //         showMsg('请开启拍照权限');
-        //     } else if (response.customButton) {
-        //         console.log('User tapped custom button: ', response.customButton);
-        //     }
-        //     else {
-        //         let source = {uri: response.uri};
-        //         var arr = this.state.arr;
-        //         arr.push({img: source});
-        //         this.setState({arr: arr});
-        //     }
-        // });
+        ImagePicker.launchImageLibrary(options, (response) => {
+            console.log('Response = ', response);
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                showMsg('请开启拍照权限');
+            } else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            }
+            else {
+                let source = {uri: response.uri};
+                var arr = this.state.arr;
+                arr.push({img: source});
+                this.setState({arr: arr});
+            }
+        });
     }
 
     getPic() {
         return this.state.arr;
+    }
+
+    setPic(list) {
+        this.setState({arr: list})
     }
 }

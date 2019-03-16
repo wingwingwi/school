@@ -62,6 +62,7 @@ export default class App extends Component<Props> {
                             <Scene key="more" component={More} title="咨询" hideNavBar icon={TabIcon}/>
                             <Scene key="mine" component={Mine} title="我的" hideNavBar icon={TabIcon}/>
                         </Tabs>
+
                         <Scene key="sound" component={Main} title="第二个界面" hideNavBar={false}/>
                         <Scene key="ko" component={Other} title="第san个界面" hideNavBar={false}/>
                         <Scene key="ki" component={More} title="sef个界面" hideNavBar={false}/>

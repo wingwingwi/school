@@ -22,7 +22,7 @@ import {postCache} from "../utils/Resquest";
 export default class Mine extends Component<Props> {
     constructor(props) {
         super(props);
-        this.state = {phone: '', uesrName: '', avatarUrl: '', showView: 0}
+        this.state = {phone: '', uesrName: '', avatarUrl: src.banzhurenxiaoxi_btn, showView: 0}
     }
 
     render() {
@@ -38,7 +38,7 @@ export default class Mine extends Component<Props> {
                             bottom: 10
                         }}>
                     <Image style={{width: 66, height: 66, borderRadius: 33, padding: 1, backgroundColor: '#fff'}}
-                           source={src.banzhurenxiaoxi_btn}/>
+                           source={this.state.avatarUrl}/>
                     <Text style={{color: '#fff', fontSize: 21, marginLeft: 10}}>{this.state.uesrName}</Text>
                 </Button>
             </ImageBackground>
@@ -46,7 +46,7 @@ export default class Mine extends Component<Props> {
                 Actions.attestation()
             }}>< ImageBackground
                 style={{width: size.width - 30, margin: 15, height: (size.width - 30) * 85 / 345}}
-                source={src.banner_pic}></ImageBackground></Button> : <View style={{height:20}}/>}
+                source={src.banner_pic}></ImageBackground></Button> : <View style={{height: 20}}/>}
             <View style={{backgroundColor: '#fff'}}>
                 {NextView.getSettingImgItemL(() => Actions.attestation(), "认证学生", src.renzhengxuesheng_icon, "", true, true)}
                 {NextView.getSettingImgItemL(() => Actions.record(), "个人档案", src.gerendangan_icon, "", true, true)}
@@ -67,7 +67,8 @@ export default class Mine extends Component<Props> {
                 this.user = data;
                 this.setState({
                     uesrName: isNotEmpty(data.nickname) ? data.nickname : data.userName,
-                    avatarUrl: data.avatarUrl, showView: data.bySource == 2 ? -1 : data.isPerfect
+                    avatarUrl: isNotEmpty(data.avatarUrl) ? {uri: data.avatarUrl} : src.banzhurenxiaoxi_btn
+                    , showView: data.bySource == 2 ? -1 : data.isPerfect
                 })
             }, true, (error) => {
             })
@@ -78,7 +79,8 @@ export default class Mine extends Component<Props> {
         this.listener = DeviceEventEmitter.addListener('Mine', (data) => {
             this.setState({
                 uesrName: isNotEmpty(data.nickname) ? data.nickname : data.userName,
-                avatarUrl: data.avatarUrl, showView: data.bySource == 2 ? -1 : data.isPerfect
+                avatarUrl: isNotEmpty(data.avatarUrl) ? {uri: data.avatarUrl} : src.banzhurenxiaoxi_btn,
+                showView: data.bySource == 2 ? -1 : data.isPerfect
             })
         });
     }

@@ -463,7 +463,7 @@ module.exports = {
             type: "multipart/form-data",
             name: "image.png"
         };
-        formData.append("files", file);
+        formData.append("file", file);
         Log.m(file);
         /**上传*/
         fetch(url, {
@@ -479,10 +479,13 @@ module.exports = {
                 else failCallback("请稍后请求");
             })
             .then(function (response) {
-                Log.d(response);
                 try {
+                    console.log(response);
                     let data = JSON.parse(response);
-                    successCallback(data);
+                    if (data.code = 200) {
+                        successCallback(data.data);
+                    } else failCallback(data.msg)
+
                 } catch (e) {
                     failCallback("请稍后请求");
                 }

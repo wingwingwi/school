@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 
-import {View, Text, StyleSheet, Image, TextInput, ImageBackground, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, Image, TextInput, ImageBackground, Alert, ScrollView} from 'react-native';
 import {Actions} from 'react-native-router-flux';
-import {isNotEmpty, showMsg, size} from '../../utils/Util';
+import {getArrStr, isNotEmpty, showMsg, size, upload} from '../../utils/Util';
 import {Provider, Toast} from '@ant-design/react-native';
 import src from '../../constant/Src';
 import NarBar from '../../component/Narbar';
@@ -15,7 +15,7 @@ import ImgsView from "../../component/ImgsView";
 import CheckView from "../../component/CheckView";
 import DateModel from "../../model/DateModel";
 import {postCache} from "../../utils/Resquest";
-import {URL_ILLNESS_RESUME, URL_MATTER_RESUME} from "../../constant/Url";
+import {URL_ILLNESS_RESUME, URL_MATTER_RESUME, URL_UPLOAD} from "../../constant/Url";
 
 
 /**
@@ -93,6 +93,7 @@ export default class ResumeStudy extends Component<Props> {
     sickLeave() {
         return <ScrollView contentContainerStyle={{flex: 1, alignItems: 'center'}}>
             <View style={{width: size.width}}>
+                <View style={{height: 10}}/>
                 {NextView.getSettingImgItemS(() => this.setState({
                     showTime: true,
                     isIll: 1
@@ -103,7 +104,7 @@ export default class ResumeStudy extends Component<Props> {
                            changeCheck={(check) => this.setState({inpatient: check})} ref={ref => this.check2 = ref}/>
                 {this.state.inpatient ?
                     <Text style={{backgroundColor: '#fff', padding: 10, width: size.width}}>上传病例以及相关材料</Text> : null}
-                {this.state.inpatient ? <ImgsView/> : null}
+                {this.state.inpatient ? <ImgsView ref={ref => this.imgsView = ref}/> : null}
                 <Text style={{color: '#E64340', fontSize: 12, padding: 10, lineHeight: 18}}>{notice}</Text>
                 {NextView.getSettingImgItemL(() => {
                 }, "备注", undefined, "", true, false)}
@@ -130,15 +131,39 @@ export default class ResumeStudy extends Component<Props> {
         </ScrollView>
     }
 
+
+    /**上传图片*/
+    _upload(times, param) {
+        if (times < this.imgsView.getPic().length && param.seeDoctor == 1) {
+            if (this.imgsView.getPic().length > 1) {
+                this.loadKey = showMsg(`上传第${times + 1}张`, 3);
+            } else
+                this.loadKey = showMsg('上传中...', 3);
+            var arr = this.imgsView.getPic();
+            var pic = arr[times].img.uri;
+            upload(URL_UPLOAD, pic, (data) => {
+                showMsg('', this.loadKey);
+                this.uploadImg.push(data.fileUrl);
+                if (this.isNotFinish)
+                    this._upload(times + 1, param);
+            }, (error) => {
+                showMsg('', this.loadKey, error);
+            })
+        } else {
+            if (param.seeDoctor == 1 && this.uploadImg.length > 0)
+                param.urls = getArrStr(this.uploadImg)
+            if (this.isNotFinish)
+                this.request(URL_ILLNESS_RESUME, param)
+        }
+    }
+
     matterResume() {
         if (!isNotEmpty(this.state.resumeTime) || !isNotEmpty(this.mContent.text())) {
             showMsg('请输入时间和备注信息')
             return
         }
-        this.loadKey = showMsg('提交申请中...', 3)
-        postCache(URL_MATTER_RESUME, {endTime: this.state.resumeTime + ':00', remk: this.mContent.text()}, (data) => {
-            showMsg('', this.loadKey, '提交成功')
-        }, false, error => showMsg('', this.loadKey, error))
+        var param = {endTime: this.state.resumeTime + ':00', remk: this.mContent.text()};
+        this.request(URL_MATTER_RESUME, param);
     }
 
     illnessResume() {
@@ -146,17 +171,31 @@ export default class ResumeStudy extends Component<Props> {
             showMsg('请输入时间')
             return
         }
-        this.loadKey = showMsg('提交申请中...', 3)
-        postCache(URL_ILLNESS_RESUME, {
+        var param = {
             endTime: this.state.illnessTime + ':00',
             inProve: this.check2.check() ? 1 : 0,
             isRecovery: this.check1.check() ? 1 : 0,
             remk: this.mContent1.text(),
-        }, (data) => {
-            showMsg('', this.loadKey, '提交成功')
-        }, false, error => showMsg('', this.loadKey, error))
+        };
+        this.uploadImg = []
+        this._upload(0, param)
     }
 
+    request(url, param) {
+        this.loadKey = showMsg("提交申请中...", 3)
+        postCache(url, param, (data) => {
+            showMsg('', this.loadKey, '提交成功')
+            Alert('提交成功', '稍后你会得到班主任的回复消息')
+        }, false, (err) => showMsg('', this.loadKey, err))
+    }
+
+    componentDidMount() {
+        this.isNotFinish = true
+    }
+
+    componentWillUnmount() {
+        this.isNotFinish = false
+    }
 
 }
 const notice = '* 手足口为国家法定传染病，需持有校医（保健老师）出具的复课证需持有校医（保健老师）出具的复课证明或持有医院开具的痊愈证明方可复课明或持有医院开具的痊愈证明方可复课。'

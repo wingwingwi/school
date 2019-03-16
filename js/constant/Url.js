@@ -68,7 +68,7 @@ module.exports = {
     // 附件管理
     // File Controller
     /**2.文件上传  POST*/
-    URL_: BDBaseUrl + "/file/upload",
+    URL_UPLOAD: BDBaseUrl + "/file/upload",
     /**2.更新个人档案  POST*/
     URL_ADD_ARCHIVES: BDBaseUrl + "/archives/addArchives",
     /**2.个人档案查询  POST*/

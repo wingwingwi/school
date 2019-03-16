@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 import {
     View,
-    Text,
+    Text, Alert,
     StyleSheet,
     TouchableOpacity,
     TextInput,
@@ -11,7 +11,7 @@ import {
     InteractionManager, DeviceEventEmitter
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
-import {getDateTime, isNotEmpty, showMsg, size} from '../../utils/Util';
+import {getArrStr, getDateTime, isNotEmpty, showMsg, size, upload} from '../../utils/Util';
 import {Provider, Toast} from '@ant-design/react-native';
 import src from '../../constant/Src';
 import NarBar from '../../component/Narbar';
@@ -26,7 +26,7 @@ import DateModel from "../../model/DateModel";
 import ChooseIModel from "../../model/ChooseIModel";
 import PickerModel from "../../model/PickerModel";
 import {postCache} from "../../utils/Resquest";
-import {URL_LEAVE_ILLNESS, URL_LEAVE_MATTER, URL_QUERY_DISEASE} from "../../constant/Url";
+import {URL_LEAVE_ILLNESS, URL_LEAVE_MATTER, URL_QUERY_DISEASE, URL_UPLOAD} from "../../constant/Url";
 
 /**
  * @class
@@ -38,8 +38,8 @@ export default class Leave extends Component<Props> {
             tab: 0, open: false, inpatient: false, showTime: false, startTime: '', endTime: '', timeType: 0,
             startBTime: '', endBTime: '', bName: '', bState: '', hospital: '', showC: false, list: [],
             showH: false, listH: []
-        }
-        ;
+        };
+        this.pics = [];
     }
 
     render() {
@@ -150,7 +150,7 @@ export default class Leave extends Component<Props> {
                            changeCheck={(check) => this.setState({open: check})}/>
                 {this.state.open ?
                     <Text style={{backgroundColor: '#fff', padding: 10, width: size.width}}>上传病例以及相关材料</Text> : null}
-                {this.state.open ? <ImgsView/> : null}
+                {this.state.open ? <ImgsView ref={ref => this.imgsView = ref}/> : null}
                 <CheckView title={"是否住院"} style={{padding: 10, marginTop: 5}}
                            changeCheck={(check) => this.setState({inpatient: check})}/>
                 {this.state.inpatient ? NextView.getSettingImgItemS(() => Actions.inputPage({
@@ -173,6 +173,11 @@ export default class Leave extends Component<Props> {
             </Button>
             <View style={{height: 20}}/>
         </ScrollView>
+    }
+
+    setPic() {
+        setTimeout(() => {
+        }, 100)
     }
 
     commitLeave() {
@@ -207,15 +212,41 @@ export default class Leave extends Component<Props> {
         } else {
             param.fallTime = param.fallTime + ':00'
             param.startTime = param.startTime + ':00'
-            this.request(URL_LEAVE_ILLNESS, param)
+            this.uploadImg = []
+            this._upload(0, param)
         }
+    }
 
+    /**上传图片*/
+    _upload(times, param) {
+        if (times < this.imgsView.getPic().length && param.seeDoctor == 1) {
+            if (this.imgsView.getPic().length > 1) {
+                this.loadKey = showMsg('上传第' + times + '张', 3);
+            } else
+                this.loadKey = showMsg('上传中...', 3);
+            var arr = this.imgsView.getPic();
+            var pic = arr[times].img.uri;
+            upload(URL_UPLOAD, pic, (data) => {
+                showMsg('', this.loadKey);
+                this.uploadImg.push(data.fileUrl);
+                if (this.isNotFinish)
+                    this._upload(times + 1, param);
+            }, (error) => {
+                showMsg('', this.loadKey, error);
+            })
+        } else {
+            if (param.seeDoctor == 1 && this.uploadImg.length > 0)
+                param.urls = getArrStr(this.uploadImg)
+            if (this.isNotFinish)
+                this.request(URL_LEAVE_ILLNESS, param)
+        }
     }
 
     request(url, param) {
         this.loadKey = showMsg("正在提交假条...", 3)
         postCache(url, param, (data) => {
             showMsg('', this.loadKey, '提交成功')
+            Alert('提交成功', '稍后你会得到班主任的回复消息')
         }, false, (err) => showMsg('', this.loadKey, err))
     }
 
@@ -223,6 +254,7 @@ export default class Leave extends Component<Props> {
         InteractionManager.runAfterInteractions(() => {
             this.requestList()
         })
+        this.isNotFinish = true
     }
 
     componentWillMount() {
@@ -234,6 +266,7 @@ export default class Leave extends Component<Props> {
     }
 
     componentWillUnmount() {
+        this.isNotFinish = false
         this.listener && this.listener.remove();
     }
 
@@ -248,6 +281,7 @@ export default class Leave extends Component<Props> {
         }, false)
     }
 }
+
 var disease1 = [];
 var disease2 = [];
 const list1 = [{name: '发热'}, {name: '咳嗽'}, {name: '头痛'}, {name: '脚痛'}, {name: '屁股痛'}, {name: '鸡冻'}, {name: '自定义'}]

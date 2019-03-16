@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 import {View, Text, StyleSheet, Image, TextInput, InteractionManager, DeviceEventEmitter} from 'react-native';
 import {Actions} from 'react-native-router-flux';
-import {isNotEmpty, post, showMsg, size} from '../../utils/Util';
+import {isNotEmpty, post, showMsg, size, upload} from '../../utils/Util';
 import {Provider, Toast} from '@ant-design/react-native';
 import src from '../../constant/Src';
 import NarBar from '../../component/Narbar';
@@ -11,10 +11,27 @@ import Button from "../../component/Button";
 import LinearGradient from "react-native-linear-gradient";
 import NextView from "../../component/NextView";
 import {save} from "../../utils/FileUtil";
-import {URL_ADD_STUDENT, URL_LIST, URL_MY_DATA, URL_UPDATE_MENBER} from "../../constant/Url";
+import {URL_ADD_STUDENT, URL_LIST, URL_MY_DATA, URL_UPDATE_MENBER, URL_UPLOAD} from "../../constant/Url";
 import {postCache} from "../../utils/Resquest";
 import BottomCModel from "../../model/BottomCModel";
 import PickerModel from "../../model/PickerModel";
+import ImagePicker from 'react-native-image-picker';
+
+var options = {
+    title: '选择图片',
+    cancelButtonTitle: '取消',
+    takePhotoButtonTitle: '拍照',
+    chooseFromLibraryButtonTitle: '图片库',
+    customButtons: [
+        {name: 'fb', title: '相册选择图片'},
+    ],
+    maxWidth: 600,
+    maxHeight: 600,
+    storageOptions: {
+        skipBackup: true,
+        path: 'images'
+    }
+};
 
 /**
  * @class
@@ -22,7 +39,12 @@ import PickerModel from "../../model/PickerModel";
 export default class UserInfo extends Component<Props> {
     constructor(props) {
         super(props);
-        this.state = {user: this.props.user ? this.props.user : {}, show: false, showModel: false}
+        this.state = {
+            user: this.props.user ? this.props.user : {},
+            show: false,
+            showModel: false,
+            avatar: src.banzhurenxiaoxi_btn
+        }
         this.sex = [{name: '男', value: '1'}, {name: '女', value: '2'}]
     }
 
@@ -30,7 +52,7 @@ export default class UserInfo extends Component<Props> {
         return (
             <View style={{flex: 1}}>
                 <NarBar title={"个人信息"} onSelect={() => Actions.pop()}/>
-                {NextView.getSettingImgItemBig(() => Actions.pop(), src.banzhurenxiaoxi_btn, "修改头像", true, true)}
+                {NextView.getSettingImgItemBig(() => this._choose(), this.state.avatar, "修改头像", true, true)}
                 {NextView.getSettingImgItemS(() => Actions.inputPage({
                     event: eventType, eventName: eventName, text: this.state.user.nickname
                 }), "昵称", this.state.user.nickname, true, true, "请输入")}
@@ -59,7 +81,7 @@ export default class UserInfo extends Component<Props> {
                         var user = this.state.user
                         user.gender = this.sex[idx].name
                         this.setState({user: user, showModel: false});
-                        this.amendInfo();
+                        this.amendInfo(user);
                     } else this.setState({showModel: false})
                 }} show={this.state.showModel}/>
             </View>);
@@ -69,7 +91,7 @@ export default class UserInfo extends Component<Props> {
         InteractionManager.runAfterInteractions(() => {
             postCache(URL_MY_DATA, undefined, (data) => {
                 //{"avatarUrl":null,"userName":"15215608650","gender":null,"nickname":null,"moblie":"15215608650","bySource":1,"isPerfect":0,"student":null}
-                this.setState({user: data})
+                this.setUserInfo(data)
             }, true, (data) => {
             })
         })
@@ -80,8 +102,14 @@ export default class UserInfo extends Component<Props> {
             var user = this.state.user
             user['nickname'] = item[eventName]
             this.setState({userName: user})
-            this.amendInfo()
+            this.amendInfo(this.state.user)
         });
+        if (this.props.user) this.setUserInfo(this.props.user)
+    }
+
+    setUserInfo(data) {
+        var avatar = isNotEmpty(data.avatarUrl) ? {uri: data.avatarUrl} : src.banzhurenxiaoxi_btn
+        this.setState({user: data, avatar: avatar})
     }
 
     componentWillUnmount() {
@@ -89,11 +117,40 @@ export default class UserInfo extends Component<Props> {
     }
 
 
-    amendInfo() {
-        var user = this.state.user
-        postCache(URL_UPDATE_MENBER, user)
+    amendInfo(user) {
+        var param = {avatarUrl: user.avatarUrl, gender: user.gender, nickname: user.nickname}
+        postCache(URL_UPDATE_MENBER, param)
         DeviceEventEmitter.emit('Mine', user)
     }
+
+    _choose() {
+        ImagePicker.launchImageLibrary(options, (response) => {
+            console.log('Response = ', response);
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                showMsg('请开启拍照权限');
+            } else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            }
+            else {
+                let source = {uri: response.uri};
+                this.upLoad(response.uri)
+                this.setState({avatar: source});
+            }
+        });
+    }
+
+    upLoad(pic) {
+        upload(URL_UPLOAD, pic, (data) => {
+            var user = this.state.user;
+            user.avatarUrl = data.fileUrl;
+            this.amendInfo(user);
+        }, (error) => {
+            showMsg(error);
+        })
+    }
+
 }
 const eventType = 'userInfo'
 const eventName = 'userName'
