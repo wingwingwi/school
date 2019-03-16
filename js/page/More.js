@@ -4,6 +4,7 @@ import {
     View, Text, StyleSheet, ScrollView, RefreshControl, Image,
     TouchableOpacity, ImageBackground, NativeModules, DeviceEventEmitter
 } from 'react-native';
+import {Actions} from 'react-native-router-flux';
 import NarBar from "../component/Narbar";
 import BListView from "../component/BListView";
 import Button from "../component/Button";
@@ -25,6 +26,7 @@ export default class More extends Component<Props> {
         super(props);
         this.state = {isRefreshing: false, list: []}; //定义属性
         this.page = 1;
+        this.key = 1;
     }
 
     render() {
@@ -58,34 +60,53 @@ export default class More extends Component<Props> {
             </View>
         );
     };
+
+
     /**item view */
     _renderItem = item => {
         var h = (size.width - 30) * 73 / 3 / 112
-        return (<View style={{backgroundColor: "#fff", paddingLeft: 10, paddingRight: 10}}>
-                <Text style={{color: '#000', fontSize: 15, paddingTop: 10, paddingBottom: 10}}>为什么要给宝宝进行安全教育</Text>
-                {item.index == 2 ? <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <View style={{height: h, flex: 2}}>
+        var view = []
+        if (item.fileList && item.fileList.length > 0)
+            for (var i = 0; i < item.fileList.length; i++) {
+                if (item.fileList.length >= 3) {
+                    view.push(<Image style={{flex: 1, height: h, borderRadius: 5}}
+                                     source={{uri: item.fileList[i].fileUrl}} key={this.key++}/>)
+                    if (i < 2) {
+                        view.push(<View style={{width: 5, height: 1}} key={this.key++}/>)
+                    }
+                } else if (item.fileList.length > 0 && i == 0) {
+                    view.push(<View style={{height: h, flex: 2}} key={this.key++}>
                         <Text style={{color: '#888', fontSize: 10, lineHeight: 15, flex: 1, marginTop: 5}}
                               multiline={true}
                               numberOfLines={3}>{content}</Text>
                         <Text style={{color: '#333', fontSize: 10, marginTop: 5}}>教育热点</Text>
-                    </View>
-
-                    <View style={{width: 5, height: 1}}/>
-                    <Image style={{flex: 1, height: h, borderRadius: 5}} source={src.banner_pic2}/>
-                </View> : <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Image style={{flex: 1, height: h, borderRadius: 5}} source={src.banner_pic2}/>
-                    <View style={{width: 5, height: 1}}/>
-                    <Image style={{flex: 1, height: h, borderRadius: 5}} source={src.banner_pic2}/>
-                    <View style={{width: 5, height: 1}}/>
-                    <Image style={{flex: 1, height: h, borderRadius: 5}} source={src.banner_pic2}/>
-                </View>}
-                {item.index == 2 ? null :
+                    </View>)
+                    view.push(<View style={{width: 5, height: 1}} key={this.key++}/>)
+                    view.push(<Image style={{flex: 1, height: h, borderRadius: 5}}
+                                     source={{uri: item.fileList[0].fileUrl}}
+                                     key={this.key++}/>)
+                }
+            }
+        else {
+            view.push(<View style={{height: h, flex: 2}} key={this.key++}>
+                <Text style={{color: '#888', fontSize: 10, lineHeight: 15, flex: 1, marginTop: 5}}
+                      multiline={true}
+                      numberOfLines={3}>{content}</Text>
+                <Text style={{color: '#333', fontSize: 10, marginTop: 5}}>教育热点</Text>
+            </View>)
+        }
+        return (<Button style={{backgroundColor: "#fff", paddingLeft: 10, paddingRight: 10}} onPress={() => {
+                Actions.webPage({id: item.id})
+            }}>
+                <Text style={{color: '#000', fontSize: 15, paddingTop: 10, paddingBottom: 10}}
+                      numberOfLines={1}>{item.title}</Text>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>{view}
+                </View>
+                {!item.fileList || item.fileList.length < 3 ? null :
                     <Text style={{color: '#333', fontSize: 10, marginTop: 10}}>教育热点</Text>
                 }
-
                 <View style={{width: null, height: 1, marginTop: 10, backgroundColor: '#eee'}}/>
-            </View>
+            </Button>
         );
     };
 

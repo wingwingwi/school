@@ -107,7 +107,8 @@ export default class ChooseIModel extends Component {
                 }}
                 key={this.key++}
                 onPress={() => this.changeList(index)}>
-                <Text style={{padding: 8, fontSize: 13, color: item.isC ? '#fff' : '#888'}}>{item.name}</Text>
+                <Text style={{paddingTop: 5, paddingBottom: 5, fontSize: 13, color: item.isC ? '#fff' : '#888'}}
+                      numberOfLines={1}>{item.name}</Text>
             </TouchableOpacity>
         );
     }
@@ -132,17 +133,20 @@ export default class ChooseIModel extends Component {
     sure() {
         var name = ''
         var id = ''
+        var list = this.state.list
         for (var i = 0; i < list.length; i++) {
             if (list[i].isC) {
-                if (isNotEmpty(list[i].id)) {
+                if (!isNotEmpty(list[i].id)) {
                     name = '自定义'
                     id = ''
                 } else {
-                    name = isNotEmpty(name) ? list[i].name : `${name},${list[i].name}`
-                    id = isNotEmpty(id) ? list[i].id : `${id},${list[i].id}`
+                    name = !isNotEmpty(name) ? list[i].name : `${name},${list[i].name}`
+                    id = !isNotEmpty(id) ? list[i].id : `${id},${list[i].id}`
                 }
             }
         }
+        console.log('name=' + name)
+        console.log('id=' + id)
         if (isNotEmpty(name)) {
             this.props.closeModal({name: name, id: id})
         } else showMsg('请选择')
@@ -191,7 +195,8 @@ export default class ChooseIModel extends Component {
     componentWillReceiveProps(nextProps) {
         if (nextProps.show) {
             var list = nextProps.list;
-            list.push({name: '自定义', id: ''})
+            if (isNotEmpty(list[list.length - 1].id))
+                list.push({name: '自定义', id: ''})
             if (list != undefined && list.length > 0) {
                 this.setState({isVisible: nextProps.show, list: list});
             } else this.setState({isVisible: nextProps.show});

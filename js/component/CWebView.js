@@ -28,7 +28,7 @@ export default class CWebView extends React.Component {
         return (
             <View style={{flex: 1, width: null}}>
                 <WebView
-                    source={{html}}
+                    source={this.props.url}
                     style={this.props.style}
                     onLoadProgress={({nativeEvent}) =>
                         this._loadProgress(nativeEvent.progress)
@@ -40,18 +40,15 @@ export default class CWebView extends React.Component {
                     }}
                     onLoadEnd={syntheticEvent => {
                         this.setState({loadEnd: true});
+                        if (this.props.loadFinish) this.props.loadFinish()
                     }}
                     onMessage={event => {
-                        var datas = event.nativeEvent.data
-                        console.log(`event=${datas}`)
+                        var height = event.nativeEvent.data
+                        console.log(`event=${height}`)
                         try {
-                            let data = JSON.parse(datas);
-                            if (data.type == 'setHeight') {
-                                let height = data.data;
-                                this.props.setHeight && this.props.setHeight(height)
-                            } else if (data.type == 'msg') {
-                                showMsg(data.msg)
-                            }
+                            var h = parseInt(height)
+                            if (h != 0)
+                                this.props.setHeight && this.props.setHeight(parseInt(height))
                         } catch (e) {
                             console.log(`解析失败`)
                         }
@@ -59,7 +56,7 @@ export default class CWebView extends React.Component {
                     // onNavigationStateChange={event => {
                     //     if (event.title) console.log(`event=${event.title}`)
                     // }}
-                    scrollEnabled={false}
+                    scrollEnabled={this.props.scrollEnabled}
                     injectedJavaScript={this.props.injectedJavaScript}
                     ref={ref => (this.webView = ref)}
                 />
@@ -135,9 +132,10 @@ const color = "green";
 
 /**测试信息* */
 const runFirst = `
-    document.body.style.backgroundColor = '${color}';
-    setTimeout(function() { window.ReactNativeWebView.postMessage("RN=>Html=>RN") }, 2000);
-    true; // note: this is required, or you'll sometimes get silent failures
+    setTimeout(function() { 
+    var height = document.body.scrollHeight;
+    window.ReactNativeWebView.postMessage(""+height) }, 100);
+    true; 
   `;
 
 const runSound = `
