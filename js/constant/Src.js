@@ -11,6 +11,7 @@ const Src = {
     //登录
     zhanghao_icon: require('../../res/icon/zhanghao_icon.png'),
     mima_icon: require('../../res/icon/mima_icon.png'),
+    logo_pic: require('../../res/icon/logo_pic.png'),
 
     banzhurenxiaoxi_btn: require('../../res/icon/banzhurenxiaoxi_btn.png'),
     gerenxiaoxi_btn: require('../../res/icon/gerenxiaoxi_btn.png'),
@@ -42,7 +43,15 @@ const Src = {
     /**个人档案*/
     gengduo_down_btn: require('../../res/icon/gengduo_down_btn.png'),
     gengduo_up_btn: require('../../res/icon/gengduo_up_btn.png'),
-
+    yichang_highlight_btn: require('../../res/icon/yichang_highlight_btn.png'),
+    zhengchang_highlight_btn: require('../../res/icon/zhengchang_highlight_btn.png'),
+    yichang_normal_btn: require('../../res/icon/yichang_normal_btn.png'),
+    zhengchang_normal_btn: require('../../res/icon/zhengchang_normal_btn.png'),
+    /**详情*/
+    dianzan_highlight_btn: require('../../res/icon/dianzan_highlight_btn.png'),
+    dianzan1_normal_btn: require('../../res/icon/dianzan1_normal_btn.png'),
+    dianzan2_normal_btn: require('../../res/icon/dianzan2_normal_btn.png'),
+    dianzan2_highlight_btn: require('../../res/icon/dianzan2_highlight_btn.png'),
 
 }
 

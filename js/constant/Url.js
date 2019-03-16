@@ -55,9 +55,9 @@ module.exports = {
     // 资讯管理
     // 对资讯的管理
     /**2.去评论  POST*/
-    URL_: BDBaseUrl + "/news/addComment",
+    URL_ADD_COMMENT: BDBaseUrl + "/news/addComment",
     /**2. 查询评论列表 POST*/
-    URL_: BDBaseUrl + "/news/queryComment",
+    URL_QUERY_COMMENT: BDBaseUrl + "/news/queryComment",
     /**2.查询资讯列表  POST*/
     URL_QUERY_PAGE: BDBaseUrl + "/news/queryPage",
     /**2.点赞/取消点赞  POST*/

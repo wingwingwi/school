@@ -68,7 +68,7 @@ export default class Login extends Component<Props> {
                         marginTop: size.width / 10,
                         marginBottom: 30
                     }}
-                           source={src.banzhurenxiaoxi_btn}/>
+                           source={src.logo_pic}/>
                     <KeyboardAvoidingView behavior="padding" enabled keyboardVerticalOffset={100}>
                         {this.accountView()}
                         <View style={{width: size.width - 20, height: 1, marginTop: 10, backgroundColor: '#DBDBDB'}}/>
