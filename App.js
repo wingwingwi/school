@@ -41,6 +41,10 @@ import ResumeStudy from "./js/page/work/ResumeStudy";
 import InputPage from "./js/page/user/InputPage";
 import {_token} from "./js/constant/Constants";
 import {postCache} from "./js/utils/Resquest";
+import TechPage from "./js/page/tech/TechPage";
+import StudentList from "./js/page/tech/StudentList";
+import LeaveInfo from "./js/page/tech/LeaveInfo";
+import SendMsg from "./js/page/tech/SendMsg";
 
 const prefix = Platform.OS === 'android' ? 'coustom://coustom/' : 'coustom://';//外部应用打开使用到的链接；
 
@@ -55,6 +59,10 @@ export default class App extends Component<Props> {
             <Overlay key="overlay">
                 <Modal key="modal" hideNavBar>
                     <Scene tabBarPosition="bottom" key="root" hideNavBar panHandlers={null} initial={true}>
+                        <Scene key='tech' component={TechPage} title='' hideNavBar={true}/>
+                        <Scene key='studentList' component={StudentList} title='' hideNavBar={true}/>
+                        <Scene key='leaveInfo' component={LeaveInfo} title='' hideNavBar={true}/>
+                        <Scene key='sendMsg' component={SendMsg} title='' hideNavBar={true}/>
                         <Tabs key="tabbar" swipeEnabled={true} showLabel={false}
                               tabBarStyle={[styles.tabBarStyle, {backgroundColor: '#fff'}]}>
                             <Scene key="main" component={Main} title="首页" hideNavBar icon={TabIcon}/>

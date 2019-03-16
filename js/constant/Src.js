@@ -53,6 +53,11 @@ const Src = {
     dianzan2_normal_btn: require('../../res/icon/dianzan2_normal_btn.png'),
     dianzan2_highlight_btn: require('../../res/icon/dianzan2_highlight_btn.png'),
 
+
+    /**老师*/
+    bingjia_btn: require('../../res/tech/bingjia_btn.png'),
+    shijia_btn: require('../../res/tech/shijia_btn.png'),
+    tongzhi_icon: require('../../res/tech/tongzhi_icon.png'),
 }
 
 export default Src;//导出，用于其他地方调用
