@@ -61,7 +61,7 @@ module.exports = {
     /**2.查询资讯列表  POST*/
     URL_QUERY_PAGE: BDBaseUrl + "/news/queryPage",
     /**2.点赞/取消点赞  POST*/
-    URL_: BDBaseUrl + "/news/thumbs",
+    URL_THUMBS: BDBaseUrl + "/news/thumbs",
     /**2.查询资讯详情  POST*/
     URL_NEWS_DETAIL: BDBaseUrl + "/news/toDetail",
 
@@ -89,13 +89,12 @@ module.exports = {
     URL_LEAVE_MATTER: BDBaseUrl + "/leave/addMatterLeave",
     /**2.【班主任端】班主任发送通知  POST*/
     URL_: BDBaseUrl + "/leave/sendNote",
+    /**2.病假复课  POST*/
+    URL_ILLNESS_RESUME: BDBaseUrl + "/resume/addIllnessResume",
+    /**2.事假复课  POST*/
+    URL_MATTER_RESUME: BDBaseUrl + "/resume/addMatterResume",
     /**2.  POST*/
     URL_: BDBaseUrl + "",
-    /**2.  POST*/
-    URL_: BDBaseUrl + "",
-    /**2.  POST*/
-    URL_: BDBaseUrl + "",
-
 
 };
 

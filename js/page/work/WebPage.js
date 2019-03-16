@@ -18,7 +18,7 @@ import Button from "../../component/Button";
 import NarBar from "../../component/Narbar";
 import CWebView from "../../component/CWebView";
 import {postCache} from "../../utils/Resquest";
-import {URL_NEWS_DETAIL, URL_QUERY_COMMENT, URL_QUERY_PAGE} from "../../constant/Url";
+import {URL_NEWS_DETAIL, URL_QUERY_COMMENT, URL_QUERY_PAGE, URL_THUMBS} from "../../constant/Url";
 import src from "../../constant/Src";
 import EditView from "../../component/EditView";
 
@@ -28,7 +28,7 @@ export default class WebPage extends Component<Props> {
         var html = '<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>标题</title></head><body></body></html>'
         this.state = {
             isShow: false, height: size.height, url: {html: html}, titleName: '网页', list: [],
-            look: '', time: '', thumbs: 0
+            look: '', time: '', thumbs: 0, isThumb: false
         }
     }
 
@@ -46,25 +46,28 @@ export default class WebPage extends Component<Props> {
                         }}
                     />
                     <ScrollView style={{flex: 1}}>
-                        {this.props.id ? <View style={{padding:10}}>
-                            <Text style={{color: '#666', fontSize: 15}} numberOfLines={1}>{this.state.titleName}</Text>
+                        {this.props.id ? <View style={{padding: 10}}>
+                            <Text style={{color: '#000', fontSize: 14, fontWeight: 'bold'}}
+                                  numberOfLines={1}>{this.state.titleName}</Text>
                             <View style={{
                                 marginTop: 5,
-                                width: size.width-20,
+                                width: size.width - 20,
                                 flexDirection: 'row',
                                 alignItems: 'center',
-                                justifyContent:'space-between'
+                                justifyContent: 'space-between'
                             }}>
-                                <Text style={{color: '#0099FF', fontSize: 12}}>卫生安全<Text
-                                    style={{color: '#999', fontSize: 12}}>{'|阅读量' + this.state.look}</Text></Text>
-                                <Text style={{color: '#999', fontSize: 12}}>{'发布时间：' + this.state.time}</Text>
+                                <Text style={{color: '#0099FF', fontSize: 10}}>卫生安全<Text
+                                    style={{color: '#a9a9a9', fontSize: 10}}>{'|阅读量' + this.state.look}</Text></Text>
+                                <Text style={{color: '#a9a9a9', fontSize: 10}}>{'发布时间：' + this.state.time}</Text>
                             </View>
                         </View> : null}
                         {this.state.isShow ? <CWebView
                             style={{height: this.state.height, width: size.width}}
                             url={this.state.url}
                             ref={ref => (this.webView = ref)}
-                            loadFinish={() => showMsg('', this.loadKey)}
+                            loadFinish={() => {
+                                showMsg('', this.loadKey)
+                            }}
                             scrollEnabled={false}
                             setHeight={(height) => {
                                 this.setState({height: height})
@@ -83,7 +86,9 @@ export default class WebPage extends Component<Props> {
                                 borderColor: '#0099FF',
                                 borderWidth: 1,
                             }} onPress={() => {
-                            }}><Image source={src.dianzan1_normal_btn} style={{width: 20, height: 20}}/>
+                                this.dianZan()
+                            }}><Image source={this.state.isThumb ? src.dianzan_highlight_btn : src.dianzan1_normal_btn}
+                                      style={{width: 20, height: 20}}/>
                                 <Text style={{
                                     color: '#0099FF',
                                     fontSize: 12,
@@ -106,16 +111,19 @@ export default class WebPage extends Component<Props> {
             this.setState({
                 titleName: data.title, isShow: true,
                 url: isIos ? {html: html} : {html: html, baseUrl: ''},
-                look: data.look, time: data.createTime.substring(0,10), thumbs: data.thumbs
+                look: data.look, time: data.createTime.substring(0, 10), thumbs: data.thumbs
             })
-            setTimeout(() => {
-                this.webView && this.webView.injectJavaScript(runFirst)
-            }, 1200)
         }, false, (error => showMsg('', this.loadKey, error)))
         postCache(URL_QUERY_COMMENT, {id: this.props.id}, (data) => {
 
         })
     }
+
+    dianZan() {
+        postCache(URL_THUMBS, {id: this.props.id}, undefined, false, (err) => showMsg(err))
+        this.setState({isThumb: !this.state.isThumb, thumbs: this.state.thumbs + (this.state.isThumb ? -1 : 1)})
+    }
+
 
     comment() {
 

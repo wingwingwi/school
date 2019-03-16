@@ -41,6 +41,7 @@ export default class CWebView extends React.Component {
                     onLoadEnd={syntheticEvent => {
                         this.setState({loadEnd: true});
                         if (this.props.loadFinish) this.props.loadFinish()
+                        this.injectJavaScript(heightFunJS)
                     }}
                     onMessage={event => {
                         var height = event.nativeEvent.data
@@ -129,6 +130,14 @@ const html = `
     `;
 
 const color = "green";
+
+/**测试信息* */
+const heightFunJS = `
+    setTimeout(function() { 
+    var height = document.body.scrollHeight;
+    window.ReactNativeWebView.postMessage(height) }, 50);
+    true; 
+  `;
 
 /**测试信息* */
 const runFirst = `
