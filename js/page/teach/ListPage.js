@@ -13,8 +13,10 @@ import TextBar from "../../component/TextBar";
 import NextView from "../../component/NextView";
 import ImgsView from "../../component/ImgsView";
 import CheckView from "../../component/CheckView";
+import Swiper from 'react-native-swiper'
 import DateModel from "../../model/DateModel";
 import ChooseIModel from "../../model/ChooseIModel";
+import BListView from "../../component/BListView";
 import PickerModel from "../../model/PickerModel";
 
 /**
@@ -30,7 +32,7 @@ export default class ListPage extends Component<Props> {
         this.state = {//设置初值
             tab: 0, open: false, inpatient: false, showTime: false, startTime: '', endTime: '', timeType: 0,
             startBTime: '', endBTime: '', bName: '', bState: '', hospital: '', showC: false, list: [],
-            showH: false, listH: []
+            showH: false, listH: [],listbj: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}] ,listch: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}] //定义属性
         }
         ;
     }
@@ -43,109 +45,30 @@ export default class ListPage extends Component<Props> {
                     this.setState({tab: index})
                 }}/>
                 {this.state.tab == 0 ? this.leave() : this.sickLeave()}
-                <DateModel show={this.state.showTime} closeModal={(date) => {
-                    var item = {}
-                    if (date) {
-                        if (this.state.timeType == 0) item.startTime = date
-                        else if (this.state.timeType == 1) item.endTime = date
-                        else if (this.state.timeType == 2) item.startBTime = date
-                        else if (this.state.timeType == 3) item.endBTime = date
-                    }
-                    item.showTime = false;
-                    this.setState(item);
-                }}/>
-                <ChooseIModel show={this.state.showC} list={this.state.list} closeModal={(data) => {
-                    if (data) {
-
-                    }
-                    this.setState({showC: false})
-                }}/>
-                <PickerModel show={this.state.showH} list={this.state.listH} closeModal={(item) => {
-                    if(item) this.setState({hospital:item})
-                    this.setState({showH: false})
-                }}/>
             </View>);
     }
 
 
     leave() {
-        return <ScrollView contentContainerStyle={{flex: 1, alignItems: 'center'}}>
-            <View style={{height: 10}}/>
-            <View style={{width: size.width}}>
-                {NextView.getSettingImgItemS(() => {
-                    this.setState({showTime: true, timeType: 0})
-                }, "开始时间", this.state.startTime, true, true, "请选择")}
-                {NextView.getSettingImgItemS(() => {
-                    this.setState({showTime: true, timeType: 1})
-                }, "结束时间", this.state.endTime, true, true, "请选择")}
-                <View style={{height: 10}}/>
-                {NextView.getSettingImgItemL(() => {
-                }, "请假事由", undefined, "", true, false)}
-            </View>
-            <View style={{backgroundColor: '#fff'}}>
-                <EditView ref={ref => (this.mContent = ref)} style={styles.lineEdit} numberOfLines={4}
-                          placeholder={'请输入请假事由'} multiline={true}/>
-            </View>
-            <Button onPress={() => {
-            }} style={{marginTop: 70, marginLeft: 15, marginRight: 15}}>
-                <LinearGradient colors={["#00C6FF", "#0082FF"]} start={{x: 0, y: 0}} end={{x: 1, y: 0}}
-                                style={{
-                                    height: 45,
-                                    width: size.width - 30,
-                                    borderRadius: 5,
-                                    justifyContent: 'center',
-                                    alignItems: 'center'
-                                }}>
-                    <Text style={{color: '#fff', fontSize: 18}}>提交</Text>
-                </LinearGradient>
-            </Button>
-        </ScrollView>
+        return <View style={{flex: 1, backgroundColor: '#fff'}}>
+        <BListView
+                   ref={ref => (this.listView = ref)}
+                   ListEmptyComponent={this._listEmptyComponent}
+                   list={this.state.listch}
+                   renderRefresh={() => this._get(false)}
+                   itemView={this._renderItema}/>
+        </View>;
     }
 
     sickLeave() {
-        return <ScrollView contentContainerStyle={{flex: 1, alignItems: 'center'}}>
-            <View style={{height: 10}}/>
-            <View style={{width: size.width}}>
-                {NextView.getSettingImgItemS(() => {
-                    this.setState({showTime: true, timeType: 2})
-                }, "开始时间", this.state.startBTime, true, true, '请选择')}
-                {NextView.getSettingImgItemS(() => {
-                    this.setState({showTime: true, timeType: 3})
-                }, "结束时间", this.state.endBTime, true, true, '请选择')}
-                <View style={{height: 10}}/>
-                {NextView.getSettingImgItemS(() => {
-                    this.setState({showC: true, list: list1, timeType: 4})
-                }, "主要症状", this.state.bState, true, true, '请选择')}
-                {NextView.getSettingImgItemS(() => {
-                    this.setState({showC: true, list: list3, timeType: 5})
-                }, "疾病名称", this.state.bName, true, true, '请选择')}
-                <View style={{height: 5}}/>
-                <CheckView title={"是否就医"} style={{padding: 10, marginTop: 5}}
-                           changeCheck={(check) => this.setState({open: check})}/>
-                {this.state.open ?
-                    <Text style={{backgroundColor: '#fff', padding: 10, width: size.width}}>上传病例以及相关材料</Text> : null}
-                {this.state.open ? <ImgsView/> : null}
-                <CheckView title={"是否住院"} style={{padding: 10, marginTop: 5}}
-                           changeCheck={(check) => this.setState({inpatient: check})}/>
-                {this.state.inpatient ? NextView.getSettingImgItemS(() => {
-                        this.setState({showH: true, list: list2, timeType: 6})
-                    }, "就诊医院", this.state.hospital, true, true, "请选择") : null}
-            </View>
-            <Button onPress={() => {
-            }} style={{marginTop: 70, marginLeft: 15, marginRight: 15}}>
-                <LinearGradient colors={["#00C6FF", "#0082FF"]} start={{x: 0, y: 0}} end={{x: 1, y: 0}}
-                                style={{
-                                    height: 45,
-                                    width: size.width - 30,
-                                    borderRadius: 5,
-                                    justifyContent: 'center',
-                                    alignItems: 'center'
-                                }}>
-                    <Text style={{color: '#fff', fontSize: 18}}>提交</Text>
-                </LinearGradient>
-            </Button>
-            <View style={{height: 20}}/>
-        </ScrollView>
+        return <View style={{flex: 1, backgroundColor: '#fff'}}>
+            <BListView
+                ref={ref => (this.listView = ref)}
+                ListEmptyComponent={this._listEmptyComponent}
+                list={this.state.listbj}
+                renderRefresh={() => this._get(false)}
+                itemView={this._renderItemb}/>
+        </View>;
     }
 
     headerComponent() {
@@ -200,8 +123,8 @@ export default class ListPage extends Component<Props> {
         </TouchableOpacity>
     }
 
-    /**item view */
-    _renderItem = item => {
+    /**item view 事假 */
+    _renderItema = item => {
         var h = (size.width - 30) * 73 / 3 / 112
         return (<View style={{backgroundColor: "#fff", paddingLeft: 10, paddingRight: 10}}>
 
@@ -214,8 +137,32 @@ export default class ListPage extends Component<Props> {
                             <Text style={{color: '#111111', fontSize: 15,fontWeight:'bold',marginTop:15}}>
                                 张大大
                             </Text>
-                            <Text style={{color: '#0099FF', fontSize: 12, marginTop: 5}} numberOfLines={1}>事假申请</Text>
-                            <Text style={{color: '#82868B', fontSize: 12, marginTop: 5}} numberOfLines={1}>感冒   发烧咳嗽</Text>
+                            <Text style={{color: '#0099FF', fontSize: 12, marginTop: 5}} numberOfLines={1}>开始时间：2019-03-15 08：00</Text>
+                            <Text style={{color: '#82868B', fontSize: 12, marginTop: 5}} numberOfLines={1}>家中有事，需要带孩子参加</Text>
+                        </View>
+                    </View>
+                </Button>
+                <View style={{width: null, height: 1, marginTop: 10, backgroundColor: '#eee'}}/>
+            </View>
+        );
+    };
+
+    /**item view 病假 */
+    _renderItemb = item => {
+        return (<View style={{backgroundColor: "#fff", paddingLeft: 10, paddingRight: 10}}>
+
+                <Button onPress={() => {
+                Actions.message();
+            }}>
+                    <View style={{width: size.width, padding: 10, flexDirection: 'row'}}>
+                        <Image style={{width: 55, height: 55}} source={src.gerenxiaoxi_btn}/>
+                        <View style={{height: 65, flex: 1, marginLeft: 10, justifyContent: 'center'}}>
+                            <Text style={{color: '#111111', fontSize: 15,fontWeight:'bold',marginTop:15}}>
+                                张萌萌
+                            </Text>
+                            <Text style={{color: '#0099FF', fontSize: 12, marginTop: 5}} numberOfLines={1}>开始时间：2019-03-15 08：00</Text>
+                            <Text style={{color: '#82868B', fontSize: 12, marginTop: 5}} numberOfLines={1}>疾病名称：感冒</Text>
+                            <Text style={{color: '#82868B', fontSize: 12, marginTop: 5}} numberOfLines={1}>症状：发烧，咳嗽</Text>
                         </View>
                     </View>
                 </Button>
