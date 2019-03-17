@@ -27,7 +27,7 @@ import BasePage from "./BasePage";
 export default class Main extends BasePage {
     constructor(props) {
         super(props);
-        this.state = {isRefreshing: false, list: []}; //定义属性
+        this.state = {isRefreshing: false, list: [], listS: []}; //定义属性
         this.key = 1;
     }
 
@@ -54,8 +54,8 @@ export default class Main extends BasePage {
 
     request() {
         postCache(URL_BANNERS, undefined, (data) => {
-            //this.setState({phone: data})
-        })
+            this.setState({listS: data})
+        }, true)
     }
 
     requestList(isShow, page) {
@@ -80,12 +80,46 @@ export default class Main extends BasePage {
         var h = (size.width - 20) * 290 / 690
         return <View style={{backgroundColor: '#fff'}}>
             <View style={{marginLeft: 10, marginRight: 10}}>
-                <Swiper style={{width: null, height: h}}>
-                    <Button onPress={() => {
-                        Actions.webPage({url: 'https://www.baidu.com'})
+                <Swiper style={{width: null, height: h}}
+                        dot={<View style={{
+                            backgroundColor: '#fff',
+                            width: 6,
+                            height: 6,
+                            borderRadius: 3,
+                            marginLeft: 3,
+                            marginRight: 3,
+                            marginTop: 3,
+                            marginBottom: 3,
+                        }}/>}
+                        activeDot={<View style={{
+                            backgroundColor: 'grey',
+                            width: 6,
+                            height: 6,
+                            borderRadius: 3,
+                            marginLeft: 3,
+                            marginRight: 3,
+                            marginTop: 3,
+                            marginBottom: 3
+                        }}/>}
+                        paginationStyle={{
+                            bottom: 10, left: null, right: 10
+                        }}>
+                    {this.state.list.length > 0 ? (this.state.list.map((item, idx) => {
+                        return <Button onPress={() => {
+                            Actions.webPage({url: item.linkUrl, id: item.id});
+                        }} key={idx}>
+                            <ImageBackground style={{width: size.width - 20, height: h, borderRadius: 5}}
+                                             source={src.banner_pic2}>
+                                <Image style={{width: size.width - 20, height: h, borderRadius: 5}}
+                                       source={{uri: item.pictureUrl}}/>
+                            </ImageBackground>
+
+                        </Button>
+                    })) : <Button onPress={() => {
                     }}>
-                        <Image style={{width: null, height: h}} source={src.banner_pic2}/>
-                    </Button>
+                        <Image style={{width: null, height: h, borderRadius: 5}} source={src.banner_pic2}/>
+                    </Button>}
+
                 </Swiper>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
