@@ -59,6 +59,8 @@ const Src = {
     shijia_btn: require('../../res/tech/shijia_btn.png'),
     tongzhi_icon: require('../../res/tech/tongzhi_icon.png'),
     gouxuan_btn: require('../../res/tech/gouxuan_btn.png'),
+    headico_boy: require('../../res/tech/headico_boy.png'),
+    headico_girl: require('../../res/tech/headico_girl.png'),
 }
 
 export default Src;//导出，用于其他地方调用

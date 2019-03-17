@@ -13,7 +13,7 @@ import {
 } from "react-native"; //基本架构
 
 import {Actions} from "react-native-router-flux"; //路由
-import {showMsg, size} from "../../utils/Util"; //工具类
+import {isNotEmpty, showMsg, size} from "../../utils/Util"; //工具类
 import Button from "../../component/Button";
 import BasePage from "../BasePage";
 import NarBar from "../../component/Narbar";
@@ -71,7 +71,8 @@ export default class StudentList extends BasePage {
         return (
             <View>
                 <View style={{width: size.width, padding: 10, flexDirection: 'row', backgroundColor: '#fff'}}>
-                    <Image style={{width: 55, height: 55, borderRadius: 22}} source={{uri: item.avatarUrl}}/>
+                    <Image style={{width: 55, height: 55, borderRadius: 22}}
+                           source={isNotEmpty(item.avatarUrl) ? {uri: item.avatarUrl} : src.logo_pic}/>
                     <View style={{height: 55, flex: 1, marginLeft: 10, justifyContent: 'center'}}>
                         <Text style={{color: '#111', fontSize: 15}}>{item.realName}<Text
                             style={{color: '#888', fontSize: 14}}>{`     ${item.gender}   ${item.age}岁`}</Text></Text>
@@ -104,7 +105,7 @@ export default class StudentList extends BasePage {
 
     requestList() {
         postCache(URL_QUERY_LEAVES, {lb: this.props.isType ? 2 : 1}, (data) => {
-            this.setState({list:data})
+            this.setState({list: data})
             this.listView.setRefreshing(false);
         }, false, err => {
             showMsg(err)

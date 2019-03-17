@@ -39,7 +39,7 @@ export default class WebPage extends Component<Props> {
                     <NarBar
                         title={this.state.titleName} isHasNotState={true}
                         onSelect={() => {
-                            if (this.webView.canGoBack) {
+                            if (this.webView && this.webView.canGoBack) {
                                 this.webView.goBack();
                             } else
                                 Actions.pop();
