@@ -99,15 +99,10 @@ export default class Record extends BasePage {
 
     itemView(item, group, index) {
         var str = isNotEmpty(item.value) ? item.value : '请输入'
-        if (item.isChose)
-            str = isNotEmpty(item.value) ? item.value == '1' ? '正常' : '不良' : '请选择'
-        //console.log(JSON.stringify(item)+'===='+);
+        if (item.isChose) str = ' '
         return (<View style={{width: size.width}} key={this.key++}>
             <Button onPress={() => {
-                if (item.isChose) {
-                    chooseKey = item.key
-                    this.setState({showModal: true})
-                } else {
+                if (!item.isChose) {
                     Actions.inputPage({
                         event: eventType, eventName: item.key,
                         text: item.value
@@ -116,6 +111,18 @@ export default class Record extends BasePage {
             }} style={[styles.itemView, {marginTop: 0}]}>
                 <Text style={styles.leftText}>{item.name}</Text>
                 <Text style={styles.editStyle}>{str}</Text>
+                {item.isChose ? <View style={{flexDirection: 'row'}}>
+                    <Button onPress={() => {
+                        var list = this.changeValue(item.key, '1')
+                        this.setState({list: list})
+                    }}><Image style={{width: 65, height: 25}}
+                              source={item.value == '1' ? src.zhengchang_highlight_btn : src.zhengchang_normal_btn}/></Button>
+                    <Button onPress={() => {
+                        var list = this.changeValue(item.key, '2')
+                        this.setState({list: list})
+                    }}><Image style={{width: 65, height: 25, marginLeft: 10, marginRight: 10}}
+                              source={item.value == '2' ? src.yichang_highlight_btn : src.yichang_normal_btn}/></Button>
+                </View> : null}
             </Button>
             <View style={styles.line}/></View>);
     }
@@ -209,26 +216,26 @@ var data = [{name: '身高(cm)', value: '180', key: 'height', child: []},
     {name: '体重(kg)', value: '75', key: 'weight', child: []},
     {
         name: '五官', child: [{name: '左眼', key: 'lefteye', value: '5.0'}
-            , {name: '右眼', key: 'righteye', value: '5.0'}
-            , {name: '口腔', key: 'oralcavity', value: '', isChose: true}
-            , {name: '皮肤', key: 'skin', value: '', isChose: true}
-        ]
+        , {name: '右眼', key: 'righteye', value: '5.0'}
+        , {name: '口腔', key: 'oralcavity', value: '', isChose: true}
+        , {name: '皮肤', key: 'skin', value: '', isChose: true}
+    ]
     },
     {
         name: '内科', child: [{name: '心', key: 'heart', value: '', isChose: true}
-            , {name: '肝', key: 'liver', value: '', isChose: true}
-            , {name: '肺', key: 'lung', value: '', isChose: true}
-            , {name: '淋巴结', key: 'lymphaden', value: '', isChose: true}
-            , {name: '脾', key: 'taste', value: '', isChose: true}
-        ]
+        , {name: '肝', key: 'liver', value: '', isChose: true}
+        , {name: '肺', key: 'lung', value: '', isChose: true}
+        , {name: '淋巴结', key: 'lymphaden', value: '', isChose: true}
+        , {name: '脾', key: 'taste', value: '', isChose: true}
+    ]
     },
     {
         name: '外科', child: [{name: '四肢', key: 'allfours', value: '', isChose: true}
-            , {name: '胸部', key: 'chest', value: '', isChose: true}
-            , {name: '头部', key: 'head', value: '', isChose: true}
-            , {name: '颈部', key: 'neck', value: '', isChose: true}
-            , {name: '脊柱', key: 'spine', value: '', isChose: true}
-        ]
+        , {name: '胸部', key: 'chest', value: '', isChose: true}
+        , {name: '头部', key: 'head', value: '', isChose: true}
+        , {name: '颈部', key: 'neck', value: '', isChose: true}
+        , {name: '脊柱', key: 'spine', value: '', isChose: true}
+    ]
     }
 ]
 
