@@ -87,8 +87,10 @@ export default class App extends Component<Props> {
                         <Scene key="record" component={Record} hideNavBar={true}/>
                         <Scene key="resumeStudy" component={ResumeStudy} hideNavBar={true}/>
                         <Scene key="webPage" component={WebPage} hideNavBar={true}/>
+
                         <Scene key="inputPage" component={InputPage} hideNavBar={true}/>
                         <Scene key="test" component={Test} title="测试中心" hideNavBar={false}/>
+
                         <Scene key='tech' component={TechPage} title='' hideNavBar={true}/>
                         <Scene key='studentList' component={StudentList} title='' hideNavBar={true}/>
                         <Scene key='leaveInfo' component={LeaveInfo} title='' hideNavBar={true}/>
@@ -101,7 +103,7 @@ export default class App extends Component<Props> {
 
     componentWillMount() {
         getValue('tokenData', (data) => {
-            setTimeout(()=>{
+            setTimeout(() => {
                 if (isNotEmpty(data) && data != '{}') {
                     let tokens = JSON.parse(data)
                     if (isNotEmpty(tokens.token)) {
@@ -116,7 +118,7 @@ export default class App extends Component<Props> {
                 } else {
                     Actions.replace('login')
                 }
-            },1000)
+            }, 1000)
         });
     }
 
