@@ -185,7 +185,7 @@ export default class ResumeStudy extends Component<Props> {
         this.loadKey = showMsg("提交申请中...", 3)
         postCache(url, param, (data) => {
             showMsg('', this.loadKey, '提交成功')
-            Alert('提交成功', '稍后你会得到班主任的回复消息')
+            Alert.alert('提交成功', '稍后你会得到班主任的回复消息')
         }, false, (err) => showMsg('', this.loadKey, err))
     }
 

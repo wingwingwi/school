@@ -105,13 +105,14 @@ export default class App extends Component<Props> {
         getValue('tokenData', (data) => {
             setTimeout(() => {
                 if (isNotEmpty(data) && data != '{}') {
+                    console.log(data)
                     let tokens = JSON.parse(data)
                     if (isNotEmpty(tokens.token)) {
                         _token.t = tokens.token;
-                        _token.isPerfect = data.isPerfect
-                        _token.bySource = data.bySource
-                        if (data.bySource == 2) {
-                            Actions.replace('techPage')
+                        _token.isPerfect = tokens.isPerfect
+                        _token.bySource = tokens.bySource
+                        if (tokens.bySource == 2) {
+                            Actions.replace('tech')
                         } else Actions.replace('main')
                     } else
                         Actions.replace('login')

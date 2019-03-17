@@ -47,7 +47,7 @@ export default class Record extends BasePage {
                         if (item.child.length != 0) {
                             var view = [];
                             view.push(this.titleView(item, gIndex))
-                            if (item.isShowList)
+                            if (!item.isCloseShow)
                                 item.child.map((ib, index) => {
                                     var cIndex = index;
                                     view.push(this.itemView(ib, gIndex, cIndex))
@@ -124,13 +124,13 @@ export default class Record extends BasePage {
         return <View style={{width: size.width}} key={this.key++}><Button
             style={[styles.itemView, {marginTop: 10}]} onPress={() => {
             var list = this.state.list;
-            list[index].isShowList = !list[index].isShowList
+            list[index].isCloseShow = !list[index].isCloseShow
             this.setState({list: list})
         }}><Text
             style={styles.titleText}>{item.name}</Text>
             <Text style={styles.editStyle}></Text>
             <Image style={{width: 14, height: 14, marginRight: 10}}
-                   source={item.isShowList ? src.gengduo_down_btn : src.gengduo_up_btn}/>
+                   source={item.isCloseShow ? src.gengduo_down_btn : src.gengduo_up_btn}/>
         </Button><View style={styles.line}/></View>
     }
 

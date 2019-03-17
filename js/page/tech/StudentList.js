@@ -31,8 +31,8 @@ export default class StudentList extends BasePage {
         super(props);
         this.state = {
             name: "测试",
-            refreshing: false,
-            list: [{title: '1111', img: src.logo_pic}, {title: '1111', img: src.logo_pic}]
+            refreshing: false, tab: 1,
+            list: []
         }; //定义属性
     }
 
@@ -40,6 +40,7 @@ export default class StudentList extends BasePage {
         return <View style={{flex: 1}}>
             <NarBar title={'请假列表'} onSelect={() => Actions.pop()}/>
             <TextBar list={['事假', '病假']} ref={ref => this.textBar = ref} changeTab={(tab) => {
+                this.setState({tab: tab + 1})
             }}/>
             <BListView ref={ref => (this.listView = ref)}
                        ListEmptyComponent={this._listEmptyComponent}
@@ -70,11 +71,12 @@ export default class StudentList extends BasePage {
         return (
             <View>
                 <View style={{width: size.width, padding: 10, flexDirection: 'row', backgroundColor: '#fff'}}>
-                    <Image style={{width: 55, height: 55, borderRadius: 22}} source={item.img}/>
+                    <Image style={{width: 55, height: 55, borderRadius: 22}} source={{uri: item.avatarUrl}}/>
                     <View style={{height: 55, flex: 1, marginLeft: 10, justifyContent: 'center'}}>
-                        <Text style={{color: '#111', fontSize: 15}}>{item.title}<Text
-                            style={{color: '#888', fontSize: 14}}>{'     男   9岁'}</Text></Text>
-                        <Text style={{color: '#82868B', fontSize: 12, marginTop: 11}} numberOfLines={1}>{'事假申请'}</Text>
+                        <Text style={{color: '#111', fontSize: 15}}>{item.realName}<Text
+                            style={{color: '#888', fontSize: 14}}>{`     ${item.gender}   ${item.age}岁`}</Text></Text>
+                        <Text style={{color: '#82868B', fontSize: 12, marginTop: 11}} numberOfLines={1}>
+                            {this.state.tab == 1 ? '事假申请' : '病假申请'}</Text>
                         <Button style={{
                             position: 'absolute',
                             height: 25,
@@ -86,7 +88,7 @@ export default class StudentList extends BasePage {
                             borderWidth: 1,
                             borderColor: '#0099FF',
                             alignItems: 'center', justifyContent: 'center'
-                        }} onPress={() => Actions.leaveInfo({item: item})}><Text
+                        }} onPress={() => Actions.leaveInfo({item: item, isType: this.state.tab})}><Text
                             style={{color: '#0099FF', fontSize: 12}}>去查看</Text></Button>
                     </View>
                 </View>
@@ -97,13 +99,12 @@ export default class StudentList extends BasePage {
 
     /**头部请求*/
     _get(isShow) {
-        setTimeout(() => {
-            this.requestList()
-        }, 1000);
+        this.requestList()
     }
 
     requestList() {
         postCache(URL_QUERY_LEAVES, {lb: this.props.isType ? 2 : 1}, (data) => {
+            this.setState({list:data})
             this.listView.setRefreshing(false);
         }, false, err => {
             showMsg(err)

@@ -131,7 +131,7 @@ export default class WebPage extends Component<Props> {
 
     /**已经挂载-处理耗时操作*/
     componentDidMount() {
-        if (this.props.url)
+        if (isNotEmpty(this.props.url))
             this.interval = setTimeout(() => {
                 this.setState({isShow: true, url: {uri: this.props.url}})
                 this.interval && clearTimeout(this.interval)

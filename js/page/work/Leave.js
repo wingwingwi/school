@@ -246,7 +246,7 @@ export default class Leave extends Component<Props> {
         this.loadKey = showMsg("正在提交假条...", 3)
         postCache(url, param, (data) => {
             showMsg('', this.loadKey, '提交成功')
-            Alert('提交成功', '稍后你会得到班主任的回复消息')
+            Alert.alert('提交成功', '稍后你会得到班主任的回复消息')
         }, false, (err) => showMsg('', this.loadKey, err))
     }
 

@@ -21,7 +21,7 @@ import BListView from "../../component/BListView";
 import Swiper from 'react-native-swiper'
 import src from "../../constant/Src";
 import {postCache} from "../../utils/Resquest";
-import {URL_ATTENDANCE, URL_TOADY_LEAVES} from "../../constant/Url";
+import {URL_ATTENDANCE, URL_BANNERS, URL_TOADY_LEAVES} from "../../constant/Url";
 
 /**
  * @class Test 是例子
@@ -29,7 +29,8 @@ import {URL_ATTENDANCE, URL_TOADY_LEAVES} from "../../constant/Url";
 export default class TechPage extends BasePage {
     constructor(props) {
         super(props);
-        this.state = {name: "测试", refreshing: false}; //定义属性
+        this.state = {name: "测试", refreshing: false, list: [], reachedNum: 0, actualNum: 0, listS: []}; //定义属性
+        this.key = 100
     }
 
     render() {
@@ -61,12 +62,42 @@ export default class TechPage extends BasePage {
                 >
                     <View style={{backgroundColor: '#fff', width: size.width}}>
                         <View style={{marginLeft: 15, marginRight: 15}}>
-                            <Swiper style={{width: null, height: h}}>
-                                <Button onPress={() => {
-                                    Actions.webPage({url: 'https://www.baidu.com'})
+                            <Swiper style={{width: null, height: h}}
+                                    dot={<View style={{
+                                        backgroundColor: '#fff',
+                                        width: 6,
+                                        height: 6,
+                                        borderRadius: 3,
+                                        marginLeft: 3,
+                                        marginRight: 3,
+                                        marginTop: 3,
+                                        marginBottom: 3,
+                                    }}/>}
+                                    activeDot={<View style={{
+                                        backgroundColor: 'grey',
+                                        width: 6,
+                                        height: 6,
+                                        borderRadius: 3,
+                                        marginLeft: 3,
+                                        marginRight: 3,
+                                        marginTop: 3,
+                                        marginBottom: 3
+                                    }}/>}
+                                    paginationStyle={{
+                                        bottom: 10, left: null, right: 10
+                                    }}>
+                                {this.state.list.length > 0 ? (this.state.list.map((item, idx) => {
+                                    return <Button onPress={() => {
+                                        Actions.webPage({url: item.linkUrl, id: item.id});
+                                    }} key={idx}>
+                                        <Image style={{width: null, height: h, borderRadius: 5}}
+                                               source={{uri: item.pictureUrl}}/>
+                                    </Button>
+                                })) : <Button onPress={() => {
                                 }}>
-                                    <Image style={{width: null, height: h}} source={src.banner_pic2}/>
-                                </Button>
+                                    <Image style={{width: null, height: h, borderRadius: 5}} source={src.banner_pic2}/>
+                                </Button>}
+
                             </Swiper>
                         </View>
                     </View>
@@ -100,7 +131,10 @@ export default class TechPage extends BasePage {
                     <View style={{width: null, height: 1, backgroundColor: '#e5e5e5'}}/>
                     <View style={{flexDirection: 'row', padding: 15, alignItems: 'center', backgroundColor: '#fff'}}>
                         <Text style={{color: '#0099FF', fontSize: 17}}><Text
-                            style={{color: '#333', fontSize: 15}}>应到35人，实到35人</Text> </Text>
+                            style={{
+                                color: '#333',
+                                fontSize: 15
+                            }}>{`应到${this.state.reachedNum}人，实到${this.state.actualNum}人`}</Text> </Text>
                     </View>
                     <View style={{backgroundColor: '#f5f5f5', height: 12}}/>
                     <View style={{flexDirection: 'row', padding: 15, alignItems: 'center', backgroundColor: '#fff'}}>
@@ -109,12 +143,43 @@ export default class TechPage extends BasePage {
                     </View>
                     <View style={{width: null, height: 1, backgroundColor: '#e5e5e5'}}/>
                     <View style={{flexDirection: 'row', padding: 15, alignItems: 'center', backgroundColor: '#fff'}}>
-
+                        {this.state.listS.length > 0 ? (this.state.listS.map((item, idx) => {
+                            return this._renderItem(item, idx)
+                        })) : <Text style={{color: '#666', fontSize: 15}}>暂无请假信息</Text>}
                     </View>
                 </ScrollView>
             </View>
         );
     }
+
+    /**item view */
+    _renderItem(item, idx) {
+        let index = idx;
+        return (<View key={this.key++}>
+            <View style={{width: size.width, padding: 10, flexDirection: 'row', backgroundColor: '#fff'}}>
+                <Image style={{width: 55, height: 55, borderRadius: 22}} source={item.img}/>
+                <View style={{height: 55, flex: 1, marginLeft: 10, justifyContent: 'center'}}>
+                    <Text style={{color: '#111', fontSize: 15}}>{item.title}<Text
+                        style={{color: '#888', fontSize: 14}}>{'     男   9岁'}</Text></Text>
+                    <Text style={{color: '#82868B', fontSize: 12, marginTop: 11}} numberOfLines={1}>{'事假申请'}</Text>
+                    <Button style={{
+                        position: 'absolute',
+                        height: 25,
+                        paddingLeft: 15,
+                        paddingRight: 15,
+                        top: 15,
+                        right: 0,
+                        borderRadius: 12,
+                        borderWidth: 1,
+                        borderColor: '#0099FF',
+                        alignItems: 'center', justifyContent: 'center'
+                    }} onPress={() => Actions.leaveInfo({item: item})}><Text
+                        style={{color: '#0099FF', fontSize: 12}}>去查看</Text></Button>
+                </View>
+            </View>
+            <View style={{width: size.width, height: 1, backgroundColor: '#eee'}}/>
+        </View>);
+    };
 
     onRefresh = () => {
         this.setState({refreshing: true})
@@ -138,14 +203,17 @@ export default class TechPage extends BasePage {
 
     request() {
         postCache(URL_ATTENDANCE, undefined, (data) => {
-            this.setState({refreshing: false})
+            this.setState({refreshing: false, reachedNum: data.reachedNum, actualNum: data.actualNum})
         }, false, (err) => {
             this.setState({refreshing: false})
         })
         postCache(URL_TOADY_LEAVES, undefined, (data) => {
-            this.setState({refreshing: false})
+            this.setState({refreshing: false, listS: data})
         }, false, (err) => {
             this.setState({refreshing: false})
+        })
+        postCache(URL_BANNERS, undefined, (data) => {
+            this.setState({list: data})
         })
     }
 

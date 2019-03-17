@@ -143,7 +143,10 @@ export default class Login extends Component<Props> {
                 _token.isPerfect = data.isPerfect
                 _token.bySource = data.bySource
                 setTimeout(() => {
-                    Actions.replace('main')
+                    if (data.bySource == 2) {
+                        Actions.reset('tech')
+                    } else
+                        Actions.reset('tabbar')
                 }, 800);
             }, false, (error) => {
                 showMsg('', this.loadKey);//关闭
