@@ -79,7 +79,7 @@ export default class Main extends BasePage {
     headerComponent() {
         var h = (size.width - 20) * 290 / 690
         return <View style={{backgroundColor: '#fff'}}>
-            <View style={{width: size.width - 20}}>
+            <View style={{width: size.width, flexDirection: 'row'}}>
                 <Swiper style={{width: size.width - 20, marginLeft: 10, marginRight: 10, height: h}}
                         dot={<View style={{
                             backgroundColor: '#fff',
@@ -120,8 +120,8 @@ export default class Main extends BasePage {
                         <Image style={{width: null, height: h, borderRadius: 5}} source={src.banner_pic2}/>
                     </Button>}
                 </Swiper>
-                <View style={{position: 'absolute', left: 0, height: h, width: 10,backgroundColor:'#fff'}}/>
-                <View style={{position: 'absolute', right: 0, height: h, width: 10,backgroundColor:'#fff'}}/>
+                <View style={{position: 'absolute', left: 0, height: h, width: 10, backgroundColor: '#fff'}}/>
+                <View style={{position: 'absolute', right: 0, height: h, width: 10, backgroundColor: '#fff'}}/>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
                 {this.itemView(src.woyaoqingjia_btn, "我要请假", () => Actions.leave())}

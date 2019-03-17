@@ -73,7 +73,7 @@ export default class UserInfo extends Component<Props> {
                 </Button>
                 <BottomCModel show={this.state.show} list={[{name: '注销账号'}]} closeModal={(data) => {
                     this.setState({show: false})
-                    if (data) Actions.replace('login')
+                    if (data) Actions.reset('loginPage')
                 }}/>
                 <PickerModel list={this.sex} closeModal={(index) => {
                     if (index) {

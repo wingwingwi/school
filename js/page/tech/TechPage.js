@@ -46,7 +46,7 @@ export default class TechPage extends BasePage {
                         position: 'absolute',
                         bottom: 0
                     }} onPress={() => {
-                        Actions.login()
+                        Actions.reset('loginPage')
                     }}>李芳芳</Text>
                 </View>
                 <ScrollView

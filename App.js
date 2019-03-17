@@ -59,8 +59,10 @@ export default class App extends Component<Props> {
                                   uriPrefix={prefix}>
             <Overlay key="overlay">
                 <Modal key="modal" hideNavBar>
-                    <Scene tabBarPosition="bottom" key="root" hideNavBar panHandlers={null} initial={true}>
+                    <Scene key='root' title='' panHandlers={null} hideNavBar={true} initial={true}>
                         <Scene key='welcome' component={Welcome} title='' hideNavBar={true}/>
+                    </Scene>
+                    <Scene tabBarPosition="bottom" key="root1" hideNavBar panHandlers={null} initial={false}>
                         <Tabs key="tabbar" swipeEnabled={true} showLabel={false}
                               tabBarStyle={[styles.tabBarStyle, {backgroundColor: '#fff'}]}>
                             <Scene key="main" component={Main} title="首页" hideNavBar icon={TabIcon}/>
@@ -68,14 +70,6 @@ export default class App extends Component<Props> {
                             <Scene key="more" component={More} title="咨询" hideNavBar icon={TabIcon}/>
                             <Scene key="mine" component={Mine} title="我的" hideNavBar icon={TabIcon}/>
                         </Tabs>
-
-                        <Scene key="sound" component={Main} title="第二个界面" hideNavBar={false}/>
-                        <Scene key="ko" component={Other} title="第san个界面" hideNavBar={false}/>
-                        <Scene key="ki" component={More} title="sef个界面" hideNavBar={false}/>
-                        <Scene key="zl" component={Mine} title="few个界面" hideNavBar={false}/>
-                        <Scene key="login" component={Login} title="登录" hideNavBar={true}/>
-                        <Scene key="register" component={Register} title="登录" hideNavBar={true}/>
-                        <Scene key="setPwd" component={SetPwd} title="登录" hideNavBar={true}/>
                         <Scene key="aboutUs" component={AboutUs} hideNavBar={true}/>
                         <Scene key="amendPwd" component={AmendPwd} hideNavBar={true}/>
                         <Scene key="attestation" component={Attestation} hideNavBar={true}/>
@@ -87,14 +81,19 @@ export default class App extends Component<Props> {
                         <Scene key="record" component={Record} hideNavBar={true}/>
                         <Scene key="resumeStudy" component={ResumeStudy} hideNavBar={true}/>
                         <Scene key="webPage" component={WebPage} hideNavBar={true}/>
-
                         <Scene key="inputPage" component={InputPage} hideNavBar={true}/>
                         <Scene key="test" component={Test} title="测试中心" hideNavBar={false}/>
-
+                    </Scene>
+                    <Scene key='techPage' title='' hideNavBar={true}>
                         <Scene key='tech' component={TechPage} title='' hideNavBar={true}/>
                         <Scene key='studentList' component={StudentList} title='' hideNavBar={true}/>
                         <Scene key='leaveInfo' component={LeaveInfo} title='' hideNavBar={true}/>
                         <Scene key='sendMsg' component={SendMsg} title='' hideNavBar={true}/>
+                    </Scene>
+                    <Scene key='loginPage' title='' hideNavBar={true}>
+                        <Scene key="login" component={Login} title="登录" hideNavBar={true}/>
+                        <Scene key="register" component={Register} title="登录" hideNavBar={true}/>
+                        <Scene key="setPwd" component={SetPwd} title="登录" hideNavBar={true}/>
                     </Scene>
                 </Modal>
             </Overlay>
@@ -112,12 +111,12 @@ export default class App extends Component<Props> {
                         _token.isPerfect = tokens.isPerfect
                         _token.bySource = tokens.bySource
                         if (tokens.bySource == 2) {
-                            Actions.replace('tech')
-                        } else Actions.replace('main')
+                            Actions.reset('techPage')
+                        } else Actions.reset('root1')
                     } else
-                        Actions.replace('login')
+                        Actions.reset('loginPage')
                 } else {
-                    Actions.replace('login')
+                    Actions.reset('loginPage')
                 }
             }, 1000)
         });

@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 
-import {View, Text, StyleSheet, Image, TextInput, ImageBackground, Alert, ScrollView} from 'react-native';
+import {
+    View, Text, StyleSheet, Image, TextInput, ImageBackground, Alert, ScrollView,
+    TouchableOpacity
+} from 'react-native';
 import {Actions} from 'react-native-router-flux';
 import {getArrStr, isNotEmpty, showMsg, size, upload} from '../../utils/Util';
 import {Provider, Toast} from '@ant-design/react-native';
@@ -69,10 +72,11 @@ export default class ResumeStudy extends Component<Props> {
                 {NextView.getSettingImgItemL(() => {
                 }, "备注", undefined, "", true, false)}
             </View>
-            <View style={{backgroundColor: '#fff'}}>
+            <TouchableOpacity activeOpacity={1}
+                              style={{backgroundColor: '#fff', height: 120, padding: 15}}
+                              onPress={() => this.mContent.focus()}>
                 <EditView ref={ref => (this.mContent = ref)} style={styles.lineEdit} numberOfLines={4}
-                          placeholder={'请输入备注内容'} multiline={true}/>
-            </View>
+                          placeholder={'请输入备注内容'} multiline={true}/></TouchableOpacity>
             <Button onPress={() => {
                 this.matterResume()
             }} style={{marginTop: 70, marginLeft: 15, marginRight: 15}}>
@@ -108,10 +112,11 @@ export default class ResumeStudy extends Component<Props> {
                 <Text style={{color: '#E64340', fontSize: 12, padding: 10, lineHeight: 18}}>{notice}</Text>
                 {NextView.getSettingImgItemL(() => {
                 }, "备注", undefined, "", true, false)}
-                <View style={{backgroundColor: '#fff'}}>
+                <TouchableOpacity activeOpacity={1}
+                                  style={{backgroundColor: '#fff', height: 120, padding: 15}}
+                                  onPress={() => this.mContent.focus()}>
                     <EditView ref={ref => (this.mContent1 = ref)} style={styles.lineEdit} numberOfLines={4}
-                              placeholder={'请输入备注内容'} multiline={true}/>
-                </View>
+                              placeholder={'请输入备注内容'} multiline={true}/></TouchableOpacity>
             </View>
             <Button onPress={() => {
                 this.illnessResume()
@@ -204,13 +209,10 @@ const styles = StyleSheet.create({
         fontSize: 17, color: '#333', width: 80, marginTop: 10, marginLeft: 10
     },
     lineEdit: {
-        width: size.width,
+        width: size.width - 30,
         fontSize: 15,
-        backgroundColor: '#fff',
-        padding: 10,
-        marginTop: 5,
-        height: 100,
+        maxHeight: 90,
         lineHeight: 22,
-        textAlign: 'left'
+        textAlign: 'auto'
     }
 });

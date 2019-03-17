@@ -144,9 +144,9 @@ export default class Login extends Component<Props> {
                 _token.bySource = data.bySource
                 setTimeout(() => {
                     if (data.bySource == 2) {
-                        Actions.replace('tech')
+                        Actions.reset('techPage')
                     } else
-                        Actions.replace('tabbar')
+                        Actions.reset('root1')
                 }, 800);
             }, false, (error) => {
                 showMsg('', this.loadKey);//关闭
