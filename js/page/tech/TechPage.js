@@ -20,6 +20,8 @@ import NarBar from "../../component/Narbar";
 import BListView from "../../component/BListView";
 import Swiper from 'react-native-swiper'
 import src from "../../constant/Src";
+import {postCache} from "../../utils/Resquest";
+import {URL_ATTENDANCE, URL_TOADY_LEAVES} from "../../constant/Url";
 
 /**
  * @class Test 是例子
@@ -42,6 +44,8 @@ export default class TechPage extends BasePage {
                         fontSize: 15,
                         position: 'absolute',
                         bottom: 0
+                    }} onPress={() => {
+                        Actions.login()
                     }}>李芳芳</Text>
                 </View>
                 <ScrollView
@@ -85,8 +89,8 @@ export default class TechPage extends BasePage {
                         width: size.width,
                         backgroundColor: '#fff'
                     }}>
-                        {this.itemView(src.shijia_btn, "事假", '点击前往 >', () => Actions.studentList())}
-                        {this.itemView(src.bingjia_btn, "病假", '点击前往 >', () => Actions.resumeStudy())}
+                        {this.itemView(src.shijia_btn, "事假", '点击前往 >', () => Actions.studentList({}))}
+                        {this.itemView(src.bingjia_btn, "病假", '点击前往 >', () => Actions.studentList({isType: true}))}
                     </View>
                     <View style={{backgroundColor: '#f5f5f5', height: 12}}/>
                     <View style={{flexDirection: 'row', padding: 15, alignItems: 'center', backgroundColor: '#fff'}}>
@@ -98,6 +102,15 @@ export default class TechPage extends BasePage {
                         <Text style={{color: '#0099FF', fontSize: 17}}><Text
                             style={{color: '#333', fontSize: 15}}>应到35人，实到35人</Text> </Text>
                     </View>
+                    <View style={{backgroundColor: '#f5f5f5', height: 12}}/>
+                    <View style={{flexDirection: 'row', padding: 15, alignItems: 'center', backgroundColor: '#fff'}}>
+                        <View style={{height: 16, width: 3, backgroundColor: '#0099FF'}}/>
+                        <Text style={{color: '#0099FF', fontSize: 17, marginLeft: 10}}>今日请假状况</Text>
+                    </View>
+                    <View style={{width: null, height: 1, backgroundColor: '#e5e5e5'}}/>
+                    <View style={{flexDirection: 'row', padding: 15, alignItems: 'center', backgroundColor: '#fff'}}>
+
+                    </View>
                 </ScrollView>
             </View>
         );
@@ -106,7 +119,7 @@ export default class TechPage extends BasePage {
     onRefresh = () => {
         this.setState({refreshing: true})
         setTimeout(() => {
-            this.setState({refreshing: false})
+            this.request()
         }, 1000)
     };
 
@@ -123,6 +136,19 @@ export default class TechPage extends BasePage {
         </Button>
     }
 
+    request() {
+        postCache(URL_ATTENDANCE, undefined, (data) => {
+            this.setState({refreshing: false})
+        }, false, (err) => {
+            this.setState({refreshing: false})
+        })
+        postCache(URL_TOADY_LEAVES, undefined, (data) => {
+            this.setState({refreshing: false})
+        }, false, (err) => {
+            this.setState({refreshing: false})
+        })
+    }
+
 
     /**即将挂载-处理参数*/
     componentWillMount() {
@@ -131,6 +157,8 @@ export default class TechPage extends BasePage {
 
     /**已经挂载-处理耗时操作*/
     componentDidMount() {
+        this.setState({refreshing: true})
+        this.request()
 
     }
 

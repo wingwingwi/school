@@ -41,8 +41,7 @@ export default class Login extends Component<Props> {
         InteractionManager.runAfterInteractions(() => {//清空数据
             console.log('清理数据信息')
             deleteKey(URL_LIST)
-            deleteKey('token')
-            deleteKey('isPerfect')
+            deleteKey('tokenData')
             _token.t = ''
         })
     }
@@ -138,7 +137,7 @@ export default class Login extends Component<Props> {
                 showMsg('', this.loadKey)
                 //isPerfect:’是否完善了学生信息 0未完善 1已完善,如果bySource=2可忽略’
                 showMsg("登录成功", 1)
-                save('token', data.token);//获取到数据
+                save('tokenData', JSON.stringify(data));//获取到数据
                 save('isPerfect', data.bySource == 2 ? -1 : data.isPerfect);//获取到数据 0未完善 1已完善,-1忽略
                 _token.t = data.token;
                 _token.isPerfect = data.isPerfect

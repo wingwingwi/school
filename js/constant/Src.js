@@ -12,6 +12,7 @@ const Src = {
     zhanghao_icon: require('../../res/icon/zhanghao_icon.png'),
     mima_icon: require('../../res/icon/mima_icon.png'),
     logo_pic: require('../../res/icon/logo_pic.png'),
+    qidongye_pic: require('../../res/main/qidongye_pic.png'),
 
     banzhurenxiaoxi_btn: require('../../res/icon/banzhurenxiaoxi_btn.png'),
     gerenxiaoxi_btn: require('../../res/icon/gerenxiaoxi_btn.png'),
@@ -58,6 +59,7 @@ const Src = {
     bingjia_btn: require('../../res/tech/bingjia_btn.png'),
     shijia_btn: require('../../res/tech/shijia_btn.png'),
     tongzhi_icon: require('../../res/tech/tongzhi_icon.png'),
+    gouxuan_btn: require('../../res/tech/gouxuan_btn.png'),
 }
 
 export default Src;//导出，用于其他地方调用

@@ -20,6 +20,8 @@ import NarBar from "../../component/Narbar";
 import BListView from "../../component/BListView";
 import src from "../../constant/Src";
 import TextBar from "../../component/TextBar";
+import {postCache} from "../../utils/Resquest";
+import {URL_QUERY_LEAVES} from "../../constant/Url";
 
 /**
  * @class Test 是例子
@@ -27,13 +29,18 @@ import TextBar from "../../component/TextBar";
 export default class StudentList extends BasePage {
     constructor(props) {
         super(props);
-        this.state = {name: "测试", refreshing: false,list:[{title:'1111',img:src.logo_pic},{title:'1111',img:src.logo_pic}]}; //定义属性
+        this.state = {
+            name: "测试",
+            refreshing: false,
+            list: [{title: '1111', img: src.logo_pic}, {title: '1111', img: src.logo_pic}]
+        }; //定义属性
     }
 
     render() {
-        return <View>
+        return <View style={{flex: 1}}>
             <NarBar title={'请假列表'} onSelect={() => Actions.pop()}/>
-            <TextBar list={['事假','病假']}/>
+            <TextBar list={['事假', '病假']} ref={ref => this.textBar = ref} changeTab={(tab) => {
+            }}/>
             <BListView ref={ref => (this.listView = ref)}
                        ListEmptyComponent={this._listEmptyComponent}
                        list={this.state.list}
@@ -61,9 +68,8 @@ export default class StudentList extends BasePage {
     /**item view */
     _renderItem = item => {
         return (
-            <Button onPress={() => {
-            }}>
-                <View style={{width: size.width, padding: 10, flexDirection: 'row',backgroundColor:'#fff'}}>
+            <View>
+                <View style={{width: size.width, padding: 10, flexDirection: 'row', backgroundColor: '#fff'}}>
                     <Image style={{width: 55, height: 55, borderRadius: 22}} source={item.img}/>
                     <View style={{height: 55, flex: 1, marginLeft: 10, justifyContent: 'center'}}>
                         <Text style={{color: '#111', fontSize: 15}}>{item.title}<Text
@@ -72,26 +78,42 @@ export default class StudentList extends BasePage {
                         <Button style={{
                             position: 'absolute',
                             height: 25,
-                            paddingLeft:15,
-                            paddingRight:15,
+                            paddingLeft: 15,
+                            paddingRight: 15,
                             top: 15,
                             right: 0,
                             borderRadius: 12,
                             borderWidth: 1,
                             borderColor: '#0099FF',
                             alignItems: 'center', justifyContent: 'center'
-                        }}><Text style={{color: '#0099FF', fontSize: 12}}>去查看</Text></Button>
+                        }} onPress={() => Actions.leaveInfo({item: item})}><Text
+                            style={{color: '#0099FF', fontSize: 12}}>去查看</Text></Button>
                     </View>
                 </View>
                 <View style={{width: size.width, height: 1, backgroundColor: '#eee'}}/>
-            </Button>
+            </View>
         );
     };
 
     /**头部请求*/
     _get(isShow) {
         setTimeout(() => {
-            this.listView.setRefreshing(false);
+            this.requestList()
         }, 1000);
+    }
+
+    requestList() {
+        postCache(URL_QUERY_LEAVES, {lb: this.props.isType ? 2 : 1}, (data) => {
+            this.listView.setRefreshing(false);
+        }, false, err => {
+            showMsg(err)
+            this.listView.setRefreshing(false);
+        })
+    }
+
+    componentDidMount() {
+        if (this.props.isType) this.textBar.tab(1)
+        this.listView.setRefreshing(true);
+        this.requestList()
     }
 }

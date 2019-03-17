@@ -144,6 +144,37 @@ export default class NextView {
             </TouchableHighlight>
         )
     }
+    static getSettingImgItemTech(callBack, text, rightText, isLine, isNext, defultValue) {
+        return (
+            <TouchableHighlight
+                onPress={callBack}>
+                <View>
+                    <View style={[styles.setting_item_container]}>
+                        <View style={{alignItems: 'center', flexDirection: 'row'}}>
+                            {/*{img ? <Image source={img}*/}
+                            {/*style={{width: 25, height: 25}}/> : null}*/}
+                            <Text
+                                style={{color: '#888', fontSize: 15, marginLeft: 5}}>{text}</Text>
+                        </View>
+                        <View style={{alignItems: 'center', flexDirection: 'row'}}>
+                            <Text style={{
+                                color: isNotEmpty(rightText) ? '#333' : '#999',
+                                fontSize: 14
+                            }}>{isNotEmpty(rightText) ? rightText : defultValue}</Text>
+                            {isNext ? <Image source={Src.gengduo_btn}
+                                             style={{
+                                                 marginRight: 5,
+                                                 marginLeft: 5,
+                                                 height: 12,
+                                                 width: 12
+                                             }}/> : null}</View>
+
+                    </View>
+                    {isLine ? <View style={{width: null, height: 1, backgroundColor: '#eee'}}/> : null}
+                </View>
+            </TouchableHighlight>
+        )
+    }
 
     static getSettingImgItemBig(callBack, img, rightText, isLine, isNext) {
         return (

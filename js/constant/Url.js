@@ -93,6 +93,22 @@ module.exports = {
     URL_ILLNESS_RESUME: BDBaseUrl + "/resume/addIllnessResume",
     /**2.事假复课  POST*/
     URL_MATTER_RESUME: BDBaseUrl + "/resume/addMatterResume",
+    /**2.事假/病假 详情  POST*/
+    URL_LEAVE_DETAILS: BDBaseUrl + "/leave/details",
+    /**2. 【班主任端】今日出勤状况 POST*/
+    URL_ATTENDANCE: BDBaseUrl + "/leave/attendance",
+    /**2.事假/病假 历史查询  POST*/
+    URL_QUERY_LEAVES: BDBaseUrl + "/leave/queryLeaves",
+    /**2.班主任端】班主任发送通知  POST*/
+    URL_SEND_NOTE: BDBaseUrl + "/leave/sendNote",
+    /**2.【班主任端】今日请假状况  POST*/
+    URL_TOADY_LEAVES: BDBaseUrl + "/leave/todayLeaves",
+    /**2.  POST*/
+    URL_: BDBaseUrl + "",
+    /**2.  POST*/
+    URL_: BDBaseUrl + "",
+    /**2.  POST*/
+    URL_: BDBaseUrl + "",
     /**2.  POST*/
     URL_: BDBaseUrl + "",
 

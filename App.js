@@ -45,6 +45,7 @@ import TechPage from "./js/page/tech/TechPage";
 import StudentList from "./js/page/tech/StudentList";
 import LeaveInfo from "./js/page/tech/LeaveInfo";
 import SendMsg from "./js/page/tech/SendMsg";
+import Welcome from "./js/page/Welcome";
 
 const prefix = Platform.OS === 'android' ? 'coustom://coustom/' : 'coustom://';//外部应用打开使用到的链接；
 
@@ -59,10 +60,7 @@ export default class App extends Component<Props> {
             <Overlay key="overlay">
                 <Modal key="modal" hideNavBar>
                     <Scene tabBarPosition="bottom" key="root" hideNavBar panHandlers={null} initial={true}>
-                        <Scene key='tech' component={TechPage} title='' hideNavBar={true}/>
-                        <Scene key='studentList' component={StudentList} title='' hideNavBar={true}/>
-                        <Scene key='leaveInfo' component={LeaveInfo} title='' hideNavBar={true}/>
-                        <Scene key='sendMsg' component={SendMsg} title='' hideNavBar={true}/>
+                        <Scene key='welcome' component={Welcome} title='' hideNavBar={true}/>
                         <Tabs key="tabbar" swipeEnabled={true} showLabel={false}
                               tabBarStyle={[styles.tabBarStyle, {backgroundColor: '#fff'}]}>
                             <Scene key="main" component={Main} title="首页" hideNavBar icon={TabIcon}/>
@@ -91,6 +89,10 @@ export default class App extends Component<Props> {
                         <Scene key="webPage" component={WebPage} hideNavBar={true}/>
                         <Scene key="inputPage" component={InputPage} hideNavBar={true}/>
                         <Scene key="test" component={Test} title="测试中心" hideNavBar={false}/>
+                        <Scene key='tech' component={TechPage} title='' hideNavBar={true}/>
+                        <Scene key='studentList' component={StudentList} title='' hideNavBar={true}/>
+                        <Scene key='leaveInfo' component={LeaveInfo} title='' hideNavBar={true}/>
+                        <Scene key='sendMsg' component={SendMsg} title='' hideNavBar={true}/>
                     </Scene>
                 </Modal>
             </Overlay>
@@ -98,13 +100,23 @@ export default class App extends Component<Props> {
     }
 
     componentWillMount() {
-        getValue('token', (token) => {
-            console.log('token=' + token)
-            if (isNotEmpty(token)) {
-                _token.t = token;
-            } else {
-                Actions.replace('login')
-            }
+        getValue('tokenData', (data) => {
+            setTimeout(()=>{
+                if (isNotEmpty(data) && data != '{}') {
+                    let tokens = JSON.parse(data)
+                    if (isNotEmpty(tokens.token)) {
+                        _token.t = tokens.token;
+                        _token.isPerfect = data.isPerfect
+                        _token.bySource = data.bySource
+                        if (data.bySource == 2) {
+                            Actions.replace('techPage')
+                        } else Actions.replace('main')
+                    } else
+                        Actions.replace('login')
+                } else {
+                    Actions.replace('login')
+                }
+            },1000)
         });
     }
 
