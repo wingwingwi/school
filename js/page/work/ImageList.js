@@ -41,8 +41,8 @@ export default class ImageList extends BasePage {
     closePage() {
         var date = new Date();
         console.log(date.getTime() + '')
-        if (this.time && this.time.getTime() - date.getTime() < 300) {
-            console.log(this.time.getTime() + '')
+        if (this.time && this.time - date.getTime() < 300) {
+            console.log(this.time + '')
             this.isNotClose = true
         }
         setTimeout(() => {
