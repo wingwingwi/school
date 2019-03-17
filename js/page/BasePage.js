@@ -12,6 +12,10 @@ export default class BasePage extends Component<Props> {
         this.pageState = true;
     }
 
+    componentDidMount() {
+
+    }
+
     /**卸载*/
     componentWillUnmount() {
         this.pageState = false;

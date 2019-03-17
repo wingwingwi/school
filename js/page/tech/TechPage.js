@@ -13,7 +13,7 @@ import {
 } from "react-native"; //基本架构
 
 import {Actions} from "react-native-router-flux"; //路由
-import {showMsg, size} from "../../utils/Util"; //工具类
+import {isNotEmpty, showMsg, size} from "../../utils/Util"; //工具类
 import Button from "../../component/Button";
 import BasePage from "../BasePage";
 import NarBar from "../../component/Narbar";
@@ -107,7 +107,8 @@ export default class TechPage extends BasePage {
                             backgroundColor: '#FFEDD3', borderRadius: 3, flexDirection: 'row', alignItems: 'center'
                         }}>
                             <Image source={src.tongzhi_icon} style={{width: 16, height: 16, marginLeft: 10}}/>
-                            <Text style={{color: '#333', fontSize: 11, marginLeft: 10}}>今日暂无学生请假</Text>
+                            <Text style={{color: '#333', fontSize: 11, marginLeft: 10}}>
+                                {this.state.listS.length == 0 ? '今日暂无学生请假' : `今日有${this.state.listS.length}条请假消息，注意查看`}</Text>
                         </View>
                     </View>
                     <View style={{
@@ -155,9 +156,11 @@ export default class TechPage extends BasePage {
     /**item view */
     _renderItem(item, idx) {
         let index = idx;
+        var avatar = isNotEmpty(item.avatarUrl) ? {uri: item.avatarUrl} :
+            '女' == item.gender ? src.headico_girl : src.headico_boy
         return (<View key={this.key++}>
             <View style={{width: size.width, padding: 10, flexDirection: 'row', backgroundColor: '#fff'}}>
-                <Image style={{width: 55, height: 55, borderRadius: 22}} source={item.img}/>
+                <Image style={{width: 55, height: 55, borderRadius: 28}} source={avatar}/>
                 <View style={{height: 55, flex: 1, marginLeft: 10, justifyContent: 'center'}}>
                     <Text style={{color: '#111', fontSize: 15}}>{item.title}<Text
                         style={{color: '#888', fontSize: 14}}>{'     男   9岁'}</Text></Text>
@@ -202,6 +205,7 @@ export default class TechPage extends BasePage {
     }
 
     request() {
+        this.loadKey = showMsg('正在刷新...', 3)
         postCache(URL_ATTENDANCE, undefined, (data) => {
             this.setState({refreshing: false, reachedNum: data.reachedNum, actualNum: data.actualNum})
         }, false, (err) => {
@@ -214,7 +218,8 @@ export default class TechPage extends BasePage {
         })
         postCache(URL_BANNERS, undefined, (data) => {
             this.setState({list: data})
-        })
+            showMsg('', this.loadKey)
+        }, false, () => showMsg('', this.loadKey))
     }
 
 
@@ -225,9 +230,7 @@ export default class TechPage extends BasePage {
 
     /**已经挂载-处理耗时操作*/
     componentDidMount() {
-        this.setState({refreshing: true})
         this.request()
-
     }
 
     /**卸载*/

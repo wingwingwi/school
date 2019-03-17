@@ -46,6 +46,7 @@ import StudentList from "./js/page/tech/StudentList";
 import LeaveInfo from "./js/page/tech/LeaveInfo";
 import SendMsg from "./js/page/tech/SendMsg";
 import Welcome from "./js/page/Welcome";
+import ImageList from "./js/page/work/ImageList";
 
 const prefix = Platform.OS === 'android' ? 'coustom://coustom/' : 'coustom://';//外部应用打开使用到的链接；
 
@@ -89,6 +90,7 @@ export default class App extends Component<Props> {
                         <Scene key='studentList' component={StudentList} title='' hideNavBar={true}/>
                         <Scene key='leaveInfo' component={LeaveInfo} title='' hideNavBar={true}/>
                         <Scene key='sendMsg' component={SendMsg} title='' hideNavBar={true}/>
+                        <Scene key='imageList' component={ImageList} title='' hideNavBar={true}/>
                     </Scene>
                     <Scene key='loginPage' title='' hideNavBar={true}>
                         <Scene key="login" component={Login} title="登录" hideNavBar={true}/>

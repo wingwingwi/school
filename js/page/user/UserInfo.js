@@ -43,7 +43,7 @@ export default class UserInfo extends Component<Props> {
             user: this.props.user ? this.props.user : {},
             show: false,
             showModel: false,
-            avatar: src.banzhurenxiaoxi_btn
+            avatar: src.headico_boy
         }
         this.sex = [{name: '男', value: '1'}, {name: '女', value: '2'}]
     }
@@ -108,7 +108,8 @@ export default class UserInfo extends Component<Props> {
     }
 
     setUserInfo(data) {
-        var avatar = isNotEmpty(data.avatarUrl) ? {uri: data.avatarUrl} : src.banzhurenxiaoxi_btn
+        var avatar = isNotEmpty(data.avatarUrl) ? {uri: data.avatarUrl} :
+            '女' == data.gender ? src.headico_girl : src.headico_boy
         this.setState({user: data, avatar: avatar})
     }
 

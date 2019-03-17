@@ -34,18 +34,31 @@ export default class StudentList extends BasePage {
             refreshing: false, tab: 1,
             list: []
         }; //定义属性
+        this.leftList = []
+        this.rightList = []
     }
+
 
     render() {
         return <View style={{flex: 1}}>
             <NarBar title={'请假列表'} onSelect={() => Actions.pop()}/>
-            <TextBar list={['事假', '病假']} ref={ref => this.textBar = ref} changeTab={(tab) => {
-                this.setState({tab: tab + 1})
+            <TextBar list={['事假', '病假']} ref={ref => this.textBar = ref} changeTab={(num) => {
+                var tab = num + 1;
+                console.log('tab=' + tab)
+                console.log(JSON.stringify(this.leftList))
+                console.log(JSON.stringify(this.rightList))
+                if (tab == 1) {
+                    this.setState({tab: tab, list: [].concat(this.leftList)})
+                    if (this.leftList.length == 0) this.requestList(1, true)
+                } else {
+                    this.setState({tab: tab, list: [].concat(this.rightList)})
+                    if (this.rightList.length == 0) this.requestList(2, true)
+                }
             }}/>
             <BListView ref={ref => (this.listView = ref)}
                        ListEmptyComponent={this._listEmptyComponent}
                        list={this.state.list}
-                       renderRefresh={() => this._get(false)}
+                       renderRefresh={() => this.requestList(this.state.tab)}
                        itemView={this._renderItem}/>
         </View>
     }
@@ -68,14 +81,19 @@ export default class StudentList extends BasePage {
     };
     /**item view */
     _renderItem = item => {
+        var avatar = isNotEmpty(item.avatarUrl) ? {uri: item.avatarUrl} :
+            '女' == item.gender ? src.headico_girl : src.headico_boy
         return (
             <View>
                 <View style={{width: size.width, padding: 10, flexDirection: 'row', backgroundColor: '#fff'}}>
-                    <Image style={{width: 55, height: 55, borderRadius: 22}}
-                           source={isNotEmpty(item.avatarUrl) ? {uri: item.avatarUrl} : src.logo_pic}/>
+                    <Image style={{width: 55, height: 55, borderRadius: 28}}
+                           source={avatar}/>
                     <View style={{height: 55, flex: 1, marginLeft: 10, justifyContent: 'center'}}>
-                        <Text style={{color: '#111', fontSize: 15}}>{item.realName}<Text
-                            style={{color: '#888', fontSize: 14}}>{`     ${item.gender}   ${item.age}岁`}</Text></Text>
+                        <Text style={{color: '#111', fontSize: 15}}>{item.className + '-' + item.realName}<Text
+                            style={{
+                                color: '#888',
+                                fontSize: 14
+                            }}>{`     ${item.gender}   ${item.age}岁`}</Text></Text>
                         <Text style={{color: '#82868B', fontSize: 12, marginTop: 11}} numberOfLines={1}>
                             {this.state.tab == 1 ? '事假申请' : '病假申请'}</Text>
                         <Button style={{
@@ -98,17 +116,24 @@ export default class StudentList extends BasePage {
         );
     };
 
-    /**头部请求*/
-    _get(isShow) {
-        this.requestList()
-    }
-
-    requestList() {
-        postCache(URL_QUERY_LEAVES, {lb: this.props.isType ? 2 : 1}, (data) => {
-            this.setState({list: data})
+    requestList(lb, isShow) {
+        if (isShow)
+            this.loadKey = showMsg('加载中...', 3)
+        postCache(URL_QUERY_LEAVES, {lb: lb}, (data) => {
+            if (lb == 1)
+                this.leftList = data;
+            else this.rightList = data;
+            if (this.state.tab == 1) {
+                this.setState({list: [].concat(this.leftList)})
+            } else this.setState({list: [].concat(this.rightList)})
             this.listView.setRefreshing(false);
+            if (isShow)
+                showMsg('', this.loadKey)
         }, false, err => {
-            showMsg(err)
+            if (isShow)
+                showMsg('', this.loadKey, err)
+            else
+                showMsg(err)
             this.listView.setRefreshing(false);
         })
     }
@@ -116,6 +141,10 @@ export default class StudentList extends BasePage {
     componentDidMount() {
         if (this.props.isType) this.textBar.tab(1)
         this.listView.setRefreshing(true);
-        this.requestList()
+        this.requestList(this.props.isType ? 2 : 1, true)
+    }
+
+    componentWillMount() {
+        if (this.props.isType) this.setState({tab: 2})
     }
 }
