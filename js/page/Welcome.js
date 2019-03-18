@@ -32,4 +32,7 @@ export default class Welcome extends BasePage {
     render() {
         return <Image style={{width: size.width, height: size.height}} source={src.qidongye_pic}/>
     }
+    componentWillMount() {
+        super.componentWillMount();
+    }
 }

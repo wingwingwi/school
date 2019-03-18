@@ -15,7 +15,7 @@ const Src = {
     qidongye_pic: require('../../res/main/qidongye_pic.png'),
 
     banzhurenxiaoxi_btn: require('../../res/icon/banzhurenxiaoxi_btn.png'),
-    gerenxiaoxi_btn: require('../../res/icon/gerenxiaoxi_btn.png'),
+    gerenxiaoxi1_btn: require('../../res/icon/gerenxiaoxi_btn.png'),
     xitongxiaoxi_btn: require('../../res/icon/xitongxiaoxi_btn.png'),
     gerendangan_icon: require('../../res/icon/gerendangan_icon.png'),
 
@@ -30,12 +30,14 @@ const Src = {
     guanyuwomen_icon: require('../../res/icon/guanyuwomen_icon.png'),
     banner_pic2: require('../../res/main/banner_pic.png'),
 
+
     /**首页*/
     woyaoqingjia_btn: require('../../res/main/woyaoqingjia_btn.png'),
     woyaofuke_btn: require('../../res/main/woyaofuke_btn.png'),
     jiankangjiaoyu_btn: require('../../res/main/jiankangjiaoyu_btn.png'),
     gerendangan_btn: require('../../res/main/gerendangan_btn.png'),
     gerenxiaoxi_btn: require('../../res/main/gerenxiaoxi_btn.png'),
+
     /**请假*/
     anniu_highlight_btn: require('../../res/icon/anniu_highlight_btn.png'),
     anniunormal_btn: require('../../res/icon/anniunormal_btn.png'),

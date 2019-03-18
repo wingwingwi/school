@@ -21,7 +21,8 @@ import BListView from "../../component/BListView";
 import Swiper from 'react-native-swiper'
 import src from "../../constant/Src";
 import {postCache} from "../../utils/Resquest";
-import {URL_ATTENDANCE, URL_BANNERS, URL_TOADY_LEAVES} from "../../constant/Url";
+import {URL_ATTENDANCE, URL_BANNERS, URL_MY_DATA, URL_TOADY_LEAVES} from "../../constant/Url";
+import BottomCModel from "../../model/BottomCModel";
 
 /**
  * @class Test 是例子
@@ -29,7 +30,7 @@ import {URL_ATTENDANCE, URL_BANNERS, URL_TOADY_LEAVES} from "../../constant/Url"
 export default class TechPage extends BasePage {
     constructor(props) {
         super(props);
-        this.state = {name: "测试", refreshing: false, list: [], reachedNum: 0, actualNum: 0, listS: []}; //定义属性
+        this.state = {name: "测试", refreshing: false, list: [], reachedNum: 0, actualNum: 0, show: false, listS: []}; //定义属性
         this.key = 100
     }
 
@@ -45,9 +46,7 @@ export default class TechPage extends BasePage {
                         fontSize: 15,
                         position: 'absolute',
                         bottom: 0
-                    }} onPress={() => {
-                        Actions.reset('loginPage')
-                    }}>李芳芳</Text>
+                    }} onPress={() => this.setState({show: true})}>{this.state.name}</Text>
                 </View>
                 <ScrollView
                     contentContainerStyle={{paddingTop: 0}}
@@ -149,6 +148,10 @@ export default class TechPage extends BasePage {
                         })) : <Text style={{color: '#666', fontSize: 15}}>暂无请假信息</Text>}
                     </View>
                 </ScrollView>
+                <BottomCModel show={this.state.show} list={[{name: '注销账号'}]} closeModal={(data) => {
+                    this.setState({show: false})
+                    if (data) Actions.reset('loginPage')
+                }}/>
             </View>
         );
     }
@@ -231,6 +234,11 @@ export default class TechPage extends BasePage {
     /**已经挂载-处理耗时操作*/
     componentDidMount() {
         this.request()
+        postCache(URL_MY_DATA, undefined, (data) => {
+            this.setState({
+                name: isNotEmpty(data.nickname) ? data.nickname : data.userName
+            })
+        }, true,)
     }
 
     /**卸载*/

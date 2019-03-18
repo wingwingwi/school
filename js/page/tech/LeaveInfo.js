@@ -22,6 +22,7 @@ import src from "../../constant/Src";
 import NextView from "../../component/NextView";
 import {postCache} from "../../utils/Resquest";
 import {URL_LEAVE_DETAILS} from "../../constant/Url";
+import ImagesModel from "../../model/ImagesModel";
 
 /**
  * @class Test 是例子
@@ -29,7 +30,7 @@ import {URL_LEAVE_DETAILS} from "../../constant/Url";
 export default class LeaveInfo extends BasePage {
     constructor(props) {
         super(props);
-        this.state = {name: "测试", refreshing: false, list: [], leave: {}}; //定义属性
+        this.state = {name: "测试", refreshing: false, list: [], leave: {}, showImg: false, images: [], index: 0}; //定义属性
     }
 
     render() {
@@ -60,6 +61,7 @@ export default class LeaveInfo extends BasePage {
                       onPress={() => Actions.sendMsg({item: this.props.item})}>是否发送通知？</Text>
                 <View style={{height: 50}}/>
             </ScrollView>
+            <ImagesModel show={this.state.showImg} images={this.state.images} index={this.state.index}/>
         </View>
     }
 
@@ -74,14 +76,18 @@ export default class LeaveInfo extends BasePage {
                 <View style={{height: 10}}/>
                 {NextView.getSettingImgItemTech(undefined, "病例以及相关材料", '', true, false, '')}
                 <View style={{backgroundColor: '#fff', flexDirection: 'row', padding: 10, flexWrap: 'wrap'}}>
-                    {this.state.leave && this.state.leave.files ? this.state.leave.files.map((item, idx) => <Button
-                        onPress={() => {
-                            Actions.imageList({imgs: this.state.leave.files})
-                        }}
-                        key={idx}><Image
-                        style={{width: 50, height: 50, marginRight: 10}}
-                        source={{uri: item.fileUrl}}
-                    /></Button>) : null}
+                    {this.state.leave && this.state.leave.files ? this.state.leave.files.map((item, idx) => {
+                            let positionIndex = idx;
+                            return <Button
+                                onPress={() => {
+                                    this.setState({showImg: true, images: this.state.leave.files, index: positionIndex})
+                                }}
+                                key={positionIndex}><Image
+                                style={{width: 50, height: 50, marginRight: 10}}
+                                source={{uri: item.fileUrl}}
+                            /></Button>
+                        }
+                    ) : null}
                 </View>
                 <View style={{height: 10}}/>
                 {NextView.getSettingImgItemTech(undefined, "就诊医院", this.props.item.remk, false, false, '')}

@@ -119,7 +119,7 @@ export default class Other extends Component<Props> {
         };
     }
 }
-const list = [{img: src.gerenxiaoxi_btn, title: '个人消息', text: '正在获取个人消息'},
+const list = [{img: src.gerenxiaoxi1_btn, title: '个人消息', text: '正在获取个人消息'},
     {img: src.banzhurenxiaoxi_btn, title: '班主任消息', text: '正在获取班主任消息'},
     {img: src.xitongxiaoxi_btn, title: '系统消息', text: '正在获取系统消息'}];
 const styles = StyleSheet.create({

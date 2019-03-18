@@ -17,6 +17,12 @@ Android 打包命令：./gradlew assembleRelease
 #链接资源库
 react-native link @ant-design/icons-react-native
 
+react-native link react-native-image-zoom-viewer
+
+react-native link react-native-webview
+
+react-native link react-native-image-picker
+
 react-native link react-native-linear-gradient
 
 react-native link 链接项目native资源（慎用）
