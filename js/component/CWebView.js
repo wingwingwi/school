@@ -61,11 +61,11 @@ export default class CWebView extends React.Component {
                     injectedJavaScript={this.props.injectedJavaScript}
                     ref={ref => (this.webView = ref)}
                 />
-                <View style={{position: "absolute"}}>
-                    {this.state.loadEnd ? null : (
-                        <ProgressView ref={ref => (this.progressview = ref)}/>
-                    )}
-                </View>
+                {/*<View style={{position: "absolute"}}>*/}
+                {/*{this.state.loadEnd ? null : (*/}
+                {/*<ProgressView ref={ref => (this.progressview = ref)}/>*/}
+                {/*)}*/}
+                {/*</View>*/}
             </View>
         );
     }
@@ -133,9 +133,19 @@ const color = "green";
 
 /**测试信息* */
 const heightFunJS = `
-    setTimeout(function() { 
-    var height = document.body.scrollHeight;
-    window.ReactNativeWebView.postMessage(height) }, 50);
+    var height=0;
+    setTimeout(function(){
+       height = document.body.scrollHeight;
+       window.ReactNativeWebView.postMessage(height);
+       setInterval(function() {
+        var h1=document.body.scrollHeight;
+        if(h1!=height){
+         window.ReactNativeWebView.postMessage(h1);
+        }
+        height=h1;
+        },5000);
+    
+    },100);
     true; 
   `;
 
