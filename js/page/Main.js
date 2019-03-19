@@ -81,7 +81,8 @@ export default class Main extends BasePage {
         console.log(JSON.stringify(this.state.listS))
         return <View style={{backgroundColor: '#fff'}}>
             <View style={{width: size.width, flexDirection: 'row'}}>
-                <Swiper style={{width: size.width, height: h}}
+                <View style={{ height: h, width: 10, backgroundColor: '#fff'}}/>
+                <Swiper height={h}
                         dot={<View style={{
                             backgroundColor: '#fff',
                             width: 6,
@@ -108,14 +109,14 @@ export default class Main extends BasePage {
                     {this.state.listS.length > 0 ? (this.state.listS.map((item, idx) => {
                             return <Button onPress={() => {
                                 Actions.webPage({url: item.linkUrl, id: item.id});
-                            }} key={idx} style={{width: size.width, height: h, borderRadius: 5}}>
-                                <Image style={{width: size.width, height: h}}
+                            }} key={idx} style={{ height: h, borderRadius: 5}}>
+                                <Image style={{width: size.width-20, height: h}}
                                        source={{uri: item.pictureUrl}}/>
                             </Button>
                         })) :
                         <Image style={{width: null, height: h, borderRadius: 5}} source={src.banner_pic2}/>}
                 </Swiper>
-                {/*<View style={{position: 'absolute', left: 0, height: h, width: 10, backgroundColor: '#fff'}}/>*/}
+                <View style={{ height: h, width: 10, backgroundColor: '#fff'}}/>
                 {/*<View style={{position: 'absolute', right: 0, height: h, width: 10, backgroundColor: '#fff'}}/>*/}
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>

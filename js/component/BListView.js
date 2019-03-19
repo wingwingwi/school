@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-    FlatList, View, Text, StyleSheet
+    FlatList, View, Text, StyleSheet, RefreshControl
 } from 'react-native';
 
 export default class BListView extends React.Component {
@@ -38,6 +38,14 @@ export default class BListView extends React.Component {
             onEndReachedThreshold={1}
             removeClippedSubviews={false}
             renderItem={this._renderItem}
+            refreshControl={<RefreshControl
+                refreshing={this.props.renderRefresh != undefined ? this.state.refreshing : undefined}
+                onRefresh={this.props.renderRefresh != undefined ? this._renderRefresh : undefined}
+                title='刷新加载中...'
+                titleColor='#666'
+                colors={['#ff0000', '#00ff00', '#0000ff', '#3ad564']}
+                progressBackgroundColor='#ffffff'
+            />}
             keyExtractor={this._keyExtractor}
         />
     }
