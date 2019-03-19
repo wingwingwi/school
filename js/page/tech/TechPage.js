@@ -60,7 +60,7 @@ export default class TechPage extends BasePage {
                     }
                 >
                     <View style={{backgroundColor: '#fff', width: size.width}}>
-                        <View style={{marginLeft: 15, marginRight: 15}}>
+                        <View style={{marginLeft: 15, marginRight: 15,width:size.width-30}}>
                             <Swiper style={{width: null, height: h}}
                                     dot={<View style={{
                                         backgroundColor: '#fff',
@@ -99,6 +99,8 @@ export default class TechPage extends BasePage {
 
                             </Swiper>
                         </View>
+                        <View style={{position: 'absolute', left: 0, height: h, width: 15, backgroundColor: '#fff'}}/>
+                        <View style={{position: 'absolute', right: 0, height: h, width: 15, backgroundColor: '#fff'}}/>
                     </View>
                     <View style={{backgroundColor: '#fff', width: size.width}}>
                         <View style={{

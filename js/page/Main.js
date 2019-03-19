@@ -78,9 +78,10 @@ export default class Main extends BasePage {
 
     headerComponent() {
         var h = (size.width - 20) * 290 / 690
+        console.log(JSON.stringify(this.state.listS))
         return <View style={{backgroundColor: '#fff'}}>
             <View style={{width: size.width, flexDirection: 'row'}}>
-                <Swiper style={{width: size.width - 20, marginLeft: 10, marginRight: 10, height: h}}
+                <Swiper style={{width: size.width, height: h}}
                         dot={<View style={{
                             backgroundColor: '#fff',
                             width: 6,
@@ -104,24 +105,18 @@ export default class Main extends BasePage {
                         paginationStyle={{
                             bottom: 10, left: null, right: 10
                         }}>
-                    {this.state.list.length > 0 ? (this.state.list.map((item, idx) => {
-                        return <Button onPress={() => {
-                            Actions.webPage({url: item.linkUrl, id: item.id});
-                        }} key={idx}>
-                            <ImageBackground style={{width: size.width - 20, height: h, borderRadius: 5}}
-                                             source={src.banner_pic2}>
-                                <Image style={{width: size.width - 20, height: h, borderRadius: 5}}
+                    {this.state.listS.length > 0 ? (this.state.listS.map((item, idx) => {
+                            return <Button onPress={() => {
+                                Actions.webPage({url: item.linkUrl, id: item.id});
+                            }} key={idx} style={{width: size.width, height: h, borderRadius: 5}}>
+                                <Image style={{width: size.width, height: h}}
                                        source={{uri: item.pictureUrl}}/>
-                            </ImageBackground>
-
-                        </Button>
-                    })) : <Button onPress={() => {
-                    }}>
-                        <Image style={{width: null, height: h, borderRadius: 5}} source={src.banner_pic2}/>
-                    </Button>}
+                            </Button>
+                        })) :
+                        <Image style={{width: null, height: h, borderRadius: 5}} source={src.banner_pic2}/>}
                 </Swiper>
-                <View style={{position: 'absolute', left: 0, height: h, width: 10, backgroundColor: '#fff'}}/>
-                <View style={{position: 'absolute', right: 0, height: h, width: 10, backgroundColor: '#fff'}}/>
+                {/*<View style={{position: 'absolute', left: 0, height: h, width: 10, backgroundColor: '#fff'}}/>*/}
+                {/*<View style={{position: 'absolute', right: 0, height: h, width: 10, backgroundColor: '#fff'}}/>*/}
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
                 {this.itemView(src.woyaoqingjia_btn, "我要请假", () => Actions.leave())}

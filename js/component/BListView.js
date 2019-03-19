@@ -36,7 +36,7 @@ export default class BListView extends React.Component {
             ListEmptyComponent={this.props.ListEmptyComponent}
             onEndReached={this._onEndReached.bind(this)}
             onEndReachedThreshold={1}
-            removeClippedSubviews
+            removeClippedSubviews={false}
             renderItem={this._renderItem}
             keyExtractor={this._keyExtractor}
         />
