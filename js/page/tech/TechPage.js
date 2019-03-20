@@ -59,48 +59,44 @@ export default class TechPage extends BasePage {
                         />
                     }
                 >
-                    <View style={{backgroundColor: '#fff', width: size.width}}>
-                        <View style={{marginLeft: 15, marginRight: 15,width:size.width-30}}>
-                            <Swiper style={{width: null, height: h}}
-                                    dot={<View style={{
-                                        backgroundColor: '#fff',
-                                        width: 6,
-                                        height: 6,
-                                        borderRadius: 3,
-                                        marginLeft: 3,
-                                        marginRight: 3,
-                                        marginTop: 3,
-                                        marginBottom: 3,
-                                    }}/>}
-                                    activeDot={<View style={{
-                                        backgroundColor: 'grey',
-                                        width: 6,
-                                        height: 6,
-                                        borderRadius: 3,
-                                        marginLeft: 3,
-                                        marginRight: 3,
-                                        marginTop: 3,
-                                        marginBottom: 3
-                                    }}/>}
-                                    paginationStyle={{
-                                        bottom: 10, left: null, right: 10
-                                    }}>
-                                {this.state.list.length > 0 ? (this.state.list.map((item, idx) => {
+                    <View style={{backgroundColor: '#fff', width: size.width, flexDirection: 'row'}}>
+                        <View style={{height: h, width: 10, backgroundColor: '#fff'}}/>
+                        <Swiper height={h} autoplay={true} autoplayTimeout={4}
+                                dot={<View style={{
+                                    backgroundColor: '#fff',
+                                    width: 6,
+                                    height: 6,
+                                    borderRadius: 3,
+                                    marginLeft: 3,
+                                    marginRight: 3,
+                                    marginTop: 3,
+                                    marginBottom: 3,
+                                }}/>}
+                                activeDot={<View style={{
+                                    backgroundColor: 'grey',
+                                    width: 6,
+                                    height: 6,
+                                    borderRadius: 3,
+                                    marginLeft: 3,
+                                    marginRight: 3,
+                                    marginTop: 3,
+                                    marginBottom: 3
+                                }}/>}
+                                paginationStyle={{
+                                    bottom: 10, left: null, right: 10
+                                }}>
+                            {this.state.list.length > 0 ? (this.state.list.map((item, idx) => {
                                     return <Button onPress={() => {
                                         Actions.webPage({url: item.linkUrl, id: item.id});
                                     }} key={idx}>
-                                        <Image style={{width: null, height: h, borderRadius: 5}}
+                                        <Image style={{height: h, width: size.width - 20}}
                                                source={{uri: item.pictureUrl}}/>
                                     </Button>
-                                })) : <Button onPress={() => {
-                                }}>
-                                    <Image style={{width: null, height: h, borderRadius: 5}} source={src.banner_pic2}/>
-                                </Button>}
-
-                            </Swiper>
-                        </View>
-                        <View style={{position: 'absolute', left: 0, height: h, width: 15, backgroundColor: '#fff'}}/>
-                        <View style={{position: 'absolute', right: 0, height: h, width: 15, backgroundColor: '#fff'}}/>
+                                })) :
+                                <Image style={{width: null, height: h, borderRadius: 5}} source={src.banner_pic2}/>
+                            }
+                        </Swiper>
+                        <View style={{height: h, width: 10, backgroundColor: '#fff'}}/>
                     </View>
                     <View style={{backgroundColor: '#fff', width: size.width}}>
                         <View style={{
