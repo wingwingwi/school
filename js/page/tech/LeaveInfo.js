@@ -111,7 +111,14 @@ export default class LeaveInfo extends BasePage {
         this.timeout = setTimeout(() => {
             postCache(URL_LEAVE_DETAILS, {id: this.props.item.id}, (data) => {
                 showMsg('', this.loadKey)
-                this.setData(data)
+                let leave = data.leavePro;
+                let resume = data.resumePro;
+                if (leave.lb == this.props.isType) {
+                    this.setData(leave)
+                } else if (resume.lb == this.props.isType) {
+                    this.setData(resume)
+                }
+
             }, false, (error) => {
                 showMsg('', this.loadKey, error)
             })
