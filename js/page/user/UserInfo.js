@@ -16,6 +16,7 @@ import {postCache} from "../../utils/Resquest";
 import BottomCModel from "../../model/BottomCModel";
 import PickerModel from "../../model/PickerModel";
 import ImagePicker from 'react-native-image-picker';
+import BasePage from "../BasePage";
 
 var options = {
     title: '选择图片',
@@ -36,7 +37,7 @@ var options = {
 /**
  * @class
  */
-export default class UserInfo extends Component<Props> {
+export default class UserInfo extends BasePage {
     constructor(props) {
         super(props);
         this.state = {
@@ -98,6 +99,7 @@ export default class UserInfo extends Component<Props> {
     }
 
     componentWillMount() {
+        super.componentWillMount()
         this.listener = DeviceEventEmitter.addListener(eventType, (item) => {
             var user = this.state.user
             user['nickname'] = item[eventName]
@@ -114,6 +116,7 @@ export default class UserInfo extends Component<Props> {
     }
 
     componentWillUnmount() {
+        super.componentWillUnmount()
         this.listener && this.listener.remove();
     }
 

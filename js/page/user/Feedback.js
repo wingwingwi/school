@@ -11,11 +11,12 @@ import Button from "../../component/Button";
 import LinearGradient from "react-native-linear-gradient";
 import {postCache} from "../../utils/Resquest";
 import {URL_ADD_OPINION, URL_MY_DATA} from "../../constant/Url";
+import BasePage from "../BasePage";
 
 /**
  * @class
  */
-export default class Feedback extends Component<Props> {
+export default class Feedback extends BasePage{
     constructor(props) {
         super(props);
     }

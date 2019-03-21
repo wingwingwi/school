@@ -11,11 +11,12 @@ import Button from "../../component/Button";
 import LinearGradient from "react-native-linear-gradient";
 import {postCache} from "../../utils/Resquest";
 import {URL_DOLOGIN, URL_SEND_CODE, URL_UPDATE} from "../../constant/Url";
+import BasePage from "../BasePage";
 
 /**
  * @class
  */
-export default class AmendPwd extends Component<Props> {
+export default class AmendPwd extends BasePage {
     constructor(props) {
         super(props);
         this.state = {isEnable: true, smsText: '发送验证码'}
@@ -152,6 +153,7 @@ export default class AmendPwd extends Component<Props> {
 
 
     componentWillUnmount() {
+        super.componentWillUnmount()
         this.interval && clearInterval(this.interval)
         this.setState = (state, callback) => {
             return;

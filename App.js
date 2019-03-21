@@ -63,7 +63,7 @@ export default class App extends Component<Props> {
                     <Scene key='root' title='' panHandlers={null} hideNavBar={true} initial={true}>
                         <Scene key='welcome' component={Welcome} title='' hideNavBar={true}/>
                     </Scene>
-                    <Scene tabBarPosition="bottom" key="root1" hideNavBar panHandlers={null} initial={false}>
+                    <Scene tabBarPosition="bottom" key="root1" hideNavBar initial={false}>
                         <Tabs key="tabbar" swipeEnabled={true} showLabel={false}
                               tabBarStyle={[styles.tabBarStyle, {backgroundColor: '#fff'}]}>
                             <Scene key="main" component={Main} title="首页" hideNavBar icon={TabIcon}/>

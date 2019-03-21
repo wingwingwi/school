@@ -23,16 +23,18 @@ import EditView from "../../component/EditView";
 import Button from "../../component/Button";
 import LinearGradient from "react-native-linear-gradient";
 import {_token} from "../../constant/Constants";
+import BasePage from "../BasePage";
 
 /**
  * @class Login 注册登录
  */
-export default class Login extends Component<Props> {
+export default class Login extends BasePage {
     constructor(props) {
         super(props);
     }
 
     componentWillMount() {
+        super.componentWillMount()
         if (!isIos)
             BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
     }
@@ -47,6 +49,7 @@ export default class Login extends Component<Props> {
     }
 
     componentWillUnmount() {
+        super.componentWillUnmount()
         if (!isIos)
             BackHandler.removeEventListener('hardwareBackPress', this.onBackAndroid);
     }
@@ -166,6 +169,6 @@ const styles = StyleSheet.create({
         fontSize: 17, color: '#333', marginLeft: 10
     },
     lineEdit: {
-        flex: 1, width: null, marginLeft: 10, fontSize: 17, textAlign: 'left', paddingRight: 100,
+        flex: 1, width: null, marginLeft: 10, fontSize: 17, textAlign: 'left', paddingRight: 30,
     }
 });

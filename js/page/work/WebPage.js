@@ -21,8 +21,9 @@ import {postCache} from "../../utils/Resquest";
 import {URL_NEWS_DETAIL, URL_QUERY_COMMENT, URL_QUERY_PAGE, URL_THUMBS} from "../../constant/Url";
 import src from "../../constant/Src";
 import EditView from "../../component/EditView";
+import BasePage from "../BasePage";
 
-export default class WebPage extends Component<Props> {
+export default class WebPage extends BasePage {
     constructor(props) {
         super(props);
         var html = '<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>标题</title></head><body></body></html>'
@@ -100,9 +101,6 @@ export default class WebPage extends Component<Props> {
         );
     }
 
-    /**即将挂载-处理参数*/
-    componentWillMount() {
-    }
 
     request() {
         this.loadKey = showMsg('加载中...', 3)
@@ -143,6 +141,7 @@ export default class WebPage extends Component<Props> {
 
     /**卸载*/
     componentWillUnmount() {
+        super.componentWillUnmount()
         this.webView = undefined
         this.setState = (state, callback) => {
             return;

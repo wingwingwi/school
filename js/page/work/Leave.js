@@ -27,11 +27,12 @@ import ChooseIModel from "../../model/ChooseIModel";
 import PickerModel from "../../model/PickerModel";
 import {postCache} from "../../utils/Resquest";
 import {URL_LEAVE_ILLNESS, URL_LEAVE_MATTER, URL_QUERY_DISEASE, URL_UPLOAD} from "../../constant/Url";
+import BasePage from "../BasePage";
 
 /**
  * @class
  */
-export default class Leave extends Component<Props> {
+export default class Leave extends BasePage {
     constructor(props) {
         super(props);
         this.state = {//设置初值
@@ -258,6 +259,7 @@ export default class Leave extends Component<Props> {
     }
 
     componentWillMount() {
+        super.componentWillMount()
         this.listener = DeviceEventEmitter.addListener(eventType, (item) => {
             var param = {};
             param[item.key] = item.text;
@@ -266,6 +268,7 @@ export default class Leave extends Component<Props> {
     }
 
     componentWillUnmount() {
+        super.componentWillUnmount()
         this.isNotFinish = false
         this.listener && this.listener.remove();
     }

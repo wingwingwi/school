@@ -12,11 +12,12 @@ import Button from "../../component/Button";
 import LinearGradient from "react-native-linear-gradient";
 import {URL_LIST} from "../../constant/Url";
 import CWebView from "../../component/CWebView";
+import BasePage from "../BasePage";
 
 /**
  * @class
  */
-export default class AboutUs extends Component<Props> {
+export default class AboutUs extends BasePage {
     constructor(props) {
         super(props);
         var html = '<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>标题</title></head><body></body></html>'

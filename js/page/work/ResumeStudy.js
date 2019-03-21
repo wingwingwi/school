@@ -19,12 +19,13 @@ import CheckView from "../../component/CheckView";
 import DateModel from "../../model/DateModel";
 import {postCache} from "../../utils/Resquest";
 import {URL_ILLNESS_RESUME, URL_MATTER_RESUME, URL_UPLOAD} from "../../constant/Url";
+import BasePage from "../BasePage";
 
 
 /**
  * @class
  */
-export default class ResumeStudy extends Component<Props> {
+export default class ResumeStudy extends BasePage {
     constructor(props) {
         super(props);
         this.state = {//设置初值
@@ -199,6 +200,7 @@ export default class ResumeStudy extends Component<Props> {
     }
 
     componentWillUnmount() {
+        super.componentWillUnmount()
         this.isNotFinish = false
     }
 

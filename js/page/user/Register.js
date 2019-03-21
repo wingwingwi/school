@@ -9,11 +9,12 @@ import {URL_DOLOGIN, URL_REGISTER, URL_SEND_CODE} from '../../constant/Url'
 import EditView from "../../component/EditView";
 import Button from "../../component/Button";
 import LinearGradient from "react-native-linear-gradient";
+import BasePage from "../BasePage";
 
 /**
  * @class Register 注册登录
  */
-export default class Register extends Component<Props> {
+export default class Register extends BasePage {
     constructor(props) {
         super(props);
         this.state = {isEnable: true, smsText: '发送验证码'}
@@ -166,6 +167,7 @@ export default class Register extends Component<Props> {
 
 
     componentWillUnmount() {
+        super.componentWillUnmount()
         this.interval && clearInterval(this.interval)
         this.setState = (state, callback) => {
             return;

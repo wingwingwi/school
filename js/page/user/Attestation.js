@@ -14,11 +14,12 @@ import BottomCModel from "../../model/BottomCModel";
 import PickerModel from "../../model/PickerModel";
 import {postCache} from "../../utils/Resquest";
 import {URL_ADD_STUDENT, URL_LIST, URL_MY_DATA, URL_QUERY_CLASS, URL_QUERY_SCHOOL} from "../../constant/Url";
+import BasePage from "../BasePage";
 
 /**
  * @class
  */
-export default class Attestation extends Component<Props> {
+export default class Attestation extends BasePage{
     constructor(props) {
         super(props);
         this.state = {
@@ -86,6 +87,7 @@ export default class Attestation extends Component<Props> {
     }
 
     componentWillMount() {
+        super.componentWillMount()
         this.ages = [];
         for (var i = 3; i < 15 ; i++) {
             this.ages.push({name: `${i}周岁`, value: `${i}`});
@@ -112,6 +114,7 @@ export default class Attestation extends Component<Props> {
     }
 
     componentWillUnmount() {
+        super.componentWillUnmount()
         this.listener && this.listener.remove();
     }
 
