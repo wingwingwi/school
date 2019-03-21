@@ -168,7 +168,7 @@ export default class Main extends BasePage {
                     view.push(<View style={{height: h, flex: 2}} key={this.key++}>
                         <Text style={{color: '#888', fontSize: 10, lineHeight: 15, flex: 1, marginTop: 5}}
                               multiline={true}
-                              numberOfLines={3}>{content}</Text>
+                              numberOfLines={3}>{item.remk}</Text>
                         <Text style={{color: '#333', fontSize: 10, marginTop: 5}}>教育热点</Text>
                     </View>)
                     view.push(<View style={{width: 5, height: 1}} key={this.key++}/>)
@@ -181,7 +181,7 @@ export default class Main extends BasePage {
             view.push(<View style={{height: h, flex: 2}} key={this.key++}>
                 <Text style={{color: '#888', fontSize: 10, lineHeight: 15, flex: 1, marginTop: 5}}
                       multiline={true}
-                      numberOfLines={3}>{content}</Text>
+                      numberOfLines={3}>{item.remk}</Text>
                 <Text style={{color: '#333', fontSize: 10, marginTop: 5}}>教育热点</Text>
             </View>)
         }
