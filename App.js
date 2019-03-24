@@ -68,7 +68,7 @@ export default class App extends Component<Props> {
                               tabBarStyle={[styles.tabBarStyle, {backgroundColor: '#fff'}]}>
                             <Scene key="main" component={Main} title="首页" hideNavBar icon={TabIcon}/>
                             <Scene key="other" component={Other} title="消息" hideNavBar icon={TabIcon}/>
-                            <Scene key="more" component={More} title="咨询" hideNavBar icon={TabIcon}/>
+                            <Scene key="more" component={More} title="资讯" hideNavBar icon={TabIcon}/>
                             <Scene key="mine" component={Mine} title="我的" hideNavBar icon={TabIcon}/>
                         </Tabs>
                         <Scene key="aboutUs" component={AboutUs} hideNavBar={true}/>
