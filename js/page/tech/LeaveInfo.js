@@ -30,7 +30,16 @@ import ImagesModel from "../../model/ImagesModel";
 export default class LeaveInfo extends BasePage {
     constructor(props) {
         super(props);
-        this.state = {name: "测试", refreshing: false, list: [], leave: {}, showImg: false, images: [], index: 0}; //定义属性
+        this.state = {
+            name: "测试",
+            refreshing: false,
+            list: [],
+            leave: {},
+            resumePro: {},
+            showImg: false,
+            images: [],
+            index: 0
+        }; //定义属性
     }
 
     render() {
@@ -55,7 +64,7 @@ export default class LeaveInfo extends BasePage {
                 {NextView.getSettingImgItemTech(undefined, "请假时间", this.getDateTime(this.state.leave.startTime), true, false, '')}
                 {this.typeView()}
                 <View style={{height: 10}}/>
-                {NextView.getSettingImgItemTech(undefined, "复课时间", this.state.leave.resumeTime, true, false, '')}
+                {NextView.getSettingImgItemTech(undefined, "复课时间", this.state.resumePro.resumeTime, true, false, '')}
                 {this.typeView2()}
                 <View style={{height: 50}}/>
                 <Text style={{width: size.width, textAlign: 'center', color: "#0099FF", fontSize: 15}}
@@ -81,7 +90,7 @@ export default class LeaveInfo extends BasePage {
                                 onPress={() => {
                                     this.setState({
                                         showImg: true,
-                                        images: this.state.leave.leavePro.files,
+                                        images: this.state.leave.files,
                                         index: positionIndex
                                     })
                                 }}
@@ -113,9 +122,27 @@ export default class LeaveInfo extends BasePage {
         var type = this.props.isType
         if (type != 1) {//病假
             return <View>
-                {NextView.getSettingImgItemTech(undefined, "是否痊愈", this.state.leave && this.state.leave.resumeStatus == 1 ? "是" : "否", true, false, '')}
-                {NextView.getSettingImgItemTech(undefined, "是否有医院证明", this.state.illnessName, true, false, '')}
+                {NextView.getSettingImgItemTech(undefined, "是否痊愈", this.state.resumePro && this.state.resumePro.isRecovery == 1 ? "是" : "否", true, false, '')}
+                {NextView.getSettingImgItemTech(undefined, "是否有医院证明", this.state.resumePro && this.state.resumePro.inProve == 1 ? "是" : "否", true, false, '')}
                 {NextView.getSettingImgItemTech(undefined, "医院诊断说明", '', true, false, '')}
+                <View style={{backgroundColor: '#fff', flexDirection: 'row', padding: 10, flexWrap: 'wrap'}}>
+                    {this.state.resumePro && this.state.resumePro.files ? this.state.resumePro.files.map((item, idx) => {
+                            let positionIndex = idx + 100;
+                            return <Button
+                                onPress={() => {
+                                    this.setState({
+                                        showImg: true,
+                                        images: this.state.resumePro.files,
+                                        index: positionIndex-100
+                                    })
+                                }}
+                                key={positionIndex}><Image
+                                style={{width: 50, height: 50, marginRight: 10}}
+                                source={{uri: item.fileUrl}}
+                            /></Button>
+                        }
+                    ) : null}
+                </View>
             </View>
         } else return null;
     }
@@ -127,19 +154,14 @@ export default class LeaveInfo extends BasePage {
                 showMsg('', this.loadKey)
                 let leave = data.leavePro;
                 let resume = data.resumePro;
-                if (leave.lb == this.props.isType) {
-                    this.setData(leave)
-                } else if (resume.lb == this.props.isType) {
-                    this.setData(resume)
-                }
-
+                this.setData(leave, resume)
             }, false, (error) => {
                 showMsg('', this.loadKey, error)
             })
         }, 200)
     }
 
-    setData(data) {
+    setData(data, resume) {
         var illnessName = ''
         var illnessState = ''
         if (isNotEmpty(data.diseases) && data.diseases.length > 0)
@@ -150,7 +172,7 @@ export default class LeaveInfo extends BasePage {
                     illnessName = !isNotEmpty(illnessName) ? data.diseases[i].diseaseName : `${illnessName},${data.diseases[i].diseaseName}`
                 }
             }
-        this.setState({leave: data, illnessState: illnessState, illnessName: illnessName})
+        this.setState({leave: data, resumePro: resume, illnessState: illnessState, illnessName: illnessName})
     }
 
     getDateTime(time) {

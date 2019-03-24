@@ -60,15 +60,15 @@ export default class LeaveList extends BasePage {
 
     componentWillMount() {
         super.componentWillMount()
-        this.listener&&this.listener.remove()
+        this.listener = DeviceEventEmitter.addListener(eventType, (item) => {
+            this.requestList()
+        });
     }
 
 
     componentWillUnmount() {
         super.componentWillUnmount()
-        this.listener = DeviceEventEmitter.addListener(eventType, (item) => {
-            this.requestList()
-        });
+        this.listener && this.listener.remove()
     }
 
     componentDidMount() {
@@ -104,8 +104,8 @@ export default class LeaveList extends BasePage {
         let name = `${item.lb == 1 ? "事假" : "病假"}-${item.startTime}`
         return <View>
             {NextView.getSettingImgItemTech(() => {
-                if(item.resumeStatus==0)
-                Actions.resumeStudy({lb: item.lb, id: item.id})
+                if (item.resumeStatus == 0)
+                    Actions.resumeStudy({lb: item.lb, id: item.id})
             }, name, item.resumeStatus == 0 ? '去复课' : '', true, true, "")}
         </View>
     }

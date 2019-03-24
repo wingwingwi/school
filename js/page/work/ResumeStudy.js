@@ -193,7 +193,7 @@ export default class ResumeStudy extends BasePage {
         param["leaveProId"] = this.props.id;
         postCache(url, param, (data) => {
             showMsg('', this.loadKey, '提交成功')
-            DeviceEventEmitter.emit('leavelist', item)
+            DeviceEventEmitter.emit('leavelist', '')
             Alert.alert('提交成功', '稍后你会得到班主任的回复消息')
         }, false, (err) => showMsg('', this.loadKey, err))
     }
