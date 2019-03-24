@@ -66,7 +66,7 @@ export default class RecordList extends BasePage {
                     <Image source={src.xinjiandangan_btn}
                            style={{
                                width: 60,
-                               height: 60
+                               height: 65
                            }}/>
                 </Button>
             </View>);
