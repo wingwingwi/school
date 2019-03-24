@@ -71,6 +71,7 @@ module.exports = {
     URL_UPLOAD: BDBaseUrl + "/file/upload",
     /**2.更新个人档案  POST*/
     URL_ADD_ARCHIVES: BDBaseUrl + "/archives/addArchives",
+    URL_ARCHIVES_LIST: BDBaseUrl + "/archives/list",
     /**2.个人档案查询  POST*/
     URL_MY_ARCHIVES: BDBaseUrl + "/archives/myArchives",
     // 消息

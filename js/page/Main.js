@@ -122,7 +122,7 @@ export default class Main extends BasePage {
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
                 {this.itemView(src.woyaoqingjia_btn, "我要请假", () => Actions.leave())}
-                {this.itemView(src.woyaofuke_btn, "我要复课", () => Actions.resumeStudy())}
+                {this.itemView(src.woyaofuke_btn, "我要复课", () => Actions.leaveList())}
                 {this.itemView(src.jiankangjiaoyu_btn, "健康教育", () => {
                     Actions.more()
                 })}

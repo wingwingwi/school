@@ -47,6 +47,8 @@ import LeaveInfo from "./js/page/tech/LeaveInfo";
 import SendMsg from "./js/page/tech/SendMsg";
 import Welcome from "./js/page/Welcome";
 import ImageList from "./js/page/work/ImageList";
+import RecordList from "./js/page/work/RecordList";
+import LeaveList from "./js/page/work/LeaveList";
 
 const prefix = Platform.OS === 'android' ? 'coustom://coustom/' : 'coustom://';//外部应用打开使用到的链接；
 
@@ -80,6 +82,8 @@ export default class App extends Component<Props> {
                         <Scene key="leave" component={Leave} hideNavBar={true}/>
                         <Scene key="health" component={Health} hideNavBar={true}/>
                         <Scene key="record" component={Record} hideNavBar={true}/>
+                        <Scene key="recordList" component={RecordList} hideNavBar={true}/>
+                        <Scene key="leaveList" component={LeaveList} hideNavBar={true}/>
                         <Scene key="resumeStudy" component={ResumeStudy} hideNavBar={true}/>
                         <Scene key="webPage" component={WebPage} hideNavBar={true}/>
                         <Scene key="inputPage" component={InputPage} hideNavBar={true}/>

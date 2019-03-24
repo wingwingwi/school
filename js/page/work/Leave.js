@@ -211,6 +211,9 @@ export default class Leave extends BasePage {
             showMsg(!isNotEmpty(param.fallTime) ? '选择时间' : !isNotEmpty(param.startTime) ? '选择时间' :
                 !isNotEmpty(this.state.bState) ? '输入病状信息' : '输入病理名称')
         } else {
+            if (this.state.open && !(this.imgsView && this.imgsView.getPic().length > 0)) {
+                showMsg("就医需要上传相关报告图片")
+            }
             param.fallTime = param.fallTime + ':00'
             param.startTime = param.startTime + ':00'
             this.uploadImg = []
@@ -220,7 +223,7 @@ export default class Leave extends BasePage {
 
     /**上传图片*/
     _upload(times, param) {
-        if (times < this.imgsView.getPic().length && param.seeDoctor == 1) {
+        if (this.imgsView && times < this.imgsView.getPic().length && param.seeDoctor == 1) {
             if (this.imgsView.getPic().length > 1) {
                 this.loadKey = showMsg('上传第' + times + '张', 3);
             } else

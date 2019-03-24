@@ -43,10 +43,10 @@ export default class ResumeStudy extends BasePage {
     render() {
         return (
             <View style={{flex: 1}}>
-                <NarBar title={"我要复课"} onSelect={() => Actions.pop()}/>
-                <TextBar list={["事假", "病假"]} changeTab={(index) => {
-                    this.setState({tab: index})
-                }}/>
+                <NarBar title={"我要复课" + this.props.lb == 1 ? "(事假)" : "(病假)"} onSelect={() => Actions.pop()}/>
+                {/*<TextBar list={["事假", "病假"]} changeTab={(index) => {*/}
+                {/*this.setState({tab: index})*/}
+                {/*}}/>*/}
                 {this.state.tab == 0 ? this.leave() : this.sickLeave()}
                 <DateModel show={this.state.showTime} closeModal={(date) => {
                     var item = {}
@@ -189,6 +189,7 @@ export default class ResumeStudy extends BasePage {
 
     request(url, param) {
         this.loadKey = showMsg("提交申请中...", 3)
+        param["id"] = this.props.id;
         postCache(url, param, (data) => {
             showMsg('', this.loadKey, '提交成功')
             Alert.alert('提交成功', '稍后你会得到班主任的回复消息')
@@ -202,6 +203,7 @@ export default class ResumeStudy extends BasePage {
     componentWillUnmount() {
         super.componentWillUnmount()
         this.isNotFinish = false
+        this.setState({tab: this.props.lb == 1 ? 0 : 1})
     }
 
 }
