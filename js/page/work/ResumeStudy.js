@@ -140,7 +140,7 @@ export default class ResumeStudy extends BasePage {
 
     /**上传图片*/
     _upload(times, param) {
-        if (this.imgsView&&times < this.imgsView.getPic().length && param.seeDoctor == 1) {
+        if (this.imgsView&&times < this.imgsView.getPic().length && param.inProve == 1) {
             if (this.imgsView.getPic().length > 1) {
                 var index=times+1;
                 this.loadKey = showMsg(`上传第${index}张`, 3);
@@ -157,10 +157,14 @@ export default class ResumeStudy extends BasePage {
                 showMsg('', this.loadKey, error);
             })
         } else {
-            if (param.seeDoctor == 1 && this.uploadImg.length > 0)
+            if (param.inProve == 1 && this.uploadImg.length > 0)
                 param.urls = getArrStr(this.uploadImg)
-            if (this.isNotFinish)
+            if (this.isNotFinish){
+                //console.log(JSON.stringify(param))
                 this.request(URL_ILLNESS_RESUME, param)
+            }
+
+
         }
     }
 
