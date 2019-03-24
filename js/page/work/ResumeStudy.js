@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 import {
     View, Text, StyleSheet, Image, TextInput, ImageBackground, Alert, ScrollView,
-    TouchableOpacity
+    TouchableOpacity,DeviceEventEmitter
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
 import {getArrStr, isNotEmpty, showMsg, size, upload} from '../../utils/Util';
@@ -43,7 +43,7 @@ export default class ResumeStudy extends BasePage {
     render() {
         return (
             <View style={{flex: 1}}>
-                <NarBar title={"我要复课" + this.props.lb == 1 ? "(事假)" : "(病假)"} onSelect={() => Actions.pop()}/>
+                <NarBar title={"我要复课" + (this.props.lb == 1 ? "(事假)" : "(病假)")} onSelect={() => Actions.pop()}/>
                 {/*<TextBar list={["事假", "病假"]} changeTab={(index) => {*/}
                 {/*this.setState({tab: index})*/}
                 {/*}}/>*/}
@@ -140,9 +140,10 @@ export default class ResumeStudy extends BasePage {
 
     /**上传图片*/
     _upload(times, param) {
-        if (times < this.imgsView.getPic().length && param.seeDoctor == 1) {
+        if (this.imgsView&&times < this.imgsView.getPic().length && param.seeDoctor == 1) {
             if (this.imgsView.getPic().length > 1) {
-                this.loadKey = showMsg(`上传第${times + 1}张`, 3);
+                var index=times+1;
+                this.loadKey = showMsg(`上传第${index}张`, 3);
             } else
                 this.loadKey = showMsg('上传中...', 3);
             var arr = this.imgsView.getPic();
@@ -189,9 +190,10 @@ export default class ResumeStudy extends BasePage {
 
     request(url, param) {
         this.loadKey = showMsg("提交申请中...", 3)
-        param["id"] = this.props.id;
+        param["leaveProId"] = this.props.id;
         postCache(url, param, (data) => {
             showMsg('', this.loadKey, '提交成功')
+            DeviceEventEmitter.emit('leavelist', item)
             Alert.alert('提交成功', '稍后你会得到班主任的回复消息')
         }, false, (err) => showMsg('', this.loadKey, err))
     }
@@ -199,11 +201,14 @@ export default class ResumeStudy extends BasePage {
     componentDidMount() {
         this.isNotFinish = true
     }
+    componentWillMount(){
+        super.componentWillMount();
+        this.setState({tab: (this.props.lb == 1 ? 0 : 1)})
+    }
 
     componentWillUnmount() {
         super.componentWillUnmount()
         this.isNotFinish = false
-        this.setState({tab: this.props.lb == 1 ? 0 : 1})
     }
 
 }

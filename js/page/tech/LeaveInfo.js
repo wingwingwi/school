@@ -114,7 +114,7 @@ export default class LeaveInfo extends BasePage {
         if (type != 1) {//病假
             return <View>
                 {NextView.getSettingImgItemTech(undefined, "是否痊愈", this.state.leave && this.state.leave.resumeStatus == 1 ? "是" : "否", true, false, '')}
-                {NextView.getSettingImgItemTech(undefined, "是否有医院证明", this.state.illnessName, false, false, '')}
+                {NextView.getSettingImgItemTech(undefined, "是否有医院证明", this.state.illnessName, true, false, '')}
                 {NextView.getSettingImgItemTech(undefined, "医院诊断说明", '', true, false, '')}
             </View>
         } else return null;

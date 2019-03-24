@@ -100,6 +100,8 @@ module.exports = {
     URL_ATTENDANCE: BDBaseUrl + "/leave/attendance",
     /**2.事假/病假 历史查询  POST*/
     URL_QUERY_LEAVES: BDBaseUrl + "/leave/queryLeaves",
+    /**2.事假/病假 历史查询  POST*/
+    URL_LIST_LEAVES: BDBaseUrl + "/leave/listLeaves",
     /**2.班主任端】班主任发送通知  POST*/
     URL_SEND_NOTE: BDBaseUrl + "/leave/sendNote",
     /**2.【班主任端】今日请假状况  POST*/

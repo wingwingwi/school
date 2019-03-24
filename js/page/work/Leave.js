@@ -252,7 +252,7 @@ export default class Leave extends BasePage {
             showMsg('', this.loadKey, '提交成功')
             Alert.alert('提交成功', '请选择复课时间', [{
                 text: '复课', onPress: () => {
-                    Actions.replace("leaveList")
+                    Actions.replace("leaveList", {resumeStatus: 0})
                 }
             }, {
                 text: '先等等', onPress: () => {

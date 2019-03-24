@@ -26,7 +26,10 @@ import DateModel from "../../model/DateModel";
 import ChooseIModel from "../../model/ChooseIModel";
 import PickerModel from "../../model/PickerModel";
 import {postCache} from "../../utils/Resquest";
-import {URL_LEAVE_ILLNESS, URL_LEAVE_MATTER, URL_QUERY_DISEASE, URL_QUERY_LEAVES, URL_UPLOAD} from "../../constant/Url";
+import {
+    URL_LEAVE_ILLNESS, URL_LEAVE_MATTER, URL_LIST_LEAVES, URL_QUERY_DISEASE, URL_QUERY_LEAVES,
+    URL_UPLOAD
+} from "../../constant/Url";
 import BasePage from "../BasePage";
 import BListView from "../../component/BListView";
 
@@ -46,6 +49,7 @@ export default class LeaveList extends BasePage {
         return (
             <View style={{flex: 1}}>
                 <NarBar title={"我要复课"} onSelect={() => Actions.pop()}/>
+                <View style={{height: 1}}/>
                 <BListView ref={ref => this.listView = ref}
                            ListEmptyComponent={this._listEmptyComponent}
                            list={this.state.list}
@@ -56,11 +60,15 @@ export default class LeaveList extends BasePage {
 
     componentWillMount() {
         super.componentWillMount()
+        this.listener&&this.listener.remove()
     }
 
 
     componentWillUnmount() {
         super.componentWillUnmount()
+        this.listener = DeviceEventEmitter.addListener(eventType, (item) => {
+            this.requestList()
+        });
     }
 
     componentDidMount() {
@@ -68,7 +76,10 @@ export default class LeaveList extends BasePage {
     }
 
     requestList() {
-        postCache(URL_QUERY_LEAVES, {lb: 2}, (data) => {
+        var param = {};
+        if (this.props.resumeStatus)
+            param['resumeStatus'] = this.props.resumeStatus
+        postCache(URL_LIST_LEAVES, param, (data) => {
             this.listView.setRefreshing(false);
             this.setState({list: data, isLoading: false})
         }, false, err => {
@@ -93,9 +104,12 @@ export default class LeaveList extends BasePage {
         let name = `${item.lb == 1 ? "事假" : "病假"}-${item.startTime}`
         return <View>
             {NextView.getSettingImgItemTech(() => {
+                if(item.resumeStatus==0)
                 Actions.resumeStudy({lb: item.lb, id: item.id})
-            }, name, "", true, true, "")}
+            }, name, item.resumeStatus == 0 ? '去复课' : '', true, true, "")}
         </View>
     }
 
 }
+
+const eventName = 'leavelist'
