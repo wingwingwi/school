@@ -52,10 +52,11 @@ export default class LeaveInfo extends BasePage {
                     </View>
                 </View>
                 <View style={{height: 10}}/>
-                {NextView.getSettingImgItemTech(undefined, "开始时间", this.getDateTime(this.state.leave.startTime), true, false, '')}
-                {/*{NextView.getSettingImgItemTech(undefined, "结束时间", this.state.leave.resumeTime, true, false, '')}*/}
-                <View style={{height: 10}}/>
+                {NextView.getSettingImgItemTech(undefined, "请假时间", this.getDateTime(this.state.leave.startTime), true, false, '')}
                 {this.typeView()}
+                <View style={{height: 10}}/>
+                {NextView.getSettingImgItemTech(undefined, "复课时间", this.state.leave.resumeTime, true, false, '')}
+                {this.typeView2()}
                 <View style={{height: 50}}/>
                 <Text style={{width: size.width, textAlign: 'center', color: "#0099FF", fontSize: 15}}
                       onPress={() => Actions.sendMsg({item: this.props.item})}>是否发送通知？</Text>
@@ -70,17 +71,19 @@ export default class LeaveInfo extends BasePage {
         if (type != 1) {//病假
             return <View>
                 {NextView.getSettingImgItemTech(undefined, "发病时间", this.getDateTime(this.state.leave.fallTime), false, false, '')}
-                <View style={{height: 10}}/>
                 {NextView.getSettingImgItemTech(undefined, "主要症状", this.state.illnessState, true, false, '')}
                 {NextView.getSettingImgItemTech(undefined, "疾病名称", this.state.illnessName, false, false, '')}
-                <View style={{height: 10}}/>
                 {NextView.getSettingImgItemTech(undefined, "病例以及相关材料", '', true, false, '')}
                 <View style={{backgroundColor: '#fff', flexDirection: 'row', padding: 10, flexWrap: 'wrap'}}>
                     {this.state.leave && this.state.leave.files ? this.state.leave.files.map((item, idx) => {
                             let positionIndex = idx;
                             return <Button
                                 onPress={() => {
-                                    this.setState({showImg: true, images: this.state.leave.files, index: positionIndex})
+                                    this.setState({
+                                        showImg: true,
+                                        images: this.state.leave.leavePro.files,
+                                        index: positionIndex
+                                    })
                                 }}
                                 key={positionIndex}><Image
                                 style={{width: 50, height: 50, marginRight: 10}}
@@ -89,7 +92,6 @@ export default class LeaveInfo extends BasePage {
                         }
                     ) : null}
                 </View>
-                <View style={{height: 10}}/>
                 {NextView.getSettingImgItemTech(undefined, "就诊医院", this.props.item.remk, false, false, '')}
             </View>
         } else {
@@ -99,11 +101,23 @@ export default class LeaveInfo extends BasePage {
                     padding: 15,
                     color: '#333',
                     fontSize: 14,
+                    minHeight: 80,
                     backgroundColor: '#fff',
                     width: size.width
                 }}>{this.props.item.remk}</Text>
             </View>
         }
+    }
+
+    typeView2() {
+        var type = this.props.isType
+        if (type != 1) {//病假
+            return <View>
+                {NextView.getSettingImgItemTech(undefined, "是否痊愈", this.state.leave && this.state.leave.resumeStatus == 1 ? "是" : "否", true, false, '')}
+                {NextView.getSettingImgItemTech(undefined, "是否有医院证明", this.state.illnessName, false, false, '')}
+                {NextView.getSettingImgItemTech(undefined, "医院诊断说明", '', true, false, '')}
+            </View>
+        } else return null;
     }
 
     componentDidMount() {
