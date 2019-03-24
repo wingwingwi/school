@@ -51,11 +51,24 @@ export default class RecordList extends BasePage {
                             />}>
                     <View style={{width: size.width, height: 5}}/>
                     {this.state.list.length > 0 ? (this.state.list.map((item, idx) => this.itemView(item, idx))) :
-                        <View style={{width: size.width, alignItems: 'center', padding: 20}}>
-                            <Text>{this.state.refreshing ? "正在加载" : "暂无数据"}</Text>
+                        <View
+                            style={{width: size.width, alignItems: 'center', paddingTop: 70, justifyContent: 'center'}}>
+                            <Image source={src.shangweitianjia_icon} style={{width: 70, height: 70}}/>
+                            <Text style={{
+                                color: '#a9a9a9',
+                                fontSize: 14,
+                                marginTop: 10
+                            }}>{this.state.refreshing ? "正在加载" : "尚未添加个人档案"}</Text>
                         </View>}
-
                 </ScrollView>
+                <Button style={{position: 'absolute', bottom: 20, right: 20}}
+                        onPress={() => Actions.record()}>
+                    <Image source={src.xinjiandangan_btn}
+                           style={{
+                               width: 60,
+                               height: 60
+                           }}/>
+                </Button>
             </View>);
     }
 
@@ -79,8 +92,8 @@ export default class RecordList extends BasePage {
     itemView(item, idx) {
         return <View key={idx}>
             {NextView.getSettingImgItemTech(() => {
-                Actions.resumeStudy({id: item.id})
-            }, item.createTime.substring(0, 4)+'年', "", true, true, "")}
+                Actions.record({id: item.id})
+            }, item.createTime.substring(0, 4) + '年', "", true, true, "")}
         </View>
     }
 

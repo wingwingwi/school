@@ -85,16 +85,17 @@ export default class Record extends BasePage {
 
 
     componentDidMount() {
-        InteractionManager.runAfterInteractions(() => {
-            this.loadKey = showMsg("获取个人档案中...", 3)
-            postCache(URL_MY_ARCHIVES, {id: this.props.id}, (data) => {
-                showMsg('', this.loadKey)
-                if (isNotEmpty(data))
-                    this.setValue(data)
-            }, false, (error) => {
-                showMsg('', this.loadKey, 'error')
+        if (isNotEmpty(this.props.id))
+            InteractionManager.runAfterInteractions(() => {
+                this.loadKey = showMsg("获取个人档案中...", 3)
+                postCache(URL_MY_ARCHIVES, {id: this.props.id}, (data) => {
+                    showMsg('', this.loadKey)
+                    if (isNotEmpty(data))
+                        this.setValue(data)
+                }, false, (error) => {
+                    showMsg('', this.loadKey, 'error')
+                })
             })
-        })
     }
 
     itemView(item, group, index) {
@@ -191,7 +192,8 @@ export default class Record extends BasePage {
     /***/
     commit() {
         var list = this.state.list
-        var param = {id: this.props.id}
+        var param = {}
+        if (isNotEmpty(this.props.id)) param = {id: this.props.id}
         for (var i = 0; i < data.length; i++) {
             if (data[i].child.length == 0) {
                 var it = data[i]

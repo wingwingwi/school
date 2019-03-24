@@ -50,6 +50,8 @@ const Src = {
     zhengchang_highlight_btn: require('../../res/icon/zhengchang_highlight_btn.png'),
     yichang_normal_btn: require('../../res/icon/yichang_normal_btn.png'),
     zhengchang_normal_btn: require('../../res/icon/zhengchang_normal_btn.png'),
+    shangweitianjia_icon: require('../../res/icon/shangweitianjia_icon.png'),
+    xinjiandangan_btn: require('../../res/icon/xinjiandangan_btn.png'),
     /**详情*/
     dianzan_highlight_btn: require('../../res/icon/dianzan_highlight_btn.png'),
     dianzan1_normal_btn: require('../../res/icon/dianzan1_normal_btn.png'),
