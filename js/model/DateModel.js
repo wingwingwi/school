@@ -373,7 +373,12 @@ export default class DateModel extends Component {
     /**跟新状态*/
     componentWillReceiveProps(nextProps) {
         if (nextProps.show) {
+            year = nowYear;
+            month = nowMonth;
+            day = nowDay;
             this.setState({isVisible: nextProps.show});
+            this.setDateText(year, month, day)
+            this.changList(year, month)
         } else {
             this.setState({isVisible: false});
         }

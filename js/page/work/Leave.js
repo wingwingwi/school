@@ -256,7 +256,7 @@ export default class Leave extends BasePage {
                 }
             }, {
                 text: '先等等', onPress: () => {
-
+                    Actions.pop()
                 }
             }])
         }, false, (err) => showMsg('', this.loadKey, err))
