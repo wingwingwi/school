@@ -307,7 +307,7 @@ const list3 = [{name: '感冒'}, {name: '扁桃体发炎'}, {name: '手足口病
     , {name: '其他传染病'}
     , {name: '其他非传染病'}
     , {name: '原因不明疾病'}
-    , {name: '自定义'}
+    , {name: '自定义11'}
 ]
 
 const eventType = 'userInfo'

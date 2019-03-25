@@ -137,7 +137,7 @@ export default class ChooseIModel extends Component {
         for (var i = 0; i < list.length; i++) {
             if (list[i].isC) {
                 if (!isNotEmpty(list[i].id)) {
-                    name = '自定义'
+                    name = '其他'
                     id = ''
                 } else {
                     name = !isNotEmpty(name) ? list[i].name : `${name},${list[i].name}`
@@ -196,7 +196,7 @@ export default class ChooseIModel extends Component {
         if (nextProps.show) {
             var list = nextProps.list;
             if (isNotEmpty(list[list.length - 1].id))
-                list.push({name: '自定义', id: ''})
+                list.push({name: '其他', id: ''})
             if (list != undefined && list.length > 0) {
                 this.setState({isVisible: nextProps.show, list: list});
             } else this.setState({isVisible: nextProps.show});

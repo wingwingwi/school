@@ -169,7 +169,7 @@ export default class Main extends BasePage {
                         <Text style={{color: '#888', fontSize: 10, lineHeight: 15, flex: 1, marginTop: 5}}
                               multiline={true}
                               numberOfLines={3}>{item.remk}</Text>
-                        <Text style={{color: '#333', fontSize: 10, marginTop: 5}}>教育热点</Text>
+                        <Text style={{color: '#333', fontSize: 10, marginTop: 5}}>健康教育</Text>
                     </View>)
                     view.push(<View style={{width: 5, height: 1}} key={this.key++}/>)
                     view.push(<Image style={{flex: 1, height: h, borderRadius: 5}}
@@ -182,7 +182,7 @@ export default class Main extends BasePage {
                 <Text style={{color: '#888', fontSize: 10, lineHeight: 15, flex: 1, marginTop: 5}}
                       multiline={true}
                       numberOfLines={3}>{item.remk}</Text>
-                <Text style={{color: '#333', fontSize: 10, marginTop: 5}}>教育热点</Text>
+                <Text style={{color: '#333', fontSize: 10, marginTop: 5}}>健康教育</Text>
             </View>)
         }
         return (<Button style={{backgroundColor: "#fff", paddingLeft: 10, paddingRight: 10}} onPress={() => {
@@ -193,7 +193,7 @@ export default class Main extends BasePage {
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>{view}
                 </View>
                 {!item.fileList || item.fileList.length < 3 ? null :
-                    <Text style={{color: '#333', fontSize: 10, marginTop: 10}}>教育热点</Text>
+                    <Text style={{color: '#333', fontSize: 10, marginTop: 10}}>健康教育</Text>
                 }
                 <View style={{width: null, height: 1, marginTop: 10, backgroundColor: '#eee'}}/>
             </Button>
