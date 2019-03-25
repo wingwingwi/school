@@ -388,4 +388,4 @@ const times = [[{label: '08点', value: '08'}, {label: '09点', value: '09'}, {l
     {label: '11点', value: '11'}, {label: '12点', value: '12'}, {label: '13点', value: '13'},
     {label: '14点', value: '14'}, {label: '15点', value: '15'}, {label: '16点', value: '16'},
     {label: '17点', value: '17'}, {label: '18点', value: '18'}
-], [{label: '00分', value: '00'}, {label: '15点', value: '15'}, {label: '30点', value: '30'}, {label: '45点', value: '45'}]]
+], [{label: '00分', value: '00'}]]

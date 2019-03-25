@@ -113,7 +113,7 @@ export default class Attestation extends BasePage {
             this.setState({userName: item[eventName]})
         });
         getValue(eventType, (data) => {
-            if (data) this.setData(data)
+            if (data) this.setData(JSON.parse(data))
             console.log(JSON.stringify(data))
         })
     }
