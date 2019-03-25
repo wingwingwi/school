@@ -196,11 +196,11 @@ export default class DateModel extends Component {
                 {/*/>*/}
                 <PickerView data={this.state.dataList} value={this.state.value}
                             onChange={value => {
-                                this.setState({value: value, dateTime: value[0] + ":" + value[1]})
+                                this.setState({value: value, dateTime: value[0] + ":00"})
                                 console.log(JSON.stringify(value))
                             }}
                             cascade={false}
-                            cols={2}
+                            cols={1}
                             indicatorStyle={{flex: 1, color: '#999'}}
                             itemStyle={{fontSize: 15, padding: 5, color: '#555'}}/>
             </View>
@@ -388,4 +388,4 @@ const times = [[{label: '08点', value: '08'}, {label: '09点', value: '09'}, {l
     {label: '11点', value: '11'}, {label: '12点', value: '12'}, {label: '13点', value: '13'},
     {label: '14点', value: '14'}, {label: '15点', value: '15'}, {label: '16点', value: '16'},
     {label: '17点', value: '17'}, {label: '18点', value: '18'}
-], [{label: '00分', value: '00'}]]
+]]
