@@ -188,7 +188,7 @@ export default class Leave extends BasePage {
         if (!isNotEmpty(param.startTime) || !isNotEmpty(param.remk)) {
             showMsg('请提交完整假单')
         } else {
-            param.startTime = param.startTime + ':00'
+            param.startTime = param.startTime
             this.request(URL_LEAVE_MATTER, param)
         }
 
@@ -214,8 +214,8 @@ export default class Leave extends BasePage {
             if (this.state.open && !(this.imgsView && this.imgsView.getPic().length > 0)) {
                 showMsg("就医需要上传相关报告图片")
             }
-            param.fallTime = param.fallTime + ':00'
-            param.startTime = param.startTime + ':00'
+            param.fallTime = param.fallTime
+            param.startTime = param.startTime
             this.uploadImg = []
             this._upload(0, param)
         }

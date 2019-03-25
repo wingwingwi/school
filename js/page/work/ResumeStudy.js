@@ -173,7 +173,7 @@ export default class ResumeStudy extends BasePage {
             showMsg('请输入时间和备注信息')
             return
         }
-        var param = {endTime: this.state.resumeTime + ':00', remk: this.mContent.text()};
+        var param = {endTime: this.state.resumeTime , remk: this.mContent.text()};
         this.request(URL_MATTER_RESUME, param);
     }
 
@@ -183,7 +183,7 @@ export default class ResumeStudy extends BasePage {
             return
         }
         var param = {
-            endTime: this.state.illnessTime + ':00',
+            endTime: this.state.illnessTime ,
             inProve: this.check2.check() ? 1 : 0,
             isRecovery: this.check1.check() ? 1 : 0,
             remk: this.mContent1.text(),
