@@ -20,7 +20,7 @@ import {DatePickerView, PickerView} from '@ant-design/react-native';
 
 const nowDate = new Date(); //获取当前的时间
 const nowYear = nowDate.getFullYear(); //当前年
-const nowMonth = nowDate.getMonth() + 0; //当前年
+const nowMonth = nowDate.getMonth() + 1; //当前年
 const nowDay = nowDate.getDate(); //当前年
 const nowWeek = nowDate.getDay(); //周几
 const nowHour = nowDate.getHours();
@@ -295,9 +295,10 @@ export default class DateModel extends Component {
 
     //2个月内操作
     setNewList(item) {
-        if (item.type == 0) {
-            this.setDateText(nowYear, nowMonth, item.day);
-        } else if (item.type == -1) {
+        console.log(JSON.stringify(item))
+        if (item.type == 0) {//本月
+            this.setDateText(item.y, item.m, item.day);
+        } else if (item.type == -1) {//上一个月
             if (nowMonth == 12 && item.m == 1) {
                 this.setDateText(nowYear, nowMonth, item.day);
                 this.changList(nowYear, nowMonth);
@@ -305,7 +306,7 @@ export default class DateModel extends Component {
                 this.setDateText(nowYear, nowMonth, item.day);
                 this.changList(nowYear, nowMonth);
             }
-        } else if (item.type == 1) {
+        } else if (item.type == 1) {//下一个月
             if (nowMonth == 12 && item.m == 12) {
                 this.setDateText(nowYear + 1, 1, item.day);
                 this.changList(nowYear, 1);

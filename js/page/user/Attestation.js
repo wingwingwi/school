@@ -47,7 +47,7 @@ export default class Attestation extends BasePage {
                     text: this.state.userName
                 }), "姓名", this.state.userName, true, true, "请输入学生真实姓名")}
                 {NextView.getSettingImgItemS(() => this.showModal(1, this.school), "学校", this.state.schoolName, true, true, "请选择学生学校")}
-                {NextView.getSettingImgItemS(() => this.showModal(2, this.classes), "班级", this.state.chassName, true, true, "请选择学生班级")}
+                {NextView.getSettingImgItemS(() => this.showModal(2, this.classes), "班级", this.state.className, true, true, "请选择学生班级")}
                 {NextView.getSettingImgItemS(() => this.showModal(3, this.ages), "年龄", this.state.ageName, true, true, "请选择")}
                 {NextView.getSettingImgItemS(() => this.showModal(4, this.sex), "性别", this.state.sexName, true, true, "请选择")}
                 <Button onPress={() => {
@@ -68,12 +68,12 @@ export default class Attestation extends BasePage {
                     if (index) {
                         var idx = parseInt(index)
                         if (this.state.showType == 1) {
-                            this.setState({schoolName: this.school[idx].name, chassName: '', showModel: false});
+                            this.setState({schoolName: this.school[idx].name, className: '', showModel: false});
                             this.attestationItem.schoolId = this.school[idx].id
                             this.queryClass(false, this.attestationItem.schoolId)
                         } else if (this.state.showType == 2) {
                             console.log(this.classes[idx].name + JSON.stringify(this.classes))
-                            this.setState({chassName: this.classes[idx].name, showModel: false});
+                            this.setState({className: this.classes[idx].name, showModel: false});
                             this.attestationItem.classId = this.classes[idx].id
                         } else if (this.state.showType == 3) {
                             this.setState({ageName: this.ages[idx].name, showModel: false});
