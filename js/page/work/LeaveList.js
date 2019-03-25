@@ -76,9 +76,9 @@ export default class LeaveList extends BasePage {
     }
 
     requestList() {
-        var param = {};
+        var param = undefined;
         if (this.props.resumeStatus)
-            param['resumeStatus'] = this.props.resumeStatus
+            param = {resumeStatus: this.props.resumeStatus}
         postCache(URL_LIST_LEAVES, param, (data) => {
             this.listView.setRefreshing(false);
             this.setState({list: data, isLoading: false})
