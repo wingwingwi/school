@@ -40,6 +40,7 @@ export default class SetPwd extends Component<Props> {
                         {this.pwdSView()}
                         <View style={{width: size.width, height: 1, marginTop: 10, backgroundColor: '#DBDBDB'}}/>
                         <Button onPress={() => {
+                            this.amend()
                         }} style={{marginTop: 50, marginLeft: 15, marginRight: 15}}>
                             <LinearGradient colors={["#00C6FF", "#0082FF"]} start={{x: 0, y: 0}} end={{x: 1, y: 0}}
                                             style={{
@@ -49,7 +50,7 @@ export default class SetPwd extends Component<Props> {
                                                 justifyContent: 'center',
                                                 alignItems: 'center'
                                             }}>
-                                <Text style={{color: '#fff', fontSize: 18}}>注册</Text>
+                                <Text style={{color: '#fff', fontSize: 18}}>确定</Text>
                             </LinearGradient>
                         </Button>
                     </View>
