@@ -124,7 +124,7 @@ export default class App extends Component<Props> {
                 } else {
                     Actions.reset('loginPage')
                 }
-            }, 4500)
+            }, 1000)
         });
     }
 
