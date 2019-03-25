@@ -105,11 +105,11 @@ android {
         versionName "1.0"
     }
     signingConfigs {
-        lechuan {
-            keyAlias 'lechuan'
-            keyPassword 'Qtt1234567'
-            storeFile file('lechuan.jks')
-            storePassword 'Qtt1234567'
+        xiaolong {
+            storeFile file("xiaolong.keystore")
+            storePassword "5668475"
+            keyAlias "key0"
+            keyPassword "5668475"
         }
     }
     splits {
@@ -123,7 +123,7 @@ android {
     buildTypes {
         release {
             minifyEnabled enableProguardInReleaseBuilds
-            signingConfig signingConfigs.lechuan
+            signingConfig signingConfigs.xiaolong
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
