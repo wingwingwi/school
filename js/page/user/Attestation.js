@@ -15,11 +15,12 @@ import PickerModel from "../../model/PickerModel";
 import {postCache} from "../../utils/Resquest";
 import {URL_ADD_STUDENT, URL_LIST, URL_MY_DATA, URL_QUERY_CLASS, URL_QUERY_SCHOOL} from "../../constant/Url";
 import BasePage from "../BasePage";
+import {save, getValue} from "../../utils/FileUtil";
 
 /**
  * @class
  */
-export default class Attestation extends BasePage{
+export default class Attestation extends BasePage {
     constructor(props) {
         super(props);
         this.state = {
@@ -89,7 +90,7 @@ export default class Attestation extends BasePage{
     componentWillMount() {
         super.componentWillMount()
         this.ages = [];
-        for (var i = 3; i < 15 ; i++) {
+        for (var i = 3; i < 15; i++) {
             this.ages.push({name: `${i}周岁`, value: `${i}`});
         }
         this.sex = [{name: '男', value: '男'}, {name: '女', value: '女'}]
@@ -116,6 +117,9 @@ export default class Attestation extends BasePage{
     componentWillUnmount() {
         super.componentWillUnmount()
         this.listener && this.listener.remove();
+        getValue(eventType, (data) => {
+            if (data) this.setData(data)
+        })
     }
 
     querySchool(isShow) {
@@ -163,14 +167,27 @@ export default class Attestation extends BasePage{
             this.loadKey = showMsg("正在提交...", 3)
             this.attestationItem.realName = this.state.userName;
             postCache(URL_ADD_STUDENT, this.attestationItem, (data) => {
+                this.attestationItem['schoolName'] = this.state.schoolName;
+                this.attestationItem['className'] = this.state.className;
+                this.attestationItem['ageName'] = this.state.ageName;
+                this.attestationItem['sexName'] = this.state.sexName;
+                save(eventType, JSON.stringify(this.attestationItem))
                 showMsg("", this.loadKey, "提交成功")
                 setTimeout(() => {
-                    Actions.pop()
+                    Actions.reset('root1')
                 }, 800)
             }, false, (error) => {
                 showMsg("", this.loadKey, error)
             })
         }
+    }
+
+    setData(data) {
+        this.attestationItem = data;
+        this.setState({
+            schoolName: data.schoolName, userName: data.realName, className: data.className,
+            ageName: data.ageName, sexName: data.sexName
+        })
     }
 }
 const eventType = 'Attestation'

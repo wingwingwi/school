@@ -101,6 +101,7 @@ export default class App extends Component<Props> {
                         <Scene key="register" component={Register} title="登录" hideNavBar={true}/>
                         <Scene key="setPwd" component={SetPwd} title="登录" hideNavBar={true}/>
                     </Scene>
+                    <Scene key="attestations" component={Attestation} title="认证" hideNavBar={true}/>
                 </Modal>
             </Overlay>
         </Router></Provider>);
@@ -124,7 +125,7 @@ export default class App extends Component<Props> {
                 } else {
                     Actions.reset('loginPage')
                 }
-            }, __DEV__?1000:3000)
+            }, __DEV__ ? 1000 : 3000)
         });
     }
 

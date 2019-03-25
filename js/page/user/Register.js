@@ -10,6 +10,8 @@ import EditView from "../../component/EditView";
 import Button from "../../component/Button";
 import LinearGradient from "react-native-linear-gradient";
 import BasePage from "../BasePage";
+import {save} from "../../utils/FileUtil";
+import {_token} from "../../constant/Constants";
 
 /**
  * @class Register 注册登录
@@ -32,42 +34,42 @@ export default class Register extends BasePage {
                 }}
                       onPress={() => Actions.pop()}>注册</Text>
                 {/*<KeyboardAvoidingView behavior="padding" enabled keyboardVerticalOffset={100}>*/}
-                    <View style={{alignItems: 'center', width: size.width, flex: 1, marginTop: 50}}>
-                        {this.accountView()}
-                        <View style={{width: size.width, height: 1, marginTop: 10, backgroundColor: '#DBDBDB'}}/>
-                        {this.codeView()}
-                        <View style={{width: size.width, height: 1, marginTop: 10, backgroundColor: '#DBDBDB'}}/>
-                        {this.pwdView()}
-                        <View style={{width: size.width, height: 1, marginTop: 10, backgroundColor: '#DBDBDB'}}/>
-                        <Button onPress={() => {
-                            this.register()
-                        }} style={{marginTop: 50, marginLeft: 15, marginRight: 15}}>
-                            <LinearGradient colors={["#00C6FF", "#0082FF"]} start={{x: 0, y: 0}} end={{x: 1, y: 0}}
-                                            style={{
-                                                height: 45,
-                                                width: size.width - 30,
-                                                borderRadius: 5,
-                                                justifyContent: 'center',
-                                                alignItems: 'center'
-                                            }}>
-                                <Text style={{color: '#fff', fontSize: 18}}>注册</Text>
-                            </LinearGradient>
-                        </Button>
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                position: 'absolute',
-                                paddingBottom: isIos ? 20 : 40,
-                                width: size.width,
-                                bottom: 0,
-                                justifyContent: 'center'
-                            }}>
-                            <Text style={{color: '#A9A9A9', fontSize: 13}}>注册即代表你已同意</Text>
-                            <Text style={{color: '#0082ff', fontSize: 13}} onPress={() => {
-                            }}>《平台用户协议》</Text>
-                        </View>
+                <View style={{alignItems: 'center', width: size.width, flex: 1, marginTop: 50}}>
+                    {this.accountView()}
+                    <View style={{width: size.width, height: 1, marginTop: 10, backgroundColor: '#DBDBDB'}}/>
+                    {this.codeView()}
+                    <View style={{width: size.width, height: 1, marginTop: 10, backgroundColor: '#DBDBDB'}}/>
+                    {this.pwdView()}
+                    <View style={{width: size.width, height: 1, marginTop: 10, backgroundColor: '#DBDBDB'}}/>
+                    <Button onPress={() => {
+                        this.register()
+                    }} style={{marginTop: 50, marginLeft: 15, marginRight: 15}}>
+                        <LinearGradient colors={["#00C6FF", "#0082FF"]} start={{x: 0, y: 0}} end={{x: 1, y: 0}}
+                                        style={{
+                                            height: 45,
+                                            width: size.width - 30,
+                                            borderRadius: 5,
+                                            justifyContent: 'center',
+                                            alignItems: 'center'
+                                        }}>
+                            <Text style={{color: '#fff', fontSize: 18}}>注册</Text>
+                        </LinearGradient>
+                    </Button>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            position: 'absolute',
+                            paddingBottom: isIos ? 20 : 40,
+                            width: size.width,
+                            bottom: 0,
+                            justifyContent: 'center'
+                        }}>
+                        <Text style={{color: '#A9A9A9', fontSize: 13}}>注册即代表你已同意</Text>
+                        <Text style={{color: '#0082ff', fontSize: 13}} onPress={() => {
+                        }}>《平台用户协议》</Text>
                     </View>
-                        {/*</KeyboardAvoidingView>*/}
+                </View>
+                {/*</KeyboardAvoidingView>*/}
             </View>
         );
     }
@@ -112,6 +114,8 @@ export default class Register extends BasePage {
         let code = this.mCode.text();
         if (!isNotEmpty(userName)) {
             showMsg('请输入账号信息')
+        } else if (!this.phoneNum || this.phoneNum != userName) {
+            showMsg(this.phoneNum ? "账号信息变更，请重新获取验证码" : "获取验证码未成功")
         } else if (!isNotEmpty(passWord) && passWord.length > 2) {
             showMsg('请输入3至20位密码')
         } else if (!isNotEmpty(this.smsCode) || this.smsCode != code) {
@@ -122,13 +126,27 @@ export default class Register extends BasePage {
                 showMsg('', this.loadKey);//关闭
                 showMsg("注册成功", 1)
                 setTimeout(() => {
-                    Actions.pop()
+                    this.login(userName, passWord)
                 }, 800)
             }, false, (error) => {
                 showMsg('', this.loadKey);//关闭
                 showMsg(error, 2)
             })
         }
+    }
+
+    login(userName, passWord) {
+        postCache(URL_DOLOGIN, {userName: userName, passWord: passWord}, (data) => {
+            showMsg("登录成功", 1)
+            save('tokenData', JSON.stringify(data));//获取到数据
+            save('isPerfect', data.bySource == 2 ? -1 : data.isPerfect);//获取到数据 0未完善 1已完善,-1忽略
+            _token.t = data.token;
+            _token.isPerfect = data.isPerfect
+            _token.bySource = data.bySource
+            Actions.reset('attestations',{isGo: true});//去认证
+        }, false, (error) => {
+            showMsg(error, 2)
+        })
     }
 
     sendSms() {
@@ -141,6 +159,7 @@ export default class Register extends BasePage {
                 showMsg('', this.loadKey);//关闭
                 showMsg("短信发送成功", 1)
                 this.smsCode = data
+                this.phoneNum = userName
                 this.startTimeCount()
             }, false, (error) => {
                 showMsg('', this.loadKey);//关闭

@@ -16,7 +16,7 @@ import {
 import PropTypes from "prop-types";
 import {size, showMsg, isIos, getDateList, getDateTime, twoText} from "../utils/Util";
 import Swiper from "react-native-swiper";
-import {DatePickerView} from '@ant-design/react-native';
+import {DatePickerView, PickerView} from '@ant-design/react-native';
 
 const nowDate = new Date(); //获取当前的时间
 const nowYear = nowDate.getFullYear(); //当前年
@@ -44,7 +44,7 @@ export default class DateModel extends Component {
         super(props);
         this.state = {
             isVisible: this.props.show,
-            list: [],
+            list: [], value: undefined, dataList: times,
             dateDay: "",
             dateTime: "8:00",
             isSettingDay: true
@@ -145,7 +145,7 @@ export default class DateModel extends Component {
                             color: "#0099FF",
                             fontSize: 15
                         }}
-                        onPress={() => this.props.closeModal(year+'-'+twoText(month)+'-'+twoText(day)+' '+this.state.dateTime)}
+                        onPress={() => this.props.closeModal(year + '-' + twoText(month) + '-' + twoText(day) + ' ' + this.state.dateTime)}
                     >
                         确认
                     </Text>
@@ -185,15 +185,24 @@ export default class DateModel extends Component {
                     height: size.width * 7 / 10
                 }}
             >
-                <DatePickerView value={getDateTime("2018-01-01 " + this.state.dateTime)}
-                                mode={'time'}
-                                onChange={(data) => {
-                                }}
-                                onValueChange={(data, index) => {
-                                    var time = twoText(data[0]) + ':' + twoText(data[1])
-                                    this.setState({dateTime: time});
-                                }}
-                />
+                {/*<DatePickerView value={getDateTime("2018-01-01 " + this.state.dateTime)}*/}
+                {/*mode={'time'}*/}
+                {/*onChange={(data) => {*/}
+                {/*}}*/}
+                {/*onValueChange={(data, index) => {*/}
+                {/*var time = twoText(data[0]) + ':' + twoText(data[1])*/}
+                {/*this.setState({dateTime: time});*/}
+                {/*}}*/}
+                {/*/>*/}
+                <PickerView data={this.state.dataList} value={this.state.value}
+                            onChange={value => {
+                                this.setState({value: value, dateTime: value[0] + ":" + value[1]})
+                                console.log(JSON.stringify(value))
+                            }}
+                            cascade={false}
+                            cols={2}
+                            indicatorStyle={{flex: 1, color: '#999'}}
+                            itemStyle={{fontSize: 15, padding: 5, color: '#555'}}/>
             </View>
         );
     }
@@ -374,3 +383,9 @@ export default class DateModel extends Component {
         this.props.closeModal(isOk);
     }
 }
+
+const times = [[{label: '08点', value: '08'}, {label: '09点', value: '09'}, {label: '10点', value: '10'},
+    {label: '11点', value: '11'}, {label: '12点', value: '12'}, {label: '13点', value: '13'},
+    {label: '14点', value: '14'}, {label: '15点', value: '15'}, {label: '16点', value: '16'},
+    {label: '17点', value: '17'}, {label: '18点', value: '18'}
+], [{label: '00分', value: '00'}, {label: '15点', value: '15'}, {label: '30点', value: '30'}, {label: '45点', value: '45'}]]
