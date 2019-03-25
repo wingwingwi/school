@@ -7,7 +7,7 @@ module.exports = {
             getValue(url, (str) => {
                 if (str) {
                     let data = JSON.parse(str);
-                    console.log('缓存获取到数据')
+                    if (__DEV__) console.log('缓存获取到数据')
                     successCallback(data)
                 }
                 postUtil(url, formData, (data) => {
