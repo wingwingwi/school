@@ -112,14 +112,15 @@ export default class Attestation extends BasePage {
         this.listener = DeviceEventEmitter.addListener(eventType, (item) => {
             this.setState({userName: item[eventName]})
         });
+        getValue(eventType, (data) => {
+            if (data) this.setData(data)
+            console.log(JSON.stringify(data))
+        })
     }
 
     componentWillUnmount() {
         super.componentWillUnmount()
         this.listener && this.listener.remove();
-        getValue(eventType, (data) => {
-            if (data) this.setData(data)
-        })
     }
 
     querySchool(isShow) {
