@@ -105,7 +105,7 @@ export default class Main extends BasePage {
                         paginationStyle={{
                             bottom: 10, left: null, right: 20
                         }}>
-                    {this.state.list.length > 0 ? (this.state.list.map((item, idx) => {
+                    {this.state.listS.length > 0 ? (this.state.listS.map((item, idx) => {
                         return <Button onPress={() => {
                             Actions.webPage({url: item.linkUrl, id: item.id});
                         }} key={idx} style={{width: size.width, padding: 10}}>
