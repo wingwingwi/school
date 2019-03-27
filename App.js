@@ -48,7 +48,7 @@ import SendMsg from "./js/page/tech/SendMsg";
 import Welcome from "./js/page/Welcome";
 import ImageList from "./js/page/work/ImageList";
 import RecordList from "./js/page/work/RecordList";
-import LeaveList from "./js/page/work/LeaveList"; 
+import LeaveList from "./js/page/work/LeaveList";
 import AttestationPage from "./js/page/user/AttestationPage";
 
 const prefix = Platform.OS === 'android' ? 'coustom://coustom/' : 'coustom://';//外部应用打开使用到的链接；
@@ -118,14 +118,18 @@ export default class App extends Component<Props> {
                         _token.t = tokens.token;
                         _token.isPerfect = tokens.isPerfect
                         _token.bySource = tokens.bySource
-                        if (tokens.bySource == 2) {
-                            Actions.reset('techPage')
-                        } else Actions.reset('root1')
-                    } else
-                        Actions.reset('loginPage')
-                } else {
-                    Actions.reset('loginPage')
+                        var nowTime = (new Date()).getTime();
+                        if (tokens && tokens['time'] && tokens['time'] > 0) {
+                            if ((nowTime - tokens['time']) < (30 * 24 * 60 * 60 * 1000)) {//计算过期时间
+                                if (tokens.bySource == 2) {
+                                    Actions.reset('techPage')
+                                } else Actions.reset('root1')
+                                return
+                            }
+                        }
+                    }
                 }
+                Actions.reset('loginPage')
             }, __DEV__ ? 1000 : 3000)
         });
     }

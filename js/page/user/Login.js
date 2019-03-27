@@ -140,6 +140,7 @@ export default class Login extends BasePage {
                 showMsg('', this.loadKey)
                 //isPerfect:’是否完善了学生信息 0未完善 1已完善,如果bySource=2可忽略’
                 showMsg("登录成功", 1)
+                data['time']=(new Date()).getTime();
                 save('tokenData', JSON.stringify(data));//获取到数据
                 save('isPerfect', data.bySource == 2 ? -1 : data.isPerfect);//获取到数据 0未完善 1已完善,-1忽略
                 _token.t = data.token;

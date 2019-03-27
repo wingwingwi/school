@@ -138,6 +138,7 @@ export default class Register extends BasePage {
     login(userName, passWord) {
         postCache(URL_DOLOGIN, {userName: userName, passWord: passWord}, (data) => {
             showMsg("登录成功", 1)
+            data['time']=(new Date()).getTime();
             save('tokenData', JSON.stringify(data));//获取到数据
             save('isPerfect', data.bySource == 2 ? -1 : data.isPerfect);//获取到数据 0未完善 1已完善,-1忽略
             _token.t = data.token;

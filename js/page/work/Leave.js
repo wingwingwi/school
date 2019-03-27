@@ -36,9 +36,24 @@ export default class Leave extends BasePage {
     constructor(props) {
         super(props);
         this.state = {//设置初值
-            tab: 0, open: false, inpatient: false, picture: false,showTime: false, startTime: '', endTime: '', timeType: 0,
-            startBTime: '', endBTime: '', bName: '', bState: '', hospital: '', jiuzheng:'',showC: false, list: [],
-            showH: false, listH: []
+            tab: 0,
+            open: false,
+            inpatient: false,
+            picture: false,
+            showTime: false,
+            startTime: '',
+            endTime: '',
+            timeType: 0,
+            startBTime: '',
+            endBTime: '',
+            bName: '',
+            bState: '',
+            hospital: '',
+            jiuzheng: '',
+            showC: false,
+            list: [],
+            showH: false,
+            listH: []
         };
         this.pics = [];
     }
@@ -149,10 +164,10 @@ export default class Leave extends BasePage {
                            changeCheck={(check) => this.setState({open: check})}/>
                 {this.state.open ? NextView.getSettingImgItemS(() => {
                     this.setState({showC: true, list: disease2, timeType: 5})
-                }, "疾病名称", this.state.bName, true, true, '请选择'): null}
+                }, "疾病名称", this.state.bName, true, true, '请选择') : null}
                 {this.state.open ? NextView.getSettingImgItemS(() => Actions.inputPage({
-                        event: eventType, eventName: 'jiuzheng', text: this.state.jiuzheng
-                    }), "就诊医院", this.state.jiuzheng, true, true, "请输入") : null}
+                    event: eventType, eventName: 'jiuzheng', text: this.state.jiuzheng
+                }), "就诊医院", this.state.jiuzheng, true, true, "请输入") : null}
                 <CheckView title={"上传病例以及相关材料"} style={{padding: 10, marginTop: 2}}
                            changeCheck={(check) => this.setState({picture: check})}/>
                 {this.state.picture ? <ImgsView ref={ref => this.imgsView = ref}/> : null}
@@ -176,7 +191,7 @@ export default class Leave extends BasePage {
                     <Text style={{color: '#fff', fontSize: 18}}>提交</Text>
                 </LinearGradient>
             </Button>
-            <View style={{height: 20}}/>
+            <View style={{height: 50}}/>
         </ScrollView>
     }
 

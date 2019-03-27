@@ -42,6 +42,12 @@ export default class DateModel extends Component {
     /**初始化数据*/
     constructor(props) {
         super(props);
+        var hours = []
+        for (var i = 0; i < 24; i++) {
+            var hour = i < 10 ? `0${i}` : `${i}`
+            hours.push({label: `${hour}点`, value: hour})
+        }
+        times = [hours]
         this.state = {
             isVisible: this.props.show,
             list: [], value: undefined, dataList: times,
@@ -50,6 +56,7 @@ export default class DateModel extends Component {
             isSettingDay: true
         };
         this.key = 1000;
+
     }
 
     /**已经挂载-处理耗时操作*/
@@ -390,8 +397,9 @@ export default class DateModel extends Component {
     }
 }
 
-const times = [[{label: '08点', value: '08'}, {label: '09点', value: '09'}, {label: '10点', value: '10'},
-    {label: '11点', value: '11'}, {label: '12点', value: '12'}, {label: '13点', value: '13'},
-    {label: '14点', value: '14'}, {label: '15点', value: '15'}, {label: '16点', value: '16'},
-    {label: '17点', value: '17'}, {label: '18点', value: '18'}
-]]
+var times = [[{label: '08点', value: '08'}]]
+//     [[{label: '08点', value: '08'}, {label: '09点', value: '09'}, {label: '10点', value: '10'},
+//     {label: '11点', value: '11'}, {label: '12点', value: '12'}, {label: '13点', value: '13'},
+//     {label: '14点', value: '14'}, {label: '15点', value: '15'}, {label: '16点', value: '16'},
+//     {label: '17点', value: '17'}, {label: '18点', value: '18'}
+// ]]
