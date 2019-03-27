@@ -35,7 +35,7 @@ export default class TechPage extends BasePage {
     }
 
     render() {
-        var h = (size.width - 20) * 290 / 690
+        var h = (size.width - 20) * 290 / 690 + 20
         return (
             <View style={styles.container}>
                 <View>
@@ -60,7 +60,6 @@ export default class TechPage extends BasePage {
                     }
                 >
                     <View style={{backgroundColor: '#fff', width: size.width, flexDirection: 'row'}}>
-                        <View style={{height: h, width: 10, backgroundColor: '#fff'}}/>
                         <Swiper height={h} autoplay={true} autoplayTimeout={4}
                                 dot={<View style={{
                                     backgroundColor: '#fff',
@@ -83,20 +82,20 @@ export default class TechPage extends BasePage {
                                     marginBottom: 3
                                 }}/>}
                                 paginationStyle={{
-                                    bottom: 10, left: null, right: 10
+                                    bottom: 10, left: null, right: 20
                                 }}>
                             {this.state.list.length > 0 ? (this.state.list.map((item, idx) => {
-                                    return <Button onPress={() => {
-                                        Actions.webPage({url: item.linkUrl, id: item.id});
-                                    }} key={idx}>
-                                        <Image style={{height: h, width: size.width - 20}}
-                                               source={{uri: item.pictureUrl}}/>
-                                    </Button>
-                                })) :
-                                <Image style={{width: null, height: h, borderRadius: 5}} source={src.banner_pic2}/>
+                                return <Button onPress={() => {
+                                    Actions.webPage({url: item.linkUrl, id: item.id});
+                                }} key={idx} style={{width: size.width, padding: 10}}>
+                                    <Image style={{height: h - 20, width: size.width - 20}}
+                                           source={{uri: item.pictureUrl}}/>
+                                </Button>
+                            })) : <View style={{width: size.width, padding: 10}}><Image style={{height: h - 20, width: size.width - 20, borderRadius: 5}}
+                                                source={src.banner_pic2}/></View>
+
                             }
                         </Swiper>
-                        <View style={{height: h, width: 10, backgroundColor: '#fff'}}/>
                     </View>
                     <View style={{backgroundColor: '#fff', width: size.width}}>
                         <View style={{

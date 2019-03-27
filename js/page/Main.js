@@ -77,13 +77,11 @@ export default class Main extends BasePage {
     }
 
     headerComponent() {
-        var h = (size.width - 20) * 290 / 690
+        var h = (size.width - 20) * 290 / 690 + 20
         console.log(JSON.stringify(this.state.listS))
         return <View style={{backgroundColor: '#fff'}}>
             <View style={{width: size.width, flexDirection: 'row'}}>
-                <View style={{height: h, width: 10, backgroundColor: '#fff'}}/>
-                <Swiper height={h}
-                        autoplay={true} autoplayTimeout={3}
+                <Swiper height={h} autoplay={true} autoplayTimeout={4}
                         dot={<View style={{
                             backgroundColor: '#fff',
                             width: 6,
@@ -105,20 +103,20 @@ export default class Main extends BasePage {
                             marginBottom: 3
                         }}/>}
                         paginationStyle={{
-                            bottom: 10, left: null, right: 10
+                            bottom: 10, left: null, right: 20
                         }}>
-                    {this.state.listS.length > 0 ? (this.state.listS.map((item, idx) => {
-                            return <Button onPress={() => {
-                                Actions.webPage({url: item.linkUrl, id: item.id});
-                            }} key={idx} style={{height: h, borderRadius: 5}}>
-                                <Image style={{width: size.width - 20, height: h}}
-                                       source={{uri: item.pictureUrl}}/>
-                            </Button>
-                        })) :
-                        <Image style={{width: null, height: h, borderRadius: 5}} source={src.banner_pic2}/>}
+                    {this.state.list.length > 0 ? (this.state.list.map((item, idx) => {
+                        return <Button onPress={() => {
+                            Actions.webPage({url: item.linkUrl, id: item.id});
+                        }} key={idx} style={{width: size.width, padding: 10}}>
+                            <Image style={{height: h - 20, width: size.width - 20}}
+                                   source={{uri: item.pictureUrl}}/>
+                        </Button>
+                    })) : <View style={{width: size.width, padding: 10}}><Image
+                        style={{height: h - 20, width: size.width - 20, borderRadius: 5}}
+                        source={src.banner_pic2}/></View>
+                    }
                 </Swiper>
-                <View style={{height: h, width: 10, backgroundColor: '#fff'}}/>
-                {/*<View style={{position: 'absolute', right: 0, height: h, width: 10, backgroundColor: '#fff'}}/>*/}
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
                 {this.itemView(src.woyaoqingjia_btn, "我要请假", () => Actions.leave())}
