@@ -151,7 +151,7 @@ export default class TechPage extends BasePage {
                                renderRefresh={() => this.request()}
                                itemView={this._renderItem}/>
                 </ScrollView>
-                <BottomCModel show={this.state.show} list={[{name: '确定'}]} closeModal={(data) => {
+                <BottomCModel show={this.state.show} list={[{name: '退出登录'}]} closeModal={(data) => {
                     this.setState({show: false})
                     if (data) Actions.reset('loginPage')
                 }}/>
