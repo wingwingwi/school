@@ -141,9 +141,9 @@ export default class TechPage extends BasePage {
                     </View>
                     <View style={{width: null, height: 1, backgroundColor: '#e5e5e5'}}/>
                     {/*<View style={{flexDirection: 'row', padding: 15, alignItems: 'center', backgroundColor: '#fff'}}>*/}
-                        {/*{this.state.listS.length > 0 ? (this.state.listS.map((item, idx) => {*/}
-                            {/*return this._renderItem(item, idx)*/}
-                        {/*})) : <Text style={{color: '#666', fontSize: 15}}>暂无请假信息</Text>}*/}
+                    {/*{this.state.listS.length > 0 ? (this.state.listS.map((item, idx) => {*/}
+                    {/*return this._renderItem(item, idx)*/}
+                    {/*})) : <Text style={{color: '#666', fontSize: 15}}>暂无请假信息</Text>}*/}
                     {/*</View>*/}
                     <BListView ref={ref => (this.listView = ref)}
                                ListEmptyComponent={this._listEmptyComponent}
@@ -164,14 +164,20 @@ export default class TechPage extends BasePage {
         let index = idx;
         var avatar = isNotEmpty(item.avatarUrl) ? {uri: item.avatarUrl} :
             '女' == item.gender ? src.headico_girl : src.headico_boy
-        return (<View key={this.key++}>
+        return (<Button key={this.key++} onPress={() => {
+            Actions.leaveInfo({item: item, isType: item.lb == 2 ? 1 : 0})
+        }}>
             <View style={{width: size.width, padding: 10, flexDirection: 'row', backgroundColor: '#fff'}}>
                 <Image style={{width: 55, height: 55, borderRadius: 28}} source={avatar}/>
                 <View style={{height: 55, flex: 1, marginLeft: 10, justifyContent: 'center'}}>
-                    <Text style={{color: '#111', fontSize: 15,marginTop: 6}}>{item.title}<Text
-                        style={{color: '#888', fontSize: 14}}>{'请假时间：'+item.startTime}</Text></Text>
-                    {item.lb != 1 ? <Text style={{color: '#82868B', fontSize: 12, marginTop: 6}} numberOfLines={1}>{item.zyzz}</Text> : <Text style={{color: '#82868B', fontSize: 12, marginTop: 11}} numberOfLines={1}>{item.remk}</Text>}
-                    {item.lb != 1 ? <Text style={{color: '#12b7f5', fontSize: 13, marginTop: 6}} numberOfLines={1}>{item.jbmc}</Text> : null}
+                    <Text style={{color: '#111', fontSize: 15, marginTop: 6}}>{item.title}<Text
+                        style={{color: '#888', fontSize: 14}}>{'请假时间：' + item.startTime}</Text></Text>
+                    {item.lb != 1 ? <Text style={{color: '#82868B', fontSize: 12, marginTop: 6}}
+                                          numberOfLines={1}>{item.zyzz}</Text> :
+                        <Text style={{color: '#82868B', fontSize: 12, marginTop: 11}}
+                              numberOfLines={1}>{item.remk}</Text>}
+                    {item.lb != 1 ? <Text style={{color: '#12b7f5', fontSize: 13, marginTop: 6}}
+                                          numberOfLines={1}>{item.jbmc}</Text> : null}
                     {/*<Text style={{color: '#82868B', fontSize: 12, marginTop: 11}} numberOfLines={1}>{item.zyzz}</Text>*/}
                     {/*<Text style={{color: '#82868B', fontSize: 12, marginTop: 11}} numberOfLines={1}>{item.remk}</Text>*/}
                     {item.lb != 1 ? <Button style={{
@@ -186,7 +192,7 @@ export default class TechPage extends BasePage {
                         borderColor: '#0099FF',
                         alignItems: 'center', justifyContent: 'center'
                     }} onPress={() => Actions.leaveInfo({item: item})}><Text
-                        style={{color: '#f96868', fontSize: 12}}>{'病假'}</Text></Button>:<Button style={{
+                        style={{color: '#f96868', fontSize: 12}}>{'病假'}</Text></Button> : <Button style={{
                         position: 'absolute',
                         height: 25,
                         paddingLeft: 15,
@@ -198,11 +204,11 @@ export default class TechPage extends BasePage {
                         borderColor: '#0099FF',
                         alignItems: 'center', justifyContent: 'center'
                     }} onPress={() => Actions.leaveInfo({item: item})}><Text
-                            style={{color: '#0099FF', fontSize: 12}}>{'事假'}</Text></Button>}
+                        style={{color: '#0099FF', fontSize: 12}}>{'事假'}</Text></Button>}
                 </View>
             </View>
             <View style={{width: size.width, height: 1, backgroundColor: '#eee'}}/>
-        </View>);
+        </Button>);
     };
 
     onRefresh = () => {

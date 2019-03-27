@@ -64,8 +64,7 @@ export default class LeaveInfo extends BasePage {
                 {NextView.getSettingImgItemTech(undefined, "请假时间", this.getDateTime(this.state.leave.startTime), true, false, '')}
                 {this.typeView()}
                 <View style={{height: 10}}/>
-                {NextView.getSettingImgItemTech(undefined, "复课时间", this.state.resumePro.resumeTime, true, false, '')}
-                {this.typeView2()}
+                {this.resumeGoSchool()}
                 <View style={{height: 50}}/>
                 <Text style={{width: size.width, textAlign: 'center', color: "#0099FF", fontSize: 15}}
                       onPress={() => Actions.sendMsg({item: this.props.item})}>是否发送通知？</Text>
@@ -121,7 +120,7 @@ export default class LeaveInfo extends BasePage {
     typeView2() {
         var type = this.props.isType
         if (type != 1) {//病假
-            return <View>
+            return <View key={100}>
                 {NextView.getSettingImgItemTech(undefined, "是否痊愈", this.state.resumePro && this.state.resumePro.isRecovery == 1 ? "是" : "否", true, false, '')}
                 {NextView.getSettingImgItemTech(undefined, "是否有医院证明", this.state.resumePro && this.state.resumePro.inProve == 1 ? "是" : "否", true, false, '')}
                 {NextView.getSettingImgItemTech(undefined, "医院诊断说明", '', true, false, '')}
@@ -133,7 +132,7 @@ export default class LeaveInfo extends BasePage {
                                     this.setState({
                                         showImg: true,
                                         images: this.state.resumePro.files,
-                                        index: positionIndex-100
+                                        index: positionIndex - 100
                                     })
                                 }}
                                 key={positionIndex}><Image
@@ -145,6 +144,16 @@ export default class LeaveInfo extends BasePage {
                 </View>
             </View>
         } else return null;
+    }
+
+    /**恢复上课*/
+    resumeGoSchool() {
+        var view = [];
+        if (1 == this.state.leave.resumeStatus || "1" == this.state.leave.resumeStatus) {
+            view.push(<View key={10}>{NextView.getSettingImgItemTech(undefined, "复课时间", this.state.resumePro.resumeTime, true, false, '')}</View>)
+            view.push(this.typeView2())
+        }
+        return view;
     }
 
     componentDidMount() {

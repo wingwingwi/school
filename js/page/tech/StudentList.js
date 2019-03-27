@@ -84,17 +84,21 @@ export default class StudentList extends BasePage {
         var avatar = isNotEmpty(item.avatarUrl) ? {uri: item.avatarUrl} :
             '女' == item.gender ? src.headico_girl : src.headico_boy
         return (<View key={this.key++}>
-            <View style={{width: size.width, padding: 10, flexDirection: 'row', backgroundColor: '#fff'}} >
+            <View style={{width: size.width, padding: 10, flexDirection: 'row', backgroundColor: '#fff'}}>
                 <Image style={{width: 55, height: 55, borderRadius: 28}} source={avatar}/>
-                <Button onPress={() => Actions.leaveInfo({item: item})}>
-                <View style={{height: 55, flex: 1, marginLeft: 10, justifyContent: 'center'}}>
-                    <Text style={{color: '#111', fontSize: 15,marginTop: 6}}>{item.title}<Text
-                        style={{color: '#888', fontSize: 14}}>{'请假时间：'+item.startTime}</Text></Text>
-                    {item.lb != 1 ? <Text style={{color: '#82868B', fontSize: 12, marginTop: 6}} numberOfLines={1}>{item.zyzz}</Text> : <Text style={{color: '#12b7f5', fontSize: 12, marginTop: 11}} numberOfLines={1}>{item.remk}</Text>}
-                    {item.lb != 1 ? <Text style={{color: '#12b7f5', fontSize: 13, marginTop: 6}} numberOfLines={1}>{item.jbmc}</Text> : null}
-                    {/*<Text style={{color: '#82868B', fontSize: 12, marginTop: 11}} numberOfLines={1}>{item.zyzz}</Text>*/}
-                    {/*<Text style={{color: '#82868B', fontSize: 12, marginTop: 11}} numberOfLines={1}>{item.remk}</Text>*/}
-                    {/*{item.lb != 1 ? <Button style={{*/}
+                <Button onPress={() => Actions.leaveInfo({item: item, isType: item.lb==2?1:0})}>
+                    <View style={{height: 55, flex: 1, marginLeft: 10, justifyContent: 'center'}}>
+                        <Text style={{color: '#111', fontSize: 15, marginTop: 6}}>{item.title}<Text
+                            style={{color: '#888', fontSize: 14}}>{'请假时间：' + item.startTime}</Text></Text>
+                        {item.lb != 1 ? <Text style={{color: '#82868B', fontSize: 12, marginTop: 6}}
+                                              numberOfLines={1}>{item.zyzz}</Text> :
+                            <Text style={{color: '#12b7f5', fontSize: 12, marginTop: 11}}
+                                  numberOfLines={1}>{item.remk}</Text>}
+                        {item.lb != 1 ? <Text style={{color: '#12b7f5', fontSize: 13, marginTop: 6}}
+                                              numberOfLines={1}>{item.jbmc}</Text> : null}
+                        {/*<Text style={{color: '#82868B', fontSize: 12, marginTop: 11}} numberOfLines={1}>{item.zyzz}</Text>*/}
+                        {/*<Text style={{color: '#82868B', fontSize: 12, marginTop: 11}} numberOfLines={1}>{item.remk}</Text>*/}
+                        {/*{item.lb != 1 ? <Button style={{*/}
                         {/*position: 'absolute',*/}
                         {/*height: 25,*/}
                         {/*paddingLeft: 15,*/}
@@ -105,8 +109,8 @@ export default class StudentList extends BasePage {
                         {/*borderWidth: 0,*/}
                         {/*borderColor: '#0099FF',*/}
                         {/*alignItems: 'center', justifyContent: 'center'*/}
-                    {/*}} onPress={() => Actions.leaveInfo({item: item})}><Text*/}
-                            {/*style={{color: '#f96868', fontSize: 12}}>{'病假'}</Text></Button>:<Button style={{*/}
+                        {/*}} onPress={() => Actions.leaveInfo({item: item})}><Text*/}
+                        {/*style={{color: '#f96868', fontSize: 12}}>{'病假'}</Text></Button>:<Button style={{*/}
                         {/*position: 'absolute',*/}
                         {/*height: 25,*/}
                         {/*paddingLeft: 15,*/}
@@ -117,9 +121,9 @@ export default class StudentList extends BasePage {
                         {/*borderWidth: 0,*/}
                         {/*borderColor: '#0099FF',*/}
                         {/*alignItems: 'center', justifyContent: 'center'*/}
-                    {/*}} onPress={() => Actions.leaveInfo({item: item})}><Text*/}
-                            {/*style={{color: '#0099FF', fontSize: 12}}>{'事假'}</Text></Button>}*/}
-                </View>
+                        {/*}} onPress={() => Actions.leaveInfo({item: item})}><Text*/}
+                        {/*style={{color: '#0099FF', fontSize: 12}}>{'事假'}</Text></Button>}*/}
+                    </View>
                 </Button>
             </View>
             <View style={{width: size.width, height: 1, backgroundColor: '#eee'}}/>
