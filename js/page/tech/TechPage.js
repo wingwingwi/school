@@ -168,11 +168,13 @@ export default class TechPage extends BasePage {
             <View style={{width: size.width, padding: 10, flexDirection: 'row', backgroundColor: '#fff'}}>
                 <Image style={{width: 55, height: 55, borderRadius: 28}} source={avatar}/>
                 <View style={{height: 55, flex: 1, marginLeft: 10, justifyContent: 'center'}}>
-                    <Text style={{color: '#111', fontSize: 15}}>{item.title}<Text
+                    <Text style={{color: '#111', fontSize: 15,marginTop: 6}}>{item.title}<Text
                         style={{color: '#888', fontSize: 14}}>{'请假时间：'+item.startTime}</Text></Text>
-                    <Text style={{color: '#82868B', fontSize: 12, marginTop: 11}} numberOfLines={1}>{item.remk}</Text>
-                    <Text style={{color: '#82868B', fontSize: 12, marginTop: 11}} numberOfLines={1}>{item.remk}</Text>
-                    <Button style={{
+                    {item.lb != 1 ? <Text style={{color: '#82868B', fontSize: 12, marginTop: 6}} numberOfLines={1}>{item.zyzz}</Text> : <Text style={{color: '#82868B', fontSize: 12, marginTop: 11}} numberOfLines={1}>{item.remk}</Text>}
+                    {item.lb != 1 ? <Text style={{color: '#12b7f5', fontSize: 13, marginTop: 6}} numberOfLines={1}>{item.jbmc}</Text> : null}
+                    {/*<Text style={{color: '#82868B', fontSize: 12, marginTop: 11}} numberOfLines={1}>{item.zyzz}</Text>*/}
+                    {/*<Text style={{color: '#82868B', fontSize: 12, marginTop: 11}} numberOfLines={1}>{item.remk}</Text>*/}
+                    {item.lb != 1 ? <Button style={{
                         position: 'absolute',
                         height: 25,
                         paddingLeft: 15,
@@ -184,7 +186,19 @@ export default class TechPage extends BasePage {
                         borderColor: '#0099FF',
                         alignItems: 'center', justifyContent: 'center'
                     }} onPress={() => Actions.leaveInfo({item: item})}><Text
-                        style={{color: '#0099FF', fontSize: 12}}>{item.lb != 1 ? '病假' : '事假'}</Text></Button>
+                        style={{color: '#f96868', fontSize: 12}}>{'病假'}</Text></Button>:<Button style={{
+                        position: 'absolute',
+                        height: 25,
+                        paddingLeft: 15,
+                        paddingRight: 15,
+                        top: 15,
+                        right: 0,
+                        borderRadius: 12,
+                        borderWidth: 0,
+                        borderColor: '#0099FF',
+                        alignItems: 'center', justifyContent: 'center'
+                    }} onPress={() => Actions.leaveInfo({item: item})}><Text
+                            style={{color: '#0099FF', fontSize: 12}}>{'事假'}</Text></Button>}
                 </View>
             </View>
             <View style={{width: size.width, height: 1, backgroundColor: '#eee'}}/>

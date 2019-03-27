@@ -130,7 +130,7 @@ export default class SendMsg extends BasePage {
             postCache(URL_SEND_NOTE, {cnts: cnts, id: this.props.item.id}, (data) => {
                 showMsg('', this.loadKey)
                 Alert.alert('提示', '您的通知，系统已经为你发送成功', [
-                        {text: '嗯嗯', onPress: () => Actions.popTo('studentList')}
+                        {text: '确定', onPress: () => Actions.pop()}
                     ],
                     {cancelable: false})
             }, true, (error) => showMsg('', this.loadKey, error))
