@@ -107,7 +107,7 @@ export default class Main extends BasePage {
                         }}>
                     {this.state.listS.length > 0 ? (this.state.listS.map((item, idx) => {
                         return <Button onPress={() => {
-                            Actions.webPage({url: item.linkUrl, id: item.id});
+                            Actions.webPage({id: item.linkUrl});
                         }} key={idx} style={{width: size.width, padding: 10}}>
                             <Image style={{height: h - 20, width: size.width - 20}}
                                    source={{uri: item.pictureUrl}}/>

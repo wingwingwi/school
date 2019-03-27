@@ -86,7 +86,7 @@ export default class StudentList extends BasePage {
         return (<View key={this.key++}>
             <View style={{width: size.width, padding: 10, flexDirection: 'row', backgroundColor: '#fff'}}>
                 <Image style={{width: 55, height: 55, borderRadius: 28}} source={avatar}/>
-                <Button onPress={() => Actions.leaveInfo({item: item, isType: item.lb==2?1:0})}>
+                <Button onPress={() => Actions.leaveInfo({item: item, isType: item.lb})}>
                     <View style={{height: 55, flex: 1, marginLeft: 10, justifyContent: 'center'}}>
                         <Text style={{color: '#111', fontSize: 15, marginTop: 6}}>{item.title}<Text
                             style={{color: '#888', fontSize: 14}}>{'请假时间：' + item.startTime}</Text></Text>

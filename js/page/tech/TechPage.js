@@ -86,7 +86,7 @@ export default class TechPage extends BasePage {
                                 }}>
                             {this.state.list.length > 0 ? (this.state.list.map((item, idx) => {
                                 return <Button onPress={() => {
-                                    Actions.webPage({url: item.linkUrl, id: item.id});
+                                    Actions.webPage({id: item.linkUrl});
                                 }} key={idx} style={{width: size.width, padding: 10}}>
                                     <Image style={{height: h - 20, width: size.width - 20}}
                                            source={{uri: item.pictureUrl}}/>
@@ -164,7 +164,7 @@ export default class TechPage extends BasePage {
         var avatar = isNotEmpty(item.avatarUrl) ? {uri: item.avatarUrl} :
             '女' == item.gender ? src.headico_girl : src.headico_boy
         return (<Button key={this.key++} onPress={() => {
-            Actions.leaveInfo({item: item, isType: item.lb == 2 ? 1 : 0})
+            Actions.leaveInfo({item: item, isType: item.lb })
         }}>
             <View style={{width: size.width, padding: 10, flexDirection: 'row', backgroundColor: '#fff'}}>
                 <Image style={{width: 55, height: 55, borderRadius: 28}} source={avatar}/>
