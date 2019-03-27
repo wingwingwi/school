@@ -32,6 +32,8 @@ module.exports = {
     URL_QUERY_NETE_TEMPLATE: BDBaseUrl + "/dic/queryNoteTemplate",
     /**2. 学校查询 POST*/
     URL_QUERY_SCHOOL: BDBaseUrl + "/dic/querySchool",
+    /**2.省市区街道级联查询 POST*/
+    URL_QUERY_AREA: BDBaseUrl + "/dic/selectArea",
 
 // 用户管理
 // 个人中心/学生认证/短信/登陆/注册/意见反馈等
@@ -73,7 +75,7 @@ module.exports = {
     URL_ADD_ARCHIVES: BDBaseUrl + "/archives/addArchives",
     URL_ARCHIVES_LIST: BDBaseUrl + "/archives/list",
     /**2.个人档案查询  POST*/
-    URL_MY_ARCHIVES: BDBaseUrl + "/archives/myArchives",
+    URL_MY_ARCHIVES: BDBaseUrl + "/archives/toDetail",
     // 消息
     /**2.查询消息列表  POST*/
     URL_MSG_LIST: BDBaseUrl + "/msg/list",

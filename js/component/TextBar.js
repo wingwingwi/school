@@ -58,4 +58,8 @@ export default class TextBar extends Component {
         }
         return this.state.tab;
     }
+
+    setList(list) {
+        list ? this.setState({list: list}) : null
+    }
 }

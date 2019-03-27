@@ -83,7 +83,7 @@ export default class Main extends BasePage {
             <View style={{width: size.width, flexDirection: 'row'}}>
                 <View style={{height: h, width: 10, backgroundColor: '#fff'}}/>
                 <Swiper height={h}
-                        autoplay={true} autoplayTimeout={4}
+                        autoplay={true} autoplayTimeout={3}
                         dot={<View style={{
                             backgroundColor: '#fff',
                             width: 6,

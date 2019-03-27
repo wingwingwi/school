@@ -140,13 +140,18 @@ export default class TechPage extends BasePage {
                         <Text style={{color: '#0099FF', fontSize: 17, marginLeft: 10}}>今日请假状况</Text>
                     </View>
                     <View style={{width: null, height: 1, backgroundColor: '#e5e5e5'}}/>
-                    <View style={{flexDirection: 'row', padding: 15, alignItems: 'center', backgroundColor: '#fff'}}>
-                        {this.state.listS.length > 0 ? (this.state.listS.map((item, idx) => {
-                            return this._renderItem(item, idx)
-                        })) : <Text style={{color: '#666', fontSize: 15}}>暂无请假信息</Text>}
-                    </View>
+                    {/*<View style={{flexDirection: 'row', padding: 15, alignItems: 'center', backgroundColor: '#fff'}}>*/}
+                        {/*{this.state.listS.length > 0 ? (this.state.listS.map((item, idx) => {*/}
+                            {/*return this._renderItem(item, idx)*/}
+                        {/*})) : <Text style={{color: '#666', fontSize: 15}}>暂无请假信息</Text>}*/}
+                    {/*</View>*/}
+                    <BListView ref={ref => (this.listView = ref)}
+                               ListEmptyComponent={this._listEmptyComponent}
+                               list={this.state.listS}
+                               renderRefresh={() => this.request()}
+                               itemView={this._renderItem}/>
                 </ScrollView>
-                <BottomCModel show={this.state.show} list={[{name: '注销账号'}]} closeModal={(data) => {
+                <BottomCModel show={this.state.show} list={[{name: '确定'}]} closeModal={(data) => {
                     this.setState({show: false})
                     if (data) Actions.reset('loginPage')
                 }}/>
@@ -164,8 +169,9 @@ export default class TechPage extends BasePage {
                 <Image style={{width: 55, height: 55, borderRadius: 28}} source={avatar}/>
                 <View style={{height: 55, flex: 1, marginLeft: 10, justifyContent: 'center'}}>
                     <Text style={{color: '#111', fontSize: 15}}>{item.title}<Text
-                        style={{color: '#888', fontSize: 14}}>{'     男   9岁'}</Text></Text>
-                    <Text style={{color: '#82868B', fontSize: 12, marginTop: 11}} numberOfLines={1}>{'事假申请'}</Text>
+                        style={{color: '#888', fontSize: 14}}>{'请假时间：'+item.startTime}</Text></Text>
+                    <Text style={{color: '#82868B', fontSize: 12, marginTop: 11}} numberOfLines={1}>{item.remk}</Text>
+                    <Text style={{color: '#82868B', fontSize: 12, marginTop: 11}} numberOfLines={1}>{item.remk}</Text>
                     <Button style={{
                         position: 'absolute',
                         height: 25,
@@ -174,11 +180,11 @@ export default class TechPage extends BasePage {
                         top: 15,
                         right: 0,
                         borderRadius: 12,
-                        borderWidth: 1,
+                        borderWidth: 0,
                         borderColor: '#0099FF',
                         alignItems: 'center', justifyContent: 'center'
                     }} onPress={() => Actions.leaveInfo({item: item})}><Text
-                        style={{color: '#0099FF', fontSize: 12}}>去查看</Text></Button>
+                        style={{color: '#0099FF', fontSize: 12}}>{item.lb != 1 ? '病假' : '事假'}</Text></Button>
                 </View>
             </View>
             <View style={{width: size.width, height: 1, backgroundColor: '#eee'}}/>
@@ -207,6 +213,7 @@ export default class TechPage extends BasePage {
 
     request() {
         this.loadKey = showMsg('正在刷新...', 3)
+        this.listView.setRefreshing(false);
         postCache(URL_ATTENDANCE, undefined, (data) => {
             this.setState({refreshing: false, reachedNum: data.reachedNum, actualNum: data.actualNum})
         }, false, (err) => {
@@ -220,7 +227,13 @@ export default class TechPage extends BasePage {
         postCache(URL_BANNERS, undefined, (data) => {
             this.setState({list: data})
             showMsg('', this.loadKey)
-        }, false, () => showMsg('', this.loadKey))
+        }, false, err => {
+            if (isShow)
+                showMsg('', this.loadKey, err)
+            else
+                showMsg(err)
+            this.listView.setRefreshing(false);
+        })
     }
 
 
@@ -231,6 +244,7 @@ export default class TechPage extends BasePage {
 
     /**已经挂载-处理耗时操作*/
     componentDidMount() {
+        this.listView.setRefreshing(true);
         this.request()
         postCache(URL_MY_DATA, undefined, (data) => {
             this.setState({

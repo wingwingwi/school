@@ -238,6 +238,13 @@ var data = [{name: '身高(cm)', value: '180', key: 'height', child: []},
         , {name: '颈部', key: 'neck', value: '', isChose: true}
         , {name: '脊柱', key: 'spine', value: '', isChose: true}
     ]
+    },
+    {
+        name: '结核病检查', child: [{name: '是否有肺结核密切接触史', key: 'allfours1', value: '', isChose: true}
+        , {name: '是否有肺结核可疑症状', key: 'chest1', value: '', isChose: true}
+        , {name: '是否开展结核菌素皮肤试验', key: 'head1', value: '', isChose: true}
+        , {name: '是否开展胸部X光片检查 ', key: 'neck1', value: '', isChose: true}
+    ]
     }
 ]
 

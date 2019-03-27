@@ -101,7 +101,7 @@ export default class LeaveInfo extends BasePage {
                         }
                     ) : null}
                 </View>
-                {NextView.getSettingImgItemTech(undefined, "就诊医院", this.props.item.remk, false, false, '')}
+                {NextView.getSettingImgItemTech(undefined, "住院医院", this.props.item.remk, false, false, '')}
             </View>
         } else {
             return <View>

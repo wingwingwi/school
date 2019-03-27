@@ -72,7 +72,7 @@ export default class UserInfo extends BasePage {
                         <Text style={{color: '#fff', fontSize: 18}}>退出登录</Text>
                     </LinearGradient>
                 </Button>
-                <BottomCModel show={this.state.show} list={[{name: '注销账号'}]} closeModal={(data) => {
+                <BottomCModel show={this.state.show} list={[{name: '确定'}]} closeModal={(data) => {
                     this.setState({show: false})
                     if (data) Actions.reset('loginPage')
                 }}/>

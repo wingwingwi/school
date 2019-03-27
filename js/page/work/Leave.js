@@ -36,8 +36,8 @@ export default class Leave extends BasePage {
     constructor(props) {
         super(props);
         this.state = {//设置初值
-            tab: 0, open: false, inpatient: false, showTime: false, startTime: '', endTime: '', timeType: 0,
-            startBTime: '', endBTime: '', bName: '', bState: '', hospital: '', showC: false, list: [],
+            tab: 0, open: false, inpatient: false, picture: false,showTime: false, startTime: '', endTime: '', timeType: 0,
+            startBTime: '', endBTime: '', bName: '', bState: '', hospital: '', jiuzheng:'',showC: false, list: [],
             showH: false, listH: []
         };
         this.pics = [];
@@ -143,20 +143,24 @@ export default class Leave extends BasePage {
                 {NextView.getSettingImgItemS(() => {
                     this.setState({showC: true, list: disease1, timeType: 4})
                 }, "主要症状", this.state.bState, true, true, '请选择')}
-                {NextView.getSettingImgItemS(() => {
-                    this.setState({showC: true, list: disease2, timeType: 5})
-                }, "疾病名称", this.state.bName, true, true, '请选择')}
+
                 <View style={{height: 5}}/>
-                <CheckView title={"是否就医"} style={{padding: 10, marginTop: 5}}
+                <CheckView title={"是否就医"} style={{padding: 10, marginTop: 2}}
                            changeCheck={(check) => this.setState({open: check})}/>
-                {this.state.open ?
-                    <Text style={{backgroundColor: '#fff', padding: 10, width: size.width}}>上传病例以及相关材料</Text> : null}
-                {this.state.open ? <ImgsView ref={ref => this.imgsView = ref}/> : null}
-                <CheckView title={"是否住院"} style={{padding: 10, marginTop: 5}}
+                {this.state.open ? NextView.getSettingImgItemS(() => {
+                    this.setState({showC: true, list: disease2, timeType: 5})
+                }, "疾病名称", this.state.bName, true, true, '请选择'): null}
+                {this.state.open ? NextView.getSettingImgItemS(() => Actions.inputPage({
+                        event: eventType, eventName: 'jiuzheng', text: this.state.jiuzheng
+                    }), "就诊医院", this.state.jiuzheng, true, true, "请输入") : null}
+                <CheckView title={"上传病例以及相关材料"} style={{padding: 10, marginTop: 2}}
+                           changeCheck={(check) => this.setState({picture: check})}/>
+                {this.state.picture ? <ImgsView ref={ref => this.imgsView = ref}/> : null}
+                <CheckView title={"是否住院"} style={{padding: 10, marginTop: 2}}
                            changeCheck={(check) => this.setState({inpatient: check})}/>
                 {this.state.inpatient ? NextView.getSettingImgItemS(() => Actions.inputPage({
                     event: eventType, eventName: 'hospital', text: this.state.hospital
-                }), "就诊医院", this.state.hospital, true, true, "请输入") : null}
+                }), "住院医院", this.state.hospital, true, true, "请输入") : null}
             </View>
             <Button onPress={() => {
                 this.commitSickLeave();
@@ -185,7 +189,7 @@ export default class Leave extends BasePage {
         var param = {}
         param.startTime = this.state.startTime
         param.remk = this.mContent.text()
-        if (!isNotEmpty(param.startTime) || !isNotEmpty(param.remk)) {
+        if (!isNotEmpty(param.startTime)) {
             showMsg('请提交完整假单')
         } else {
             param.startTime = param.startTime
@@ -204,6 +208,8 @@ export default class Leave extends BasePage {
         param.remk = this.state.hospital//备注，医院信息 **********
         param.seeDoctor = this.state.open ? 1 : 0//0=未就医 1=已就医
         param.startTime = this.state.startBTime//请假日期
+        param.inpatientHospital = this.state.hospital//住院医院 **********
+        param.visitHospital = this.state.jiuzheng//就诊医院 **********
         //param.urls = ''//相关材料照片(多张用,隔开) ***********
         param.zyzzIds = isNotEmpty(this.zyzzIds) ? this.zyzzIds : this.state.bState//主要症状数据集,1.如果isZyzz=0,传id(多个用,隔开） 2.如果isZyzz=1,传自定义文本
         if (!isNotEmpty(param.fallTime) || !isNotEmpty(param.jbmcIds) || !isNotEmpty(param.startTime) ||
@@ -250,15 +256,16 @@ export default class Leave extends BasePage {
         this.loadKey = showMsg("正在提交假条...", 3)
         postCache(url, param, (data) => {
             showMsg('', this.loadKey, '提交成功')
-            Alert.alert('提交成功', '请选择复课时间', [{
-                text: '复课', onPress: () => {
-                    Actions.replace("leaveList", {resumeStatus: 0})
-                }
-            }, {
-                text: '先等等', onPress: () => {
-                    Actions.pop()
-                }
-            }])
+            Actions.pop()
+            // Alert.alert('提交成功', '请选择复课时间', [{
+            //     text: '复课', onPress: () => {
+            //         Actions.replace("leaveList", {resumeStatus: 0})
+            //     }
+            // }, {
+            //     text: '先等等', onPress: () => {
+            //         Actions.pop()
+            //     }
+            // }])
         }, false, (err) => showMsg('', this.loadKey, err))
     }
 

@@ -68,7 +68,7 @@ export default class ResumeStudy extends BasePage {
                 {NextView.getSettingImgItemS(() => this.setState({
                     showTime: true,
                     isIll: 0
-                }), "结束时间", this.state.resumeTime, true, true, "请选择")}
+                }), "复课时间", this.state.resumeTime, true, true, "请选择")}
                 <View style={{height: 10}}/>
                 {NextView.getSettingImgItemL(() => {
                 }, "备注", undefined, "", true, false)}
@@ -102,7 +102,7 @@ export default class ResumeStudy extends BasePage {
                 {NextView.getSettingImgItemS(() => this.setState({
                     showTime: true,
                     isIll: 1
-                }), "结束时间", this.state.illnessTime, true, true, "请选择")}
+                }), "复课时间", this.state.illnessTime, true, true, "请选择")}
                 <View style={{height: 10}}/>
                 <CheckView title={"是否痊愈"} style={{padding: 10, marginTop: 5}} ref={ref => this.check1 = ref}/>
                 <CheckView title={"是否有医院证明"} style={{padding: 10, paddingTop: 0, marginTop: 5}}
@@ -198,7 +198,8 @@ export default class ResumeStudy extends BasePage {
         postCache(url, param, (data) => {
             showMsg('', this.loadKey, '提交成功')
             DeviceEventEmitter.emit('leavelist', '')
-            Alert.alert('提交成功', '稍后你会得到班主任的回复消息')
+            Actions.pop()
+            //Alert.alert('提交成功', '稍后你会得到班主任的回复消息')
         }, false, (err) => showMsg('', this.loadKey, err))
     }
 

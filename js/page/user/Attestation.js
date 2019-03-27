@@ -16,6 +16,7 @@ import {postCache} from "../../utils/Resquest";
 import {URL_ADD_STUDENT, URL_LIST, URL_MY_DATA, URL_QUERY_CLASS, URL_QUERY_SCHOOL} from "../../constant/Url";
 import BasePage from "../BasePage";
 import {save, getValue} from "../../utils/FileUtil";
+import ChooseAreaModel from "../../model/ChooseAreaModel";
 
 /**
  * @class
@@ -26,7 +27,7 @@ export default class Attestation extends BasePage {
         this.state = {
             list: [],
             showType: 0,
-            showModel: false,
+            showModel: false, showArea: false,
             schoolName: '',
             className: '',
             ageName: '',
@@ -84,6 +85,10 @@ export default class Attestation extends BasePage {
                         } else this.setState({showModel: false})
                     } else this.setState({showModel: false})
                 }} show={this.state.showModel}/>
+                <ChooseAreaModel show={this.state.showArea} closeModal={(data) => {
+                    if (data) this.querySchool(true, data)
+                    this.setState({showArea: false})
+                }}/>
             </View>);
     }
 
@@ -97,18 +102,18 @@ export default class Attestation extends BasePage {
     }
 
     showModal(type, list) {
-        if (list && list.length > 0) {
+        if (type == 1) this.setState({showArea: true})//this.querySchool(true)
+        else if (list && list.length > 0) {
             this.setState({showModel: true, list: list, showType: type})
         } else {
-            if (type == 1) this.querySchool(true)
             if (type == 2) this.queryClass(true, this.attestationItem.schoolId, type)
         }
     }
 
     componentDidMount() {
-        InteractionManager.runAfterInteractions(() => {
-            this.querySchool(false)
-        })
+        // InteractionManager.runAfterInteractions(() => {
+        //     this.querySchool(false)
+        // })
         this.listener = DeviceEventEmitter.addListener(eventType, (item) => {
             this.setState({userName: item[eventName]})
         });
@@ -123,14 +128,13 @@ export default class Attestation extends BasePage {
         this.listener && this.listener.remove();
     }
 
-    querySchool(isShow) {
-        postCache(URL_QUERY_SCHOOL, undefined, (data) => {
+    querySchool(isShow, formData) {
+        postCache(URL_QUERY_SCHOOL, formData, (data) => {
             this.school = data;
             this.classes = [];
-            if (isShow) {
-                this.setState({showType: 1, list: data})
-            }
-        }, true)
+            if (data && data.length > 0) this.setState({showType: 1, showModel: true, list: data})
+            else showMsg("还没有录入该地区学校")
+        })
     }
 
     queryClass(isShow, id, isShowModal) {
@@ -175,7 +179,7 @@ export default class Attestation extends BasePage {
                 save(eventType, JSON.stringify(this.attestationItem))
                 showMsg("", this.loadKey, "提交成功")
                 setTimeout(() => {
-                    Actions.reset('root1')
+                    Actions.pop();
                 }, 800)
             }, false, (error) => {
                 showMsg("", this.loadKey, error)

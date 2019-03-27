@@ -23,6 +23,8 @@ import EditView from "../../component/EditView";
 import LinearGradient from "react-native-linear-gradient";
 import {postCache} from "../../utils/Resquest";
 import {URL_QUERY_NETE_TEMPLATE} from "../../constant/Url";
+import {URL_SEND_NOTE} from "../../constant/Url";
+
 
 /**
  * @class Test 是例子
@@ -124,7 +126,8 @@ export default class SendMsg extends BasePage {
         var cnts=this.mContent.text();
         if(isNotEmpty(cnts)&&cnts.length>2){
             this.loadKey = showMsg("加载中...", 3)
-            postCache(URL_QUERY_NETE_TEMPLATE, {cnts: cnts, id: this.props.id}, (data) => {
+            Alert.alert('提示', '您的通知，系统已经为你发送成功')
+            postCache(URL_SEND_NOTE, {cnts: cnts, id: this.props.item.id}, (data) => {
                 showMsg('', this.loadKey)
                 Alert.alert('提示', '您的通知，系统已经为你发送成功', [
                         {text: '嗯嗯', onPress: () => Actions.popTo('studentList')}
