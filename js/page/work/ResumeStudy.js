@@ -96,7 +96,7 @@ export default class ResumeStudy extends BasePage {
     }
 
     sickLeave() {
-        return <ScrollView contentContainerStyle={{flex: 1, alignItems: 'center'}}>
+        return <ScrollView contentContainerStyle={{ alignItems: 'center'}} style={{flex: 1}}>
             <View style={{width: size.width}}>
                 <View style={{height: 10}}/>
                 {NextView.getSettingImgItemS(() => this.setState({

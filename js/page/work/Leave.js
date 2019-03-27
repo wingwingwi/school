@@ -108,7 +108,7 @@ export default class Leave extends BasePage {
     }
 
     leave() {
-        return <ScrollView contentContainerStyle={{flex: 1, alignItems: 'center'}}>
+        return <ScrollView contentContainerStyle={{alignItems: 'center'}} style={{flex: 1}}>
             <View style={{height: 10}}/>
             <View style={{width: size.width}}>
                 {NextView.getSettingImgItemS(() => {
@@ -145,7 +145,7 @@ export default class Leave extends BasePage {
     }
 
     sickLeave() {
-        return <ScrollView contentContainerStyle={{flex: 1, alignItems: 'center'}}>
+        return <ScrollView contentContainerStyle={{alignItems: 'center'}} style={{flex: 1}}>
             <View style={{height: 10}}/>
             <View style={{width: size.width}}>
                 {NextView.getSettingImgItemS(() => {
