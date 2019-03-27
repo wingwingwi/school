@@ -81,8 +81,8 @@ export default class Leave extends BasePage {
                     if (data) {
                         if (this.state.timeType == 4) {//症状
                             this.zyzzIds = data.id
-                            if (!isNotEmpty(data.id)) {
-                                this.setState({showC: false, bState: ''})
+                            if (data.isHasOther) {
+                                this.setState({showC: false, bState: data.name})
                                 Actions.inputPage({
                                     event: eventType,
                                     eventName: 'bState'
@@ -90,8 +90,8 @@ export default class Leave extends BasePage {
                             } else this.setState({showC: false, bState: data.name})
                         } else if (this.state.timeType == 5) {//疾病名称
                             this.jbmcIds = data.id
-                            if (!isNotEmpty(data.id)) {//自定义数据
-                                this.setState({showC: false, bName: ''})
+                            if (data.isHasOther) {//自定义数据
+                                this.setState({showC: false, bName: data.name})
                                 Actions.inputPage({
                                     event: eventType,
                                     eventName: 'bName'
@@ -227,6 +227,7 @@ export default class Leave extends BasePage {
         param.visitHospital = this.state.jiuzheng//就诊医院 **********
         //param.urls = ''//相关材料照片(多张用,隔开) ***********
         param.zyzzIds = isNotEmpty(this.zyzzIds) ? this.zyzzIds : this.state.bState//主要症状数据集,1.如果isZyzz=0,传id(多个用,隔开） 2.如果isZyzz=1,传自定义文本
+        console.log(JSON.stringify(param))
         if (!isNotEmpty(param.fallTime) || !isNotEmpty(param.jbmcIds) || !isNotEmpty(param.startTime) ||
             !isNotEmpty(this.state.bState) || !isNotEmpty(this.state.bName)) {
             showMsg(!isNotEmpty(param.fallTime) ? '选择时间' : !isNotEmpty(param.startTime) ? '选择时间' :
@@ -235,8 +236,8 @@ export default class Leave extends BasePage {
             if (this.state.open && !(this.imgsView && this.imgsView.getPic().length > 0)) {
                 showMsg("就医需要上传相关报告图片")
             }
-            param.fallTime = param.fallTime
-            param.startTime = param.startTime
+            // param.fallTime = param.fallTime
+            // param.startTime = param.startTime
             this.uploadImg = []
             this._upload(0, param)
         }
@@ -295,7 +296,14 @@ export default class Leave extends BasePage {
         super.componentWillMount()
         this.listener = DeviceEventEmitter.addListener(eventType, (item) => {
             var param = {};
-            param[item.key] = item.text;
+            if (item.key == 'bState') {//症状
+                this.zyzzIds = this.zyzzIds ? `${this.zyzzIds},${item.text}` : `${item.text}`
+                param[item.key] = this.state.bState ? `${this.state.bState},${item.text}` : `${item.text}`
+            } else if (item.key = 'bName') {//疾病名称
+                this.jbmcIds = this.jbmcIds ? `${this.jbmcIds},${item.text}` : `${item.text}`
+                param[item.key] = this.state.bName ? `${this.state.bName},${item.text}` : `${item.text}`
+            } else
+                param[item.key] = item.text;
             this.setState(param)
         });
     }

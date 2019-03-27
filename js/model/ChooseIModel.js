@@ -116,29 +116,29 @@ export default class ChooseIModel extends Component {
     changeList(index) {
         var list = this.state.list;
         list[index].isC = !list[index].isC;
-        if (!isNotEmpty(list[index].id) && list[index].isC) {//清空其他
-            for (var i = 0; i < list.length; i++) {
-                if (index != i)
-                    list[i].isC = false
-            }
-        } else {
-            for (var i = 0; i < list.length; i++) {
-                if (!isNotEmpty(list[index].id))
-                    list[i].isC = false
-            }
-        }
+        // if (!isNotEmpty(list[index].id) && list[index].isC) {//清空其他
+        //     for (var i = 0; i < list.length; i++) {
+        //         if (index != i)
+        //             list[i].isC = false
+        //     }
+        // } else {
+        //     for (var i = 0; i < list.length; i++) {
+        //         if (!isNotEmpty(list[index].id))
+        //             list[i].isC = false
+        //     }
+        // }
         this.setState({list: list})
     }
 
     sure() {
         var name = ''
         var id = ''
+        var isHasOther = false
         var list = this.state.list
         for (var i = 0; i < list.length; i++) {
             if (list[i].isC) {
                 if (!isNotEmpty(list[i].id)) {
-                    name = '其他'
-                    id = ''
+                    isHasOther = true
                 } else {
                     name = !isNotEmpty(name) ? list[i].name : `${name},${list[i].name}`
                     id = !isNotEmpty(id) ? list[i].id : `${id},${list[i].id}`
@@ -148,7 +148,9 @@ export default class ChooseIModel extends Component {
         console.log('name=' + name)
         console.log('id=' + id)
         if (isNotEmpty(name)) {
-            this.props.closeModal({name: name, id: id})
+            this.props.closeModal({name: name, id: id, isHasOther: isHasOther})
+        }else if(isHasOther){
+            this.props.closeModal({name: '', id: '', isHasOther: isHasOther})
         } else showMsg('请选择')
     }
 

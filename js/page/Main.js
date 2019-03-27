@@ -124,7 +124,7 @@ export default class Main extends BasePage {
                 {this.itemView(src.jiankangjiaoyu_btn, "健康教育", () => {
                     Actions.more()
                 })}
-                {this.itemView(src.gerendangan_btn, "个人档案", () => Actions.record())}
+                {this.itemView(src.gerendangan_btn, "个人档案", () => Actions.recordList())}
                 {this.itemView(src.gerenxiaoxi_btn, "个人消息", () => Actions.message({typeNum: 1}))}
             </View>
             <View style={{backgroundColor: '#f5f5f5', height: 12}}/>
