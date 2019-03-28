@@ -23,6 +23,7 @@ import {postCache} from "../../utils/Resquest";
 import {URL_ADD_ARCHIVES, URL_MY_ARCHIVES} from "../../constant/Url";
 import BottomCModel from "../../model/BottomCModel";
 import BasePage from "../BasePage";
+import YearMModel from "../../model/YearMModel";
 
 /**
  * @class
@@ -32,16 +33,21 @@ export default class Record extends BasePage {
         super(props);
         this.state = {
             stature: '180', vision: '', weight: '75', eyeL: "", eyeR: "", oral: '', internal: '', surgery: '',
-            list: data, showModal: false
+            list: data, showModal: false, yearMonth: '', showYear: false
         }
         this.key = 0;
+        this.dataYearMonth = []
     }
 
     render() {
         return (
             <View style={{flex: 1}}>
                 <NarBar title={"个人档案"} onSelect={() => Actions.pop()}/>
-                <ScrollView contentContainerStyle={{}} style={{flex: 1}}>
+                <ScrollView contentContainerStyle={{paddingVertical: 10}} style={{flex: 1}}>
+                    {NextView.getSettingImgItemTech(() => {
+                        this.setState({showYear: true})
+                    }, "日期", this.state.yearMonth, true, true, "")}
+                    {<View style={{height: 10}}/>}
                     {this.state.list.map((item, idx) => {
                         var gIndex = idx;
                         if (item.child.length != 0) {
@@ -80,6 +86,12 @@ export default class Record extends BasePage {
                                       this.setState({showModal: false, list: list})
                                   } else this.setState({showModal: false})
                               }}/>
+                <YearMModel show={this.state.showYear} closeModal={(dateYear) => {
+                    if (dateYear)
+                        this.setState({yearMonth: dateYear, showYear: false})
+                    else
+                        this.setState({showYear: false})
+                }}/>
             </View>);
     }
 
@@ -171,17 +183,14 @@ export default class Record extends BasePage {
         var data = this.state.list
         for (var i = 0; i < data.length; i++) {
             if (data[i].child.length == 0) {
-                // console.log(data[i].key)
-                // console.log(result[data[i].key])
                 data[i].value = result[data[i].key];
             } else
                 for (var j = 0; j < data[i].child.length; j++) {
-                    // console.log(data[i].child[j].key)
-                    // console.log(result[data[i].child[j].key])
                     data[i].child[j].value = result[data[i].child[j].key];
                 }
         }
-        this.setState({list: data})
+        var yearMonth = result['moth'] ? result['moth'].substring(0, 7) : result['updateTime'] ? result['updateTime'].substring(0, 7) : ""
+        this.setState({list: data, yearMonth: yearMonth})
     }
 
     componentWillUnmount() {
@@ -193,6 +202,12 @@ export default class Record extends BasePage {
     commit() {
         var list = this.state.list
         var param = {}
+        if (isNotEmpty(this.state.yearMonth)) {
+            param['moth'] = this.state.yearMonth
+        } else {
+            showMsg('提交时间')
+            return
+        }
         if (isNotEmpty(this.props.id)) param = {id: this.props.id}
         for (var i = 0; i < data.length; i++) {
             if (data[i].child.length == 0) {
@@ -204,6 +219,7 @@ export default class Record extends BasePage {
                     param[item.key] = isNotEmpty(item.value) ? item.value : item.isChose ? '0' : ''
                 }
         }
+        if (this.props.id) param['id'] = this.props.id
         this.loadKey = showMsg('正在提交...', 3)
         postCache(URL_ADD_ARCHIVES, param, (data) => {
             showMsg('', this.loadKey, '提交成功')
