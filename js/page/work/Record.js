@@ -218,13 +218,13 @@ export default class Record extends BasePage {
     commit() {
         var list = this.state.list
         var param = {}
+        if (isNotEmpty(this.props.id)) param = {id: this.props.id}
         if (isNotEmpty(this.state.yearMonth)) {//提交时间，格式 yyyy-mm；自己可以后面拼接
             param['moth'] = `${this.state.yearMonth}-00 00:00`
         } else {
             showMsg('提交时间')
             return
         }
-        if (isNotEmpty(this.props.id)) param = {id: this.props.id}
         for (var i = 0; i < data.length; i++) {
             if (data[i].child.length == 0) {
                 var it = data[i]
