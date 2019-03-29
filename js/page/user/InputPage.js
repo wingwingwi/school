@@ -42,6 +42,6 @@ export default class InputPage extends Component<Props> {
     }
 
     componentDidMount() {
-        this.editView && this.editView.text(isNotEmpty(this.props.text) ? this.props.text : '')
+        this.editView && this.editView.text(isNotEmpty(this.props.text) ? `${this.props.text}` : '')
     }
 }

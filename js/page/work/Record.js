@@ -137,42 +137,58 @@ export default class Record extends BasePage {
                               source={item.value == '2' ? src.yichang_highlight_btn : src.yichang_normal_btn}/></Button>
                 </View> : null}
             </Button>
+            {item.isChose && item.value == 2 ? <Button onPress={() => Actions.inputPage({
+                event: eventType, eventName: item.key,
+                text: item.valueName
+            })} style={[styles.itemView, {marginTop: 0}]}>
+                <Text style={styles.leftText}>{''}</Text>
+                <Text style={styles.editStyle}>{item.valueName ? item.valueName : '请输入说明'}</Text>
+            </Button> : null}
             <View style={styles.line}/></View>);
     }
 
     titleView(item, index) {
-        return <View style={{width: size.width}} key={this.key++}><Button
-            style={[styles.itemView, {marginTop: 10}]} onPress={() => {
-            var list = this.state.list;
-            list[index].isCloseShow = !list[index].isCloseShow
-            this.setState({list: list})
-        }}><Text
-            style={styles.titleText}>{item.name}</Text>
-            <Text style={styles.editStyle}></Text>
-            <Image style={{width: 14, height: 14, marginRight: 10}}
-                   source={item.isCloseShow ? src.gengduo_down_btn : src.gengduo_up_btn}/>
-        </Button><View style={styles.line}/></View>
+        return <View style={{width: size.width}} key={this.key++}>
+            <Button
+                style={[styles.itemView, {marginTop: 10}]} onPress={() => {
+                var list = this.state.list;
+                list[index].isCloseShow = !list[index].isCloseShow
+                this.setState({list: list})
+            }}><Text
+                style={styles.titleText}>{item.name}</Text>
+                <Text style={styles.editStyle}></Text>
+                <Image style={{width: 14, height: 14, marginRight: 10}}
+                       source={item.isCloseShow ? src.gengduo_down_btn : src.gengduo_up_btn}/>
+            </Button>
+            <View style={styles.line}/>
+        </View>
     }
 
     componentWillMount() {
         super.componentWillMount()
         this.listener = DeviceEventEmitter.addListener(eventType, (item) => {
-            var list = this.changeValue(item.key, item.text)
+            var list = this.changeValue(item.key, item.text, true)
             this.setState({list: list})
         });
     }
 
-    changeValue(key, value) {
+    changeValue(key, value, isListener) {
         var data = this.state.list
         console.log(key + '/' + value)
         for (var i = 0; i < data.length; i++) {
             if (key == data[i].key) {
-                data[i].value = value;
+                if (data[i].isChose && isListener) {
+                    data[i].valueName = value;
+                } else
+                    data[i].value = value;
                 return data;
             } else
                 for (var j = 0; j < data[i].child.length; j++) {
                     if (key == data[i].child[j].key) {
-                        data[i].child[j].value = value;
+                        if (data[i].child[j].isChose && isListener) {
+                            data[i].child[j].valueName = value;
+                        } else
+                            data[i].child[j].value = value;
                         return data;
                     }
                 }
@@ -202,8 +218,8 @@ export default class Record extends BasePage {
     commit() {
         var list = this.state.list
         var param = {}
-        if (isNotEmpty(this.state.yearMonth)) {
-            param['moth'] = this.state.yearMonth
+        if (isNotEmpty(this.state.yearMonth)) {//提交时间，格式 yyyy-mm；自己可以后面拼接
+            param['moth'] = `${this.state.yearMonth}-00 00:00`
         } else {
             showMsg('提交时间')
             return
@@ -213,10 +229,14 @@ export default class Record extends BasePage {
             if (data[i].child.length == 0) {
                 var it = data[i]
                 param[it.key] = isNotEmpty(it.value) ? it.value : it.isChose ? '0' : ''
+                if (it.isChose && it.value == 2 && it.valueName) //选择正常非正常；可以添加新数据，如果♏️说明
+                    param[`${it.key}_value`] = it.valueName
             } else
                 for (var j = 0; j < data[i].child.length; j++) {
-                    var item = data[i].child[j]
-                    param[item.key] = isNotEmpty(item.value) ? item.value : item.isChose ? '0' : ''
+                    var it = data[i].child[j]
+                    param[it.key] = isNotEmpty(it.value) ? it.value : it.isChose ? '0' : ''
+                    if (it.isChose && it.value == 2 && it.valueName) //选择正常非正常；可以添加新数据，如果♏️说明
+                        param[`${it.key}_value`] = it.valueName
                 }
         }
         if (this.props.id) param['id'] = this.props.id
