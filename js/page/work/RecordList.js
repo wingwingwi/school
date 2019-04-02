@@ -93,7 +93,7 @@ export default class RecordList extends BasePage {
         return <View key={idx}>
             {NextView.getSettingImgItemTech(() => {
                 Actions.record({id: item.id})
-            }, item.createTime.substring(0, 4) + '年', "", true, true, "")}
+            }, item.moth, "", true, true, "")}
         </View>
     }
 

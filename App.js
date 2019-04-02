@@ -102,7 +102,10 @@ export default class App extends Component<Props> {
                         <Scene key="register" component={Register} title="登录" hideNavBar={true}/>
                         <Scene key="setPwd" component={SetPwd} title="登录" hideNavBar={true}/>
                     </Scene>
-                    <Scene key="attestations" component={AttestationPage} title="认证" hideNavBar={true}/>
+                    <Scene key="attestations" title="认证" hideNavBar={true}>
+                        <Scene key="attestationRoot" component={AttestationPage} title="" hideNavBar={true}/>
+                        <Scene key="inputPage" component={InputPage} title="" hideNavBar={true}/>
+                    </Scene>
                 </Modal>
             </Overlay>
         </Router></Provider>);
@@ -118,18 +121,14 @@ export default class App extends Component<Props> {
                         _token.t = tokens.token;
                         _token.isPerfect = tokens.isPerfect
                         _token.bySource = tokens.bySource
-                        var nowTime = (new Date()).getTime();
-                        if (tokens && tokens['time'] && tokens['time'] > 0) {
-                            if ((nowTime - tokens['time']) < (30 * 24 * 60 * 60 * 1000)) {//计算过期时间
-                                if (tokens.bySource == 2) {
-                                    Actions.reset('techPage')
-                                } else Actions.reset('root1')
-                                return
-                            }
-                        }
-                    }
+                        if (tokens.bySource == 2) {
+                            Actions.reset('techPage')
+                        } else Actions.reset('root1')
+                    } else
+                        Actions.reset('loginPage')
+                } else {
+                    Actions.reset('loginPage')
                 }
-                Actions.reset('loginPage')
             }, __DEV__ ? 1000 : 3000)
         });
     }

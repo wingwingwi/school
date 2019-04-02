@@ -168,7 +168,7 @@ export default class Leave extends BasePage {
                 {this.state.open ? NextView.getSettingImgItemS(() => Actions.inputPage({
                     event: eventType, eventName: 'jiuzheng', text: this.state.jiuzheng
                 }), "就诊医院", this.state.jiuzheng, true, true, "请输入") : null}
-                <CheckView title={"上传病例以及相关材料"} style={{padding: 10, marginTop: 2}}
+                <CheckView title={"上传病历以及相关材料"} style={{padding: 10, marginTop: 2}}
                            changeCheck={(check) => this.setState({picture: check})}/>
                 {this.state.picture ? <ImgsView ref={ref => this.imgsView = ref}/> : null}
                 <CheckView title={"是否住院"} style={{padding: 10, marginTop: 2}}
@@ -228,10 +228,8 @@ export default class Leave extends BasePage {
         //param.urls = ''//相关材料照片(多张用,隔开) ***********
         param.zyzzIds = isNotEmpty(this.zyzzIds) ? this.zyzzIds : this.state.bState//主要症状数据集,1.如果isZyzz=0,传id(多个用,隔开） 2.如果isZyzz=1,传自定义文本
         console.log(JSON.stringify(param))
-        if (!isNotEmpty(param.fallTime) || !isNotEmpty(param.jbmcIds) || !isNotEmpty(param.startTime) ||
-            !isNotEmpty(this.state.bState) || !isNotEmpty(this.state.bName)) {
-            showMsg(!isNotEmpty(param.fallTime) ? '选择时间' : !isNotEmpty(param.startTime) ? '选择时间' :
-                !isNotEmpty(this.state.bState) ? '输入病状信息' : '输入病理名称')
+        if (!isNotEmpty(param.fallTime) || !isNotEmpty(param.startTime) || !isNotEmpty(this.state.bState)) {
+            showMsg(!isNotEmpty(this.state.bState) ? '输入病状信息' : "选择时间")
         } else {
             if (this.state.open && !(this.imgsView && this.imgsView.getPic().length > 0)) {
                 showMsg("就医需要上传相关报告图片")
@@ -296,10 +294,11 @@ export default class Leave extends BasePage {
         super.componentWillMount()
         this.listener = DeviceEventEmitter.addListener(eventType, (item) => {
             var param = {};
+            console.log(JSON.stringify(item))
             if (item.key == 'bState') {//症状
                 this.zyzzIds = this.zyzzIds ? `${this.zyzzIds},${item.text}` : `${item.text}`
                 param[item.key] = this.state.bState ? `${this.state.bState},${item.text}` : `${item.text}`
-            } else if (item.key = 'bName') {//疾病名称
+            } else if (item.key == 'bName') {//疾病名称
                 this.jbmcIds = this.jbmcIds ? `${this.jbmcIds},${item.text}` : `${item.text}`
                 param[item.key] = this.state.bName ? `${this.state.bName},${item.text}` : `${item.text}`
             } else

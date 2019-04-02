@@ -108,7 +108,7 @@ export default class ResumeStudy extends BasePage {
                 <CheckView title={"是否有医院证明"} style={{padding: 10, paddingTop: 0, marginTop: 5}}
                            changeCheck={(check) => this.setState({inpatient: check})} ref={ref => this.check2 = ref}/>
                 {this.state.inpatient ?
-                    <Text style={{backgroundColor: '#fff', padding: 10, width: size.width}}>上传病例以及相关材料</Text> : null}
+                    <Text style={{backgroundColor: '#fff', padding: 10, width: size.width}}>上传病历以及相关材料</Text> : null}
                 {this.state.inpatient ? <ImgsView ref={ref => this.imgsView = ref}/> : null}
                 <Text style={{color: '#E64340', fontSize: 12, padding: 10, lineHeight: 18}}>{notice}</Text>
                 {NextView.getSettingImgItemL(() => {
@@ -217,7 +217,7 @@ export default class ResumeStudy extends BasePage {
     }
 
 }
-const notice = '* 手足口为国家法定传染病，需持有校医（保健老师）出具的复课证需持有校医（保健老师）出具的复课证明或持有医院开具的痊愈证明方可复课明或持有医院开具的痊愈证明方可复课。'
+const notice = '* 患传染病的学生病愈且隔离期满后，需持有校医（保健老师）出具的复课证明或持有医院开具的痊愈证明方可复课。'
 const styles = StyleSheet.create({
     lineText: {
         fontSize: 17, color: '#333', width: 80, marginTop: 10, marginLeft: 10

@@ -24,6 +24,7 @@ import {URL_ADD_ARCHIVES, URL_MY_ARCHIVES} from "../../constant/Url";
 import BottomCModel from "../../model/BottomCModel";
 import BasePage from "../BasePage";
 import YearMModel from "../../model/YearMModel";
+import PickerModel from "../../model/PickerModel";
 
 /**
  * @class
@@ -33,7 +34,7 @@ export default class Record extends BasePage {
         super(props);
         this.state = {
             stature: '180', vision: '', weight: '75', eyeL: "", eyeR: "", oral: '', internal: '', surgery: '',
-            list: data, showModal: false, yearMonth: '', showYear: false
+            list: data, showModal: false, yearMonth: '', showYear: false, showPicker: false
         }
         this.key = 0;
         this.dataYearMonth = []
@@ -92,6 +93,14 @@ export default class Record extends BasePage {
                     else
                         this.setState({showYear: false})
                 }}/>
+                <PickerModel list={eyes} closeModal={(index) => {
+                    if (index) {
+                        var v = (parseInt(52 - index))/10 ;
+                        var data = this.changeValue(this.eyesKey, v)
+                        this.setState({list: data,showPicker:false})
+                    } else
+                        this.setState({showPicker: false})
+                }} show={this.state.showPicker}/>
             </View>);
     }
 
@@ -116,10 +125,14 @@ export default class Record extends BasePage {
         return (<View style={{width: size.width}} key={this.key++}>
             <Button onPress={() => {
                 if (!item.isChose) {
-                    Actions.inputPage({
-                        event: eventType, eventName: item.key,
-                        text: item.value
-                    })
+                    if (item.isEye) {
+                        this.eyesKey = item.key
+                        this.setState({showPicker: true})
+                    } else
+                        Actions.inputPage({
+                            event: eventType, eventName: item.key,
+                            text: item.value
+                        })
                 }
             }} style={[styles.itemView, {marginTop: 0}]}>
                 <Text style={styles.leftText}>{item.name}</Text>
@@ -127,11 +140,13 @@ export default class Record extends BasePage {
                 {item.isChose ? <View style={{flexDirection: 'row'}}>
                     <Button onPress={() => {
                         var list = this.changeValue(item.key, '1')
+                        console.log(JSON.stringify(list))
                         this.setState({list: list})
                     }}><Image style={{width: 65, height: 25}}
                               source={item.value == '1' ? src.zhengchang_highlight_btn : src.zhengchang_normal_btn}/></Button>
                     <Button onPress={() => {
                         var list = this.changeValue(item.key, '2')
+                        console.log(JSON.stringify(list))
                         this.setState({list: list})
                     }}><Image style={{width: 65, height: 25, marginLeft: 10, marginRight: 10}}
                               source={item.value == '2' ? src.yichang_highlight_btn : src.yichang_normal_btn}/></Button>
@@ -187,7 +202,7 @@ export default class Record extends BasePage {
                     if (key == data[i].child[j].key) {
                         if (data[i].child[j].isChose && isListener) {
                             data[i].child[j].valueName = value;
-                        } else
+                        }else
                             data[i].child[j].value = value;
                         return data;
                     }
@@ -195,18 +210,29 @@ export default class Record extends BasePage {
         }
     }
 
+    /**设置数据*/
     setValue(result) {
         var data = this.state.list
         for (var i = 0; i < data.length; i++) {
             if (data[i].child.length == 0) {
-                data[i].value = result[data[i].key];
+                this.setValueItem(data[i], result)
             } else
                 for (var j = 0; j < data[i].child.length; j++) {
-                    data[i].child[j].value = result[data[i].child[j].key];
+                    this.setValueItem(data[i].child[j], result)
                 }
         }
         var yearMonth = result['moth'] ? result['moth'].substring(0, 7) : result['updateTime'] ? result['updateTime'].substring(0, 7) : ""
         this.setState({list: data, yearMonth: yearMonth})
+    }
+
+    /**设置数据*/
+    setValueItem(data, result) {
+        data.value = result[data.key];
+        if (data.isChose) {
+            if (data.valueKey && result[data.valueKey]) {
+                data.valueName = result[data.valueKey]
+            }
+        }
     }
 
     componentWillUnmount() {
@@ -230,13 +256,13 @@ export default class Record extends BasePage {
                 var it = data[i]
                 param[it.key] = isNotEmpty(it.value) ? it.value : it.isChose ? '0' : ''
                 if (it.isChose && it.value == 2 && it.valueName) //选择正常非正常；可以添加新数据，如果♏️说明
-                    param[`${it.key}_value`] = it.valueName
+                    param[it.valueKey] = it.valueName
             } else
                 for (var j = 0; j < data[i].child.length; j++) {
                     var it = data[i].child[j]
                     param[it.key] = isNotEmpty(it.value) ? it.value : it.isChose ? '0' : ''
                     if (it.isChose && it.value == 2 && it.valueName) //选择正常非正常；可以添加新数据，如果♏️说明
-                        param[`${it.key}_value`] = it.valueName
+                        param[it.valueKey] = it.valueName
                 }
         }
         if (this.props.id) param['id'] = this.props.id
@@ -253,34 +279,34 @@ export default class Record extends BasePage {
 var data = [{name: '身高(cm)', value: '180', key: 'height', child: []},
     {name: '体重(kg)', value: '75', key: 'weight', child: []},
     {
-        name: '五官', child: [{name: '左眼', key: 'lefteye', value: '5.0'}
-        , {name: '右眼', key: 'righteye', value: '5.0'}
-        , {name: '口腔', key: 'oralcavity', value: '', isChose: true}
-        , {name: '皮肤', key: 'skin', value: '', isChose: true}
-    ]
+        name: '五官', child: [{name: '左眼', key: 'lefteye', isEye: true, value: '5.0'}
+            , {name: '右眼', key: 'righteye', isEye: true, value: '5.0'}
+            , {name: '口腔', key: 'oralcavity', value: '', isChose: true, valueKey: 'oralcavitytext'}
+            , {name: '皮肤', key: 'skin', value: '', isChose: true, valueKey: 'skintext'}
+        ]
     },
     {
-        name: '内科', child: [{name: '心', key: 'heart', value: '', isChose: true}
-        , {name: '肝', key: 'liver', value: '', isChose: true}
-        , {name: '肺', key: 'lung', value: '', isChose: true}
-        , {name: '淋巴结', key: 'lymphaden', value: '', isChose: true}
-        , {name: '脾', key: 'taste', value: '', isChose: true}
-    ]
+        name: '内科', child: [{name: '心', key: 'heart', value: '', isChose: true, valueKey: 'hearttext'}
+            , {name: '肝', key: 'liver', value: '', isChose: true, valueKey: 'livertext'}
+            , {name: '肺', key: 'lung', value: '', isChose: true, valueKey: 'lungtext'}
+            , {name: '淋巴结', key: 'lymphaden', value: '', isChose: true, valueKey: 'lymphadentext'}
+            , {name: '脾', key: 'taste', value: '', isChose: true, valueKey: 'tastetext'}
+        ]
     },
     {
-        name: '外科', child: [{name: '四肢', key: 'allfours', value: '', isChose: true}
-        , {name: '胸部', key: 'chest', value: '', isChose: true}
-        , {name: '头部', key: 'head', value: '', isChose: true}
-        , {name: '颈部', key: 'neck', value: '', isChose: true}
-        , {name: '脊柱', key: 'spine', value: '', isChose: true}
-    ]
+        name: '外科', child: [{name: '四肢', key: 'allfours', value: '', isChose: true, valueKey: 'allfourstext'}
+            , {name: '胸部', key: 'chest', value: '', isChose: true, valueKey: 'chesttext'}
+            , {name: '头部', key: 'head', value: '', isChose: true, valueKey: 'tastetext'}
+            , {name: '颈部', key: 'neck', value: '', isChose: true, valueKey: 'necktext'}
+            , {name: '脊柱', key: 'spine', value: '', isChose: true, valueKey: 'spinetext'}
+        ]
     },
     {
-        name: '结核病检查', child: [{name: '是否有肺结核密切接触史', key: 'allfours1', value: '', isChose: true}
-        , {name: '是否有肺结核可疑症状', key: 'chest1', value: '', isChose: true}
-        , {name: '是否开展结核菌素皮肤试验', key: 'head1', value: '', isChose: true}
-        , {name: '是否开展胸部X光片检查 ', key: 'neck1', value: '', isChose: true}
-    ]
+        name: '结核病检查', child: [{name: '是否有肺结核密切接触史', key: 'isPhisis', value: '', isChose: true}
+            , {name: '是否有肺结核可疑症状', key: 'ishavePhisis', value: '', isChose: true, valueKey: 'remarkone'}
+            , {name: '是否开展结核菌素皮肤试验', key: 'isDevelop', value: '', isChose: true}
+            , {name: '是否开展胸部X光片检查 ', key: 'isDevelopX', value: '', isChose: true, valueKey: 'remarktwo'}
+        ]
     }
 ]
 
@@ -300,3 +326,8 @@ const styles = StyleSheet.create({
     },
     line: {width: null, height: 1, backgroundColor: '#F3F3F3'}
 });
+const eyes = [{name: '5.2 -------- 1.5'}, {name: '5.1 -------- 1.2'}, {name: '5.0 -------- 1.0'},
+    {name: '4.9 -------- 0.8'}, {name: '4.8 -------- 0.6'}, {name: '4.7 -------- 0.5'}, {name: '4.6 -------- 0.4'},
+    {name: '4.5 -------- 0.3'}, {name: '4.4 -------- 0.25'}, {name: '4.3 -------- 0.2'}, {name: '4.2 -------- 0.15'},
+    {name: '4.1 -------- 0.12'}, {name: '4.0 -------- 0.1'}
+]
