@@ -81,7 +81,7 @@ export default class LeaveInfo extends BasePage {
                 {NextView.getSettingImgItemTech(undefined, "发病时间", this.getDateTime(this.state.leave.fallTime), false, false, '')}
                 {NextView.getSettingImgItemTech(undefined, "主要症状", this.state.illnessState, true, false, '')}
                 {NextView.getSettingImgItemTech(undefined, "疾病名称", this.state.illnessName, false, false, '')}
-                {NextView.getSettingImgItemTech(undefined, "病历以及相关材料", '', true, false, '')}
+                {NextView.getSettingImgItemTech(undefined, "病例以及相关材料", '', true, false, '')}
                 <View style={{backgroundColor: '#fff', flexDirection: 'row', padding: 10, flexWrap: 'wrap'}}>
                     {this.state.leave && this.state.leave.files ? this.state.leave.files.map((item, idx) => {
                             let positionIndex = idx;

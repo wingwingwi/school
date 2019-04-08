@@ -93,11 +93,11 @@ export default class Record extends BasePage {
                     else
                         this.setState({showYear: false})
                 }}/>
-                <PickerModel list={eyes} closeModal={(index) => {
+                <PickerModel list={eyes} titleLeft={'标准视力表'} titleRight={'旧标准视力表'} closeModal={(index) => {
                     if (index) {
-                        var v = (parseInt(52 - index))/10 ;
+                        var v = (parseInt(52 - index)) / 10;
                         var data = this.changeValue(this.eyesKey, v)
-                        this.setState({list: data,showPicker:false})
+                        this.setState({list: data, showPicker: false})
                     } else
                         this.setState({showPicker: false})
                 }} show={this.state.showPicker}/>
@@ -202,7 +202,7 @@ export default class Record extends BasePage {
                     if (key == data[i].child[j].key) {
                         if (data[i].child[j].isChose && isListener) {
                             data[i].child[j].valueName = value;
-                        }else
+                        } else
                             data[i].child[j].value = value;
                         return data;
                     }
@@ -280,33 +280,33 @@ var data = [{name: '身高(cm)', value: '180', key: 'height', child: []},
     {name: '体重(kg)', value: '75', key: 'weight', child: []},
     {
         name: '五官', child: [{name: '左眼', key: 'lefteye', isEye: true, value: '5.0'}
-            , {name: '右眼', key: 'righteye', isEye: true, value: '5.0'}
-            , {name: '口腔', key: 'oralcavity', value: '', isChose: true, valueKey: 'oralcavitytext'}
-            , {name: '皮肤', key: 'skin', value: '', isChose: true, valueKey: 'skintext'}
-        ]
+        , {name: '右眼', key: 'righteye', isEye: true, value: '5.0'}
+        , {name: '口腔', key: 'oralcavity', value: '', isChose: true, valueKey: 'oralcavitytext'}
+        , {name: '皮肤', key: 'skin', value: '', isChose: true, valueKey: 'skintext'}
+    ]
     },
     {
         name: '内科', child: [{name: '心', key: 'heart', value: '', isChose: true, valueKey: 'hearttext'}
-            , {name: '肝', key: 'liver', value: '', isChose: true, valueKey: 'livertext'}
-            , {name: '肺', key: 'lung', value: '', isChose: true, valueKey: 'lungtext'}
-            , {name: '淋巴结', key: 'lymphaden', value: '', isChose: true, valueKey: 'lymphadentext'}
-            , {name: '脾', key: 'taste', value: '', isChose: true, valueKey: 'tastetext'}
-        ]
+        , {name: '肝', key: 'liver', value: '', isChose: true, valueKey: 'livertext'}
+        , {name: '肺', key: 'lung', value: '', isChose: true, valueKey: 'lungtext'}
+        , {name: '淋巴结', key: 'lymphaden', value: '', isChose: true, valueKey: 'lymphadentext'}
+        , {name: '脾', key: 'taste', value: '', isChose: true, valueKey: 'tastetext'}
+    ]
     },
     {
         name: '外科', child: [{name: '四肢', key: 'allfours', value: '', isChose: true, valueKey: 'allfourstext'}
-            , {name: '胸部', key: 'chest', value: '', isChose: true, valueKey: 'chesttext'}
-            , {name: '头部', key: 'head', value: '', isChose: true, valueKey: 'tastetext'}
-            , {name: '颈部', key: 'neck', value: '', isChose: true, valueKey: 'necktext'}
-            , {name: '脊柱', key: 'spine', value: '', isChose: true, valueKey: 'spinetext'}
-        ]
+        , {name: '胸部', key: 'chest', value: '', isChose: true, valueKey: 'chesttext'}
+        , {name: '头部', key: 'head', value: '', isChose: true, valueKey: 'headtext'}
+        , {name: '颈部', key: 'neck', value: '', isChose: true, valueKey: 'necktext'}
+        , {name: '脊柱', key: 'spine', value: '', isChose: true, valueKey: 'spinetext'}
+    ]
     },
     {
         name: '结核病检查', child: [{name: '是否有肺结核密切接触史', key: 'isPhisis', value: '', isChose: true}
-            , {name: '是否有肺结核可疑症状', key: 'ishavePhisis', value: '', isChose: true, valueKey: 'remarkone'}
-            , {name: '是否开展结核菌素皮肤试验', key: 'isDevelop', value: '', isChose: true}
-            , {name: '是否开展胸部X光片检查 ', key: 'isDevelopX', value: '', isChose: true, valueKey: 'remarktwo'}
-        ]
+        , {name: '是否有肺结核可疑症状', key: 'ishavePhisis', value: '', isChose: true, valueKey: 'remarkone'}
+        , {name: '是否开展结核菌素皮肤试验', key: 'isDevelop', value: '', isChose: true}
+        , {name: '是否开展胸部X光片检查 ', key: 'isDevelopX', value: '', isChose: true, valueKey: 'remarktwo'}
+    ]
     }
 ]
 

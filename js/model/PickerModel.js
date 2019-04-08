@@ -22,7 +22,9 @@ export default class PickerModel extends Component {
     static propTypes = {
         closeModal: PropTypes.func, //关闭对话框监听方法
         show: PropTypes.bool,
-        list: PropTypes.array
+        list: PropTypes.array,
+        titleLeft: PropTypes.string,
+        titleRight: PropTypes.string
     };
 
     /**初始化数据*/
@@ -39,42 +41,40 @@ export default class PickerModel extends Component {
     renderDialog() {
         return (
             <View style={{width: size.width, backgroundColor: '#fff'}}>
-                <View
-                    style={{
-                        width: null,
-                        backgroundColor: "#fff",
-                        flexDirection: "row",
-                        justifyContent: "space-between"
+                <View style={{
+                    width: null,
+                    backgroundColor: "#fff",
+                    flexDirection: "row",
+                    alignItems: 'center',
+                    justifyContent: "space-between"
+                }}>
+                    <Text style={{
+                        padding: 10,
+                        paddingLeft: 15,
+                        fontSize: 15,
+                        color: "#333"
                     }}
-                >
-                    <Text
-                        style={{
-                            padding: 10,
-                            paddingLeft: 15,
-                            fontSize: 15,
-                            color: "#333"
-                        }}
-                        onPress={() => this.closeModal()}
-                    >
-                        取消
-                    </Text>
-                    <Text
-                        style={{
-                            padding: 10,
-                            paddingRight: 15,
-                            color: "#0099FF",
-                            fontSize: 15
-                        }}
-                        onPress={() => {
-                            var index = this.state.value[0];
-                            this.props.closeModal(index)
-                        }}
-                    >
-                        确认
-                    </Text>
+                          onPress={() => this.closeModal()}>取消</Text>
+                    <Text style={{
+                        padding: 10,
+                        paddingRight: 15,
+                        color: "#0099FF",
+                        fontSize: 15
+                    }} onPress={() => {
+                        var index = this.state.value[0];
+                        this.props.closeModal(index)
+                    }}>确认</Text>
                 </View>
                 <View style={{width: null, height: 1, backgroundColor: "#eee"}}/>
-
+                {this.props.titleLeft ? <View style={{
+                    width: null,
+                    backgroundColor: '#fff',
+                    flexDirection: 'row',
+                    justifyContent: 'space-around'
+                }}>
+                    <Text style={{padding: 10, fontSize: 15, color: "#333"}}>{this.props.titleLeft}</Text>
+                    <Text style={{padding: 10, fontSize: 15, color: "#333"}}>{this.props.titleRight}</Text>
+                </View> : null}
                 <PickerView
                     data={this.state.list}
                     value={this.state.value}

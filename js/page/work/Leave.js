@@ -168,7 +168,7 @@ export default class Leave extends BasePage {
                 {this.state.open ? NextView.getSettingImgItemS(() => Actions.inputPage({
                     event: eventType, eventName: 'jiuzheng', text: this.state.jiuzheng
                 }), "就诊医院", this.state.jiuzheng, true, true, "请输入") : null}
-                <CheckView title={"上传病历以及相关材料"} style={{padding: 10, marginTop: 2}}
+                <CheckView title={"上传病例以及相关材料"} style={{padding: 10, marginTop: 2}}
                            changeCheck={(check) => this.setState({picture: check})}/>
                 {this.state.picture ? <ImgsView ref={ref => this.imgsView = ref}/> : null}
                 <CheckView title={"是否住院"} style={{padding: 10, marginTop: 2}}
