@@ -41,7 +41,9 @@ export default class StudentList extends BasePage {
 
     render() {
         return <View style={{flex: 1}}>
-            <NarBar title={'请假列表'} onSelect={() => Actions.pop()}/>
+            <NarBar title={"请假列表"} onSelect={() => Actions.pop()} rightText={<Text style={{color: '#0099FF', fontSize: 15, marginRight: 10}}>添加</Text>} onRight={() => {
+                Actions.myStudList()
+                }}/>
             <TextBar list={['事假', '病假']} ref={ref => this.textBar = ref} changeTab={(num) => {
                 var tab = num + 1;
                 console.log('tab=' + tab)
@@ -96,33 +98,6 @@ export default class StudentList extends BasePage {
                                   numberOfLines={1}>{item.remk}</Text>}
                         {item.lb != 1 ? <Text style={{color: '#12b7f5', fontSize: 13, marginTop: 6}}
                                               numberOfLines={1}>{item.jbmc}</Text> : null}
-                        {/*<Text style={{color: '#82868B', fontSize: 12, marginTop: 11}} numberOfLines={1}>{item.zyzz}</Text>*/}
-                        {/*<Text style={{color: '#82868B', fontSize: 12, marginTop: 11}} numberOfLines={1}>{item.remk}</Text>*/}
-                        {/*{item.lb != 1 ? <Button style={{*/}
-                        {/*position: 'absolute',*/}
-                        {/*height: 25,*/}
-                        {/*paddingLeft: 15,*/}
-                        {/*paddingRight: 15,*/}
-                        {/*top: 15,*/}
-                        {/*right: 0,*/}
-                        {/*borderRadius: 12,*/}
-                        {/*borderWidth: 0,*/}
-                        {/*borderColor: '#0099FF',*/}
-                        {/*alignItems: 'center', justifyContent: 'center'*/}
-                        {/*}} onPress={() => Actions.leaveInfo({item: item})}><Text*/}
-                        {/*style={{color: '#f96868', fontSize: 12}}>{'病假'}</Text></Button>:<Button style={{*/}
-                        {/*position: 'absolute',*/}
-                        {/*height: 25,*/}
-                        {/*paddingLeft: 15,*/}
-                        {/*paddingRight: 15,*/}
-                        {/*top: 15,*/}
-                        {/*right: 0,*/}
-                        {/*borderRadius: 12,*/}
-                        {/*borderWidth: 0,*/}
-                        {/*borderColor: '#0099FF',*/}
-                        {/*alignItems: 'center', justifyContent: 'center'*/}
-                        {/*}} onPress={() => Actions.leaveInfo({item: item})}><Text*/}
-                        {/*style={{color: '#0099FF', fontSize: 12}}>{'事假'}</Text></Button>}*/}
                     </View>
                 </Button>
             </View>

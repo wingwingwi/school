@@ -217,7 +217,7 @@ export default class ResumeStudy extends BasePage {
     }
 
 }
-const notice = '* 手足口为国家法定传染病，需持有校医（保健老师）出具的复课证需持有校医（保健老师）出具的复课证明或持有医院开具的痊愈证明方可复课明或持有医院开具的痊愈证明方可复课。'
+const notice = '* 传染病实行复课证明查验制度，患传染病的学生病愈且隔离期满后，需持有医院开具的痊愈证明或持有校医（保健老师）出具的复课证明方可回教室上课。'
 const styles = StyleSheet.create({
     lineText: {
         fontSize: 17, color: '#333', width: 80, marginTop: 10, marginLeft: 10

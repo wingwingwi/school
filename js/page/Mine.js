@@ -49,7 +49,7 @@ export default class Mine extends Component<Props> {
                 source={src.banner_pic}></ImageBackground></Button> : <View style={{height: 20}}/>}
             <View style={{backgroundColor: '#fff'}}>
                 {NextView.getSettingImgItemL(() => Actions.attestation(), "认证学生", src.renzhengxuesheng_icon, "", true, true)}
-                {NextView.getSettingImgItemL(() => Actions.recordList(), "个人档案", src.gerendangan_icon, "", true, true)}
+                {NextView.getSettingImgItemL(() => Actions.recordList(), "健康档案", src.gerendangan_icon, "", true, true)}
                 {NextView.getSettingImgItemL(() => Actions.amendPwd(), "修改密码", src.xiugaimima_icon, "", true, true)}
                 {NextView.getSettingImgItemL(() => Actions.feedback(), "意见反馈", src.yijianfankui_icon, "", true, true)}
                 {NextView.getSettingImgItemL(() => Actions.aboutUs(), "关于我们", src.guanyuwomen_icon, this.state.phone, false, false)}

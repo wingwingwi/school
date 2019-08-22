@@ -43,7 +43,7 @@ export default class Record extends BasePage {
     render() {
         return (
             <View style={{flex: 1}}>
-                <NarBar title={"个人档案"} onSelect={() => Actions.pop()}/>
+                <NarBar title={"健康档案"} onSelect={() => Actions.pop()}/>
                 <ScrollView contentContainerStyle={{paddingVertical: 10}} style={{flex: 1}}>
                     {NextView.getSettingImgItemTech(() => {
                         this.setState({showYear: true})
@@ -108,7 +108,7 @@ export default class Record extends BasePage {
     componentDidMount() {
         if (isNotEmpty(this.props.id))
             InteractionManager.runAfterInteractions(() => {
-                this.loadKey = showMsg("获取个人档案中...", 3)
+                this.loadKey = showMsg("获取健康档案中...", 3)
                 postCache(URL_MY_ARCHIVES, {id: this.props.id}, (data) => {
                     showMsg('', this.loadKey)
                     if (isNotEmpty(data))

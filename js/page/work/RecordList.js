@@ -39,7 +39,7 @@ export default class RecordList extends BasePage {
     render() {
         return (
             <View style={{flex: 1}}>
-                <NarBar title={"个人档案"} onSelect={() => Actions.pop()}/>
+                <NarBar title={"健康档案"} onSelect={() => Actions.pop()}/>
                 <ScrollView contentContainerStyle={{}} style={{flex: 1}}
                             refreshControl={<RefreshControl
                                 refreshing={this.state.refreshing}
@@ -58,7 +58,7 @@ export default class RecordList extends BasePage {
                                 color: '#a9a9a9',
                                 fontSize: 14,
                                 marginTop: 10
-                            }}>{this.state.refreshing ? "正在加载" : "尚未添加个人档案"}</Text>
+                            }}>{this.state.refreshing ? "正在加载" : "尚未添加健康档案"}</Text>
                         </View>}
                 </ScrollView>
                 <Button style={{position: 'absolute', bottom: 20, right: 20}}
@@ -75,7 +75,7 @@ export default class RecordList extends BasePage {
 
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
-            this.loadKey = showMsg("获取个人档案中...", 3)
+            this.loadKey = showMsg("获取健康档案中...", 3)
             this.request();
         })
     }

@@ -108,6 +108,10 @@ module.exports = {
     URL_SEND_NOTE: BDBaseUrl + "/leave/sendNote",
     /**2.【班主任端】今日请假状况  POST*/
     URL_TOADY_LEAVES: BDBaseUrl + "/leave/todayLeaves",
+
+    /**2.【班主任端】班级内学生查询  POST*/
+    URL_MY_STUDENTS: BDBaseUrl + "/member/myStudent",
+
     /**2.  POST*/
     URL_: BDBaseUrl + "",
     /**2.  POST*/

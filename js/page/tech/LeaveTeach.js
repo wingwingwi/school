@@ -28,12 +28,11 @@ import PickerModel from "../../model/PickerModel";
 import {postCache} from "../../utils/Resquest";
 import {URL_LEAVE_ILLNESS, URL_LEAVE_MATTER, URL_QUERY_DISEASE, URL_UPLOAD} from "../../constant/Url";
 import BasePage from "../BasePage";
-import {_token} from "../../constant/Constants";
 
 /**
  * @class
  */
-export default class Leave extends BasePage {
+export default class LeaveTeach extends BasePage {
     constructor(props) {
         super(props);
         this.state = {//设置初值
@@ -63,7 +62,7 @@ export default class Leave extends BasePage {
     render() {
         return (
             <View style={{flex: 1}}>
-                <NarBar title={"我要请假"} onSelect={() => Actions.pop()}/>
+                <NarBar title={"帮学生请假"} onSelect={() => Actions.pop()}/>
                 <TextBar list={["事假", "病假"]} changeTab={(index) => {
                     this.setState({tab: index})
                 }}/>
@@ -206,7 +205,7 @@ export default class Leave extends BasePage {
 
     commitLeave() {
         var param = {}
-        param.targetId = _token.t;
+        param.targetId = this.props.memberId;
         param.startTime = this.state.startTime
         param.remk = this.mContent.text()
         if (!isNotEmpty(param.startTime)) {
@@ -220,8 +219,8 @@ export default class Leave extends BasePage {
 
     commitSickLeave() {
         var param = {}
-        param.targetId = _token.t;
         param.fallTime = this.state.endBTime//发病时间
+        param.targetId = this.props.memberId;
         param.inHospital = this.state.inpatient ? 1 : 0//0=未住院 1=已住院
         param.isJbmc = !isNotEmpty(this.jbmcIds) ? 1 : 0//疾病名称 0=非自定义 1=自定义
         param.isZyzz = !isNotEmpty(this.zyzzIds) ? 1 : 0//0=非自定义 1=自定义

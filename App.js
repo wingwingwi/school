@@ -45,6 +45,8 @@ import TechPage from "./js/page/tech/TechPage";
 import StudentList from "./js/page/tech/StudentList";
 import LeaveInfo from "./js/page/tech/LeaveInfo";
 import SendMsg from "./js/page/tech/SendMsg";
+import MyStudList from "./js/page/tech/MyStudList";
+import LeaveTeach from "./js/page/tech/LeaveTeach";
 import Welcome from "./js/page/Welcome";
 import ImageList from "./js/page/work/ImageList";
 import RecordList from "./js/page/work/RecordList";
@@ -92,6 +94,8 @@ export default class App extends Component<Props> {
                     </Scene>
                     <Scene key='techPage' title='' hideNavBar={true}>
                         <Scene key='tech' component={TechPage} title='' hideNavBar={true}/>
+                        <Scene key='myStudList' component={MyStudList} title='' hideNavBar={true}/>
+                        <Scene key='leaveTeach' component={LeaveTeach} title='' hideNavBar={true}/>
                         <Scene key='studentList' component={StudentList} title='' hideNavBar={true}/>
                         <Scene key='leaveInfo' component={LeaveInfo} title='' hideNavBar={true}/>
                         <Scene key='sendMsg' component={SendMsg} title='' hideNavBar={true}/>

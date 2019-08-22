@@ -43,7 +43,7 @@ export default class TechPage extends BasePage {
                     <Text style={{
                         padding: 15,
                         color: '#0099FF',
-                        fontSize: 15,
+                        fontSize: 13,
                         position: 'absolute',
                         bottom: 0
                     }} onPress={() => this.setState({show: true})}>{this.state.name}</Text>
@@ -267,7 +267,7 @@ export default class TechPage extends BasePage {
         this.request()
         postCache(URL_MY_DATA, undefined, (data) => {
             this.setState({
-                name: isNotEmpty(data.nickname) ? data.nickname : data.userName
+                name: isNotEmpty(data.nickname) ? data.nickname+"("+data.classesion.name+")" : data.userName+"("+data.classesion.name+")"
             })
         }, true,)
     }

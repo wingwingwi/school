@@ -120,12 +120,12 @@ export default class Main extends BasePage {
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
                 {this.itemView(src.woyaoqingjia_btn, "我要请假", () => Actions.leave())}
-                {this.itemView(src.woyaofuke_btn, "我要复课", () => Actions.leaveList())}
+                {this.itemView(src.woyaofuke_btn, "请假列表", () => Actions.leaveList())}
                 {this.itemView(src.jiankangjiaoyu_btn, "健康教育", () => {
                     Actions.more()
                 })}
-                {this.itemView(src.gerendangan_btn, "个人档案", () => Actions.recordList())}
-                {this.itemView(src.gerenxiaoxi_btn, "个人消息", () => Actions.message({typeNum: 1}))}
+                {this.itemView(src.gerendangan_btn, "健康档案", () => Actions.recordList())}
+                {/*{this.itemView(src.gerenxiaoxi_btn, "个人消息", () => Actions.message({typeNum: 1}))}*/}
             </View>
             <View style={{backgroundColor: '#f5f5f5', height: 12}}/>
             <View style={{flexDirection: 'row', padding: 10, alignItems: 'center'}}>

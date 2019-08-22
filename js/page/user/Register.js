@@ -64,9 +64,9 @@ export default class Register extends BasePage {
                             bottom: 0,
                             justifyContent: 'center'
                         }}>
-                        <Text style={{color: '#A9A9A9', fontSize: 13}}>注册即代表你已同意</Text>
-                        <Text style={{color: '#0082ff', fontSize: 13}} onPress={() => {
-                        }}>《平台用户协议》</Text>
+                        {/*<Text style={{color: '#A9A9A9', fontSize: 13}}>注册即代表你已同意</Text>*/}
+                        {/*<Text style={{color: '#0082ff', fontSize: 13}} onPress={() => {*/}
+                        {/*}}>《平台用户协议》</Text>*/}
                     </View>
                 </View>
                 {/*</KeyboardAvoidingView>*/}
