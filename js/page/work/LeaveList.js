@@ -1,36 +1,13 @@
-import React, {Component} from 'react';
+import React from 'react';
 
-import {
-    View,
-    Text, Alert,
-    Image,
-    StyleSheet,
-    TouchableOpacity,
-    TextInput,
-    ImageBackground,
-    ScrollView,
-    InteractionManager, DeviceEventEmitter
-} from 'react-native';
+import {DeviceEventEmitter, Text, View} from 'react-native';
 import {Actions} from 'react-native-router-flux';
-import {getArrStr, getDateTime, isNotEmpty, showMsg, size, upload} from '../../utils/Util';
-import {Provider, Toast} from '@ant-design/react-native';
-import src from '../../constant/Src';
+import {showMsg, size} from '../../utils/Util';
 import NarBar from '../../component/Narbar';
-import EditView from "../../component/EditView";
 import Button from "../../component/Button";
-import LinearGradient from "react-native-linear-gradient";
 import TextBar from "../../component/TextBar";
-import NextView from "../../component/NextView";
-import ImgsView from "../../component/ImgsView";
-import CheckView from "../../component/CheckView";
-import DateModel from "../../model/DateModel";
-import ChooseIModel from "../../model/ChooseIModel";
-import PickerModel from "../../model/PickerModel";
 import {postCache} from "../../utils/Resquest";
-import {
-    URL_LEAVE_ILLNESS, URL_LEAVE_MATTER, URL_LIST_LEAVES, URL_QUERY_DISEASE, URL_QUERY_LEAVES,
-    URL_UPLOAD
-} from "../../constant/Url";
+import {URL_LIST_LEAVES} from "../../constant/Url";
 import BasePage from "../BasePage";
 import BListView from "../../component/BListView";
 
@@ -55,18 +32,18 @@ export default class LeaveList extends BasePage {
             <View style={{flex: 1}}>
                 <NarBar title={"请假历史"} onSelect={() => Actions.pop()}/>
                 <TextBar list={['未复课', '已复课']} ref={ref => this.textBar = ref} changeTab={(num) => {
-                var tab = num + 1;
-                console.log('tab=' + tab)
-                console.log(JSON.stringify(this.leftList))
-                console.log(JSON.stringify(this.rightList))
-                if (tab == 1) {
-                    this.setState({tab: tab, list: [].concat(this.leftList)})
-                    if (this.leftList.length == 0) this.requestList(1, true)
-                } else {
-                    this.setState({tab: tab, list: [].concat(this.rightList)})
-                    if (this.rightList.length == 0) this.requestList(2, true)
-                }
-            }}/>
+                    var tab = num + 1;
+                    console.log('tab=' + tab)
+                    console.log(JSON.stringify(this.leftList))
+                    console.log(JSON.stringify(this.rightList))
+                    if (tab == 1) {
+                        this.setState({tab: tab, list: [].concat(this.leftList)})
+                        if (this.leftList.length == 0) this.requestList(1, true)
+                    } else {
+                        this.setState({tab: tab, list: [].concat(this.rightList)})
+                        if (this.rightList.length == 0) this.requestList(2, true)
+                    }
+                }}/>
                 <BListView ref={ref => this.listView = ref}
                            ListEmptyComponent={this._listEmptyComponent}
                            list={this.state.list}
@@ -84,6 +61,10 @@ export default class LeaveList extends BasePage {
 
     componentWillMount() {
         this.setState({tab: 1})
+        DeviceEventEmitter.addListener('leaveList', (data) => {
+            this.listView.setRefreshing(true);
+            this.requestList(this.state.tab);
+        })
     }
 
     // requestList() {
@@ -109,7 +90,7 @@ export default class LeaveList extends BasePage {
             console.log('tab=2222')
             resumeStatu = 1
         }
-        postCache(URL_LIST_LEAVES, {resumeStatus:resumeStatu}, (data) => {
+        postCache(URL_LIST_LEAVES, {resumeStatus: resumeStatu}, (data) => {
             if (lb == 1)
                 this.leftList = data;
             else this.rightList = data;
@@ -183,7 +164,12 @@ export default class LeaveList extends BasePage {
                         </View>
 
                         <View
-                            style={{flexDirection: 'row',marginTop: 6,justifyContent: 'flex-end',width: size.width - 20}}>
+                            style={{
+                                flexDirection: 'row',
+                                marginTop: 6,
+                                justifyContent: 'flex-end',
+                                width: size.width - 20
+                            }}>
 
                             <Button style={{
                                 width: 75,
@@ -191,32 +177,34 @@ export default class LeaveList extends BasePage {
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 borderRadius: 16,
-                                marginRight:10,
+                                marginRight: 10,
                                 borderColor: '#0099FF',
                                 borderWidth: 1,
                             }} onPress={() => {
 
                             }}><Text style={{
-                                    color: '#0099FF',
-                                    fontSize: 12,
-                                }}>{"修改申请"}</Text></Button>
+                                color: '#0099FF',
+                                fontSize: 12,
+                            }} onPress={() => {
+                                Actions.leave({item: item})
+                            }}>{"修改申请"}</Text></Button>
 
                             <Button style={{
                                 width: 75,
                                 height: 25,
-                                marginRight:10,
+                                marginRight: 10,
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 borderRadius: 16,
-                                backgroundColor:'#0099FF',
+                                backgroundColor: '#0099FF',
                                 borderColor: '#0099FF',
                                 borderWidth: 1,
                             }} onPress={() => {
                                 Actions.resumeStudy({lb: item.lb, id: item.id})
                             }}><Text style={{
-                                    color: '#fff',
-                                    fontSize: 12,
-                                }}>{"我要复课"}</Text></Button>
+                                color: '#fff',
+                                fontSize: 12,
+                            }}>{"我要复课"}</Text></Button>
                         </View>
                     </View>
                 </Button>
@@ -225,6 +213,10 @@ export default class LeaveList extends BasePage {
         </View>);
     }
 
+    componentWillUnmount() {
+        super.componentWillUnmount();
+        DeviceEventEmitter.removeListener()
+    }
 }
 
 const eventType = 'leavelist'

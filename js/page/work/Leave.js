@@ -1,19 +1,16 @@
-import React, {Component} from 'react';
+import React from 'react';
 
 import {
-    View,
-    Text, Alert,
-    StyleSheet,
-    TouchableOpacity,
-    TextInput,
-    ImageBackground,
+    DeviceEventEmitter,
+    InteractionManager,
     ScrollView,
-    InteractionManager, DeviceEventEmitter
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
-import {getArrStr, getDateTime, isNotEmpty, showMsg, size, upload} from '../../utils/Util';
-import {Provider, Toast} from '@ant-design/react-native';
-import src from '../../constant/Src';
+import {getArrStr, isNotEmpty, showMsg, size, tailoringTime, upload} from '../../utils/Util';
 import NarBar from '../../component/Narbar';
 import EditView from "../../component/EditView";
 import Button from "../../component/Button";
@@ -55,7 +52,8 @@ export default class Leave extends BasePage {
             showC: false,
             list: [],
             showH: false,
-            listH: []
+            listH: [],
+            pageTitle: '我要请假', commitText: '提交'
         };
         this.pics = [];
     }
@@ -63,10 +61,12 @@ export default class Leave extends BasePage {
     render() {
         return (
             <View style={{flex: 1}}>
-                <NarBar title={"我要请假"} onSelect={() => Actions.pop()}/>
+                <NarBar title={this.state.pageTitle} onSelect={() => {
+                    Actions.pop()
+                }}/>
                 <TextBar list={["事假", "病假"]} changeTab={(index) => {
                     this.setState({tab: index})
-                }}/>
+                }} ref={ref => this.textBar = ref}/>
                 {this.state.tab == 0 ? this.leave() : this.sickLeave()}
                 <DateModel show={this.state.showTime} closeModal={(date) => {
                     var item = {}
@@ -140,7 +140,7 @@ export default class Leave extends BasePage {
                                     justifyContent: 'center',
                                     alignItems: 'center'
                                 }}>
-                    <Text style={{color: '#fff', fontSize: 18}}>提交</Text>
+                    <Text style={{color: '#fff', fontSize: 18}}>{this.state.commitText}</Text>
                 </LinearGradient>
             </Button>
         </ScrollView>
@@ -165,6 +165,7 @@ export default class Leave extends BasePage {
                 <CheckView title={"是否学校老师发现生病并通知家长"} style={{padding: 10, marginTop: 2}}
                            changeCheck={(check) => this.setState({cwj: check})}/>
                 <CheckView title={"是否就医"} style={{padding: 10, marginTop: 2}}
+                           ref={ref => this.checkHosptail = ref}
                            changeCheck={(check) => this.setState({open: check})}/>
                 {this.state.open ? NextView.getSettingImgItemS(() => {
                     this.setState({showC: true, list: disease2, timeType: 5})
@@ -173,9 +174,11 @@ export default class Leave extends BasePage {
                     event: eventType, eventName: 'jiuzheng', text: this.state.jiuzheng
                 }), "就诊医院", this.state.jiuzheng, true, true, "请输入") : null}
                 <CheckView title={"上传病历以及相关材料"} style={{padding: 10, marginTop: 2}}
+                           ref={ref => this.checkFiles = ref}
                            changeCheck={(check) => this.setState({picture: check})}/>
                 {this.state.picture ? <ImgsView ref={ref => this.imgsView = ref}/> : null}
                 <CheckView title={"是否住院"} style={{padding: 10, marginTop: 2}}
+                           ref={ref => this.checkInpatient = ref}
                            changeCheck={(check) => this.setState({inpatient: check})}/>
                 {this.state.inpatient ? NextView.getSettingImgItemS(() => Actions.inputPage({
                     event: eventType, eventName: 'hospital', text: this.state.hospital
@@ -192,7 +195,7 @@ export default class Leave extends BasePage {
                                     justifyContent: 'center',
                                     alignItems: 'center'
                                 }}>
-                    <Text style={{color: '#fff', fontSize: 18}}>提交</Text>
+                    <Text style={{color: '#fff', fontSize: 18}}>{this.state.commitText}</Text>
                 </LinearGradient>
             </Button>
             <View style={{height: 50}}/>
@@ -206,6 +209,9 @@ export default class Leave extends BasePage {
 
     commitLeave() {
         var param = {}
+        if (this.props.item != undefined && this.props.item.lb != undefined){
+            param.id = this.props.item.id;
+        }
         param.targetId = _token.t;
         param.startTime = this.state.startTime
         param.remk = this.mContent.text()
@@ -218,8 +224,47 @@ export default class Leave extends BasePage {
 
     }
 
+    /**初始化传入参数数据*/
+    creatData() {
+        var data = this.props.item;//获取相关数据
+        if (data.lb != 1) {//病假
+            this.setState({
+                startBTime: tailoringTime(data.startTime),
+                endBTime: tailoringTime(data.fallTime),
+                inpatient: data.inHospital == 1,
+                open: data.seeDoctor == 1,
+                bState: data.zyzz,
+                hospital: data.inpatientHospital,
+                jiuzheng:data.visitHospital,
+                bName:data.jbmc,
+                picture:data.fileList.length == 0 ? 0:1,
+            })
+        } else {//事假
+            console.log('time========' + tailoringTime(data.startTime))
+            this.setState({startTime: tailoringTime(data.startTime)})
+        }
+    }
+
+    /**初始化组件view*/
+    creatViewData() {
+        if (this.props.item != undefined && this.props.item.lb != undefined) {//获取当前传入的数据
+            this.textBar.clock()
+            if (this.props.item.lb != 1) {//属于病假
+                this.textBar.tab(1)//跟新标题
+                this.checkInpatient.check(this.state.inpatient)
+                this.checkHosptail.check(this.state.open)
+                this.checkFiles.check(this.state.picture)
+            } else {
+                this.mContent.text(this.props.item.remk)
+            }
+        }
+    }
+
     commitSickLeave() {
         var param = {}
+        if (this.props.item != undefined && this.props.item.lb != undefined){
+            param.id = this.props.item.id;
+        }
         param.targetId = _token.t;
         param.fallTime = this.state.endBTime//发病时间
         param.inHospital = this.state.inpatient ? 1 : 0//0=未住院 1=已住院
@@ -276,6 +321,9 @@ export default class Leave extends BasePage {
         this.loadKey = showMsg("正在提交假条...", 3)
         postCache(url, param, (data) => {
             showMsg('', this.loadKey, '提交成功')
+            if (this.props.item != undefined && this.props.item.lb != undefined) {
+                DeviceEventEmitter.emit('leaveList', {isRefresh: true});//通知数据刷新
+            }
             Actions.pop()
             // Alert.alert('提交成功', '请选择复课时间', [{
             //     text: '复课', onPress: () => {
@@ -291,13 +339,20 @@ export default class Leave extends BasePage {
 
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
-            this.requestList()
+            this.requestList()//获取配置信息
+            this.creatViewData()//设置view
         })
         this.isNotFinish = true
     }
 
     componentWillMount() {
         super.componentWillMount()
+        if (this.props.item != undefined && this.props.item.lb != undefined) {//获取当前传入的数据
+            if (this.props.item.lb != 1) {//属于病假
+                this.setState({tab: 1, pageTitle: '修改申请', commitText: '确认'})//设定显示内容
+            } else this.setState({pageTitle: '修改申请', commitText: '确认'})
+            this.creatData()
+        }
         this.listener = DeviceEventEmitter.addListener(eventType, (item) => {
             var param = {};
             console.log(JSON.stringify(item))
@@ -312,6 +367,7 @@ export default class Leave extends BasePage {
             this.setState(param)
         });
     }
+
 
     componentWillUnmount() {
         super.componentWillUnmount()
@@ -342,7 +398,7 @@ const list3 = [{name: '感冒'}, {name: '扁桃体发炎'}, {name: '手足口病
     , {name: '其他传染病'}
     , {name: '其他非传染病'}
     , {name: '原因不明疾病'}
-    , {name: '自定义11'}
+    , {name: '自定义'}
 ]
 
 const eventType = 'userInfo'

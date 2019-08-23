@@ -1,17 +1,13 @@
 import React, {Component} from 'react';
-import {
-    View, ScrollView,
-    StyleSheet, Text, ViewPropTypes,
-    Image, TouchableOpacity
-} from 'react-native';
-import {size, showMsg} from '../utils/Util'
+import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {showMsg, size} from '../utils/Util'
 
 /**选项卡，文字，下划线设置*/
 export default class TextBar extends Component {
     constructor(props) {
         super(props);
         this.state = {//设置初值
-            tab: 0,
+            tab: 0, isClock: false,
             list: ["推荐", "教育健康", "社会", "亲子", "人文"]
         };
     }
@@ -39,8 +35,13 @@ export default class TextBar extends Component {
             s.width = size.width / this.state.list.length
         }
         return <TouchableOpacity onPress={() => {
-            this.setState({tab: index})
-            if (this.props.changeTab) this.props.changeTab(index)
+            if (this.state.isClock) {
+                if (this.state.tab != index)
+                    showMsg('当前不允许更改请假类型')
+            } else {
+                this.setState({tab: index})
+                if (this.props.changeTab) this.props.changeTab(index)
+            }
         }} style={[{paddingRight: 5, paddingLeft: 5, alignItems: 'center'}, s]} key={index}>
             <Text style={{
                 fontSize: 15,
@@ -57,6 +58,11 @@ export default class TextBar extends Component {
             return num;
         }
         return this.state.tab;
+    }
+
+    /**设置锁定*/
+    clock() {
+        this.setState({isClock: true})
     }
 
     setList(list) {

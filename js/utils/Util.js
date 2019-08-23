@@ -5,19 +5,11 @@
  *
  */
 import Dimensions from "Dimensions";
-import React, {
-    PixelRatio,
-    Alert,
-    ToastAndroid,
-    NativeModules,
-    AsyncStorage,
-    Platform
-} from "react-native";
-import {Toast, Portal} from "@ant-design/react-native";
+import React, {PixelRatio, Platform} from "react-native";
+import {Portal, Toast} from "@ant-design/react-native";
 import Log from "./Log.js";
 import {_token} from '../constant/Constants';
 import {getDateTime} from "./DateUtil";
-import {save, getValue} from "./FileUtil";
 
 
 module.exports = {
@@ -63,7 +55,19 @@ module.exports = {
                 Toast.show(defaultMsg, 1.5);
         }
     },
-
+    /**裁剪时间*/
+    tailoringTime(dataTime) {
+        if (dataTime != undefined && dataTime != "") {
+            if (dataTime.length == 19) {
+                var arr = dataTime.split(':')
+                return arr[0] + ':' + arr[1]
+            } else if (dataTime.indexOf('时') != -1) {
+                var arr = dataTime.split('时')
+                return arr[0] + ":00"
+            }
+        }
+        return ""
+    },
     /**得到分数*/
     getStore(num) {
         if (num == undefined) return "";

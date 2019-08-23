@@ -1,22 +1,9 @@
 import React, {Component} from "react";
-import {
-    View,
-    TouchableOpacity,
-    Alert,
-    StyleSheet,
-    Dimensions,
-    Modal,
-    FlatList,
-    Text,
-    Image,
-    ScrollView,
-    TextInput,
-    TouchableWithoutFeedback
-} from "react-native";
+import {Modal, Text, TouchableOpacity, TouchableWithoutFeedback, View} from "react-native";
 import PropTypes from "prop-types";
-import {size, showMsg, isIos, getDateList, getDateTime, twoText} from "../utils/Util";
+import {getDateList, size, twoText} from "../utils/Util";
 import Swiper from "react-native-swiper";
-import {DatePickerView, PickerView} from '@ant-design/react-native';
+import {PickerView} from '@ant-design/react-native';
 
 const nowDate = new Date(); //获取当前的时间
 const nowYear = nowDate.getFullYear(); //当前年
@@ -96,7 +83,7 @@ export default class DateModel extends Component {
                                 style={{
                                     padding: 5,
                                     fontSize: 15,
-                                    color: this.state.isSettingDay ? "#0099FF" : "#999"
+                                    color: "#0099FF"
                                 }}
                                 onPress={() => this.setState({isSettingDay: true})}
                             >
@@ -126,7 +113,7 @@ export default class DateModel extends Component {
                                 style={{
                                     padding: 5,
                                     fontSize: 15,
-                                    color: this.state.isSettingDay ? "#999" : "#0099FF"
+                                    color: "#0099FF"
                                 }}
                                 onPress={() => this.setState({isSettingDay: false})}
                             >
