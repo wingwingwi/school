@@ -28,36 +28,21 @@ import BasePage from "../BasePage";
 import {_token} from "../../constant/Constants";
 
 /**
+ * 请假页面
  * @class
  */
 export default class Leave extends BasePage {
     constructor(props) {
         super(props);
-        this.state = {//设置初值
-            tab: 0,
-            open: false,
-            cwj: false,
-            inpatient: false,
-            picture: false,
-            showTime: false,
-            startTime: '',
-            endTime: '',
-            timeType: 0,
-            startBTime: '',
-            endBTime: '',
-            bName: '',
-            bState: '',
-            hospital: '',
-            jiuzheng: '',
-            showC: false,
-            list: [],
-            showH: false,
-            listH: [],
-            pageTitle: '我要请假', commitText: '提交'
+        this.state = {
+            tab: 0, open: false, cwj: false, inpatient: false, picture: false, showTime: false,
+            startTime: '', endTime: '', timeType: 0, startBTime: '', endBTime: '', bName: '',
+            bState: '', hospital: '', jiuzheng: '', showC: false,
+            list: [], showH: false, listH: [], pageTitle: '我要请假', commitText: '提交'
         };
-        this.pics = [];
     }
 
+    /**主布局*/
     render() {
         return (
             <View style={{flex: 1}}>
@@ -85,19 +70,13 @@ export default class Leave extends BasePage {
                             this.zyzzIds = data.id
                             if (data.isHasOther) {
                                 this.setState({showC: false, bState: data.name})
-                                Actions.inputPage({
-                                    event: eventType,
-                                    eventName: 'bState'
-                                })
+                                Actions.inputPage({event: eventType, eventName: 'bState'})//症状信息
                             } else this.setState({showC: false, bState: data.name})
                         } else if (this.state.timeType == 5) {//疾病名称
                             this.jbmcIds = data.id
                             if (data.isHasOther) {//自定义数据
                                 this.setState({showC: false, bName: data.name})
-                                Actions.inputPage({
-                                    event: eventType,
-                                    eventName: 'bName'
-                                })
+                                Actions.inputPage({event: eventType, eventName: 'bName'})//疾病信息
                             } else this.setState({showC: false, bName: data.name})
                         } else this.setState({showC: false})
                     } else this.setState({showC: false})
@@ -109,6 +88,7 @@ export default class Leave extends BasePage {
             </View>);
     }
 
+    /**事假View展示*/
     leave() {
         return <ScrollView contentContainerStyle={{alignItems: 'center'}} style={{flex: 1}}>
             <View style={{height: 10}}/>
@@ -146,6 +126,7 @@ export default class Leave extends BasePage {
         </ScrollView>
     }
 
+    /**病假View展示*/
     sickLeave() {
         return <ScrollView contentContainerStyle={{alignItems: 'center'}} style={{flex: 1}}>
             <View style={{height: 10}}/>
@@ -160,9 +141,9 @@ export default class Leave extends BasePage {
                 {NextView.getSettingImgItemS(() => {
                     this.setState({showC: true, list: disease1, timeType: 4})
                 }, "主要症状", this.state.bState, true, true, '请选择')}
-
                 <View style={{height: 5}}/>
                 <CheckView title={"是否学校老师发现生病并通知家长"} style={{padding: 10, marginTop: 2}}
+                           ref={ref => this.checkCwj = ref}
                            changeCheck={(check) => this.setState({cwj: check})}/>
                 <CheckView title={"是否就医"} style={{padding: 10, marginTop: 2}}
                            ref={ref => this.checkHosptail = ref}
@@ -170,9 +151,9 @@ export default class Leave extends BasePage {
                 {this.state.open ? NextView.getSettingImgItemS(() => {
                     this.setState({showC: true, list: disease2, timeType: 5})
                 }, "疾病名称", this.state.bName, true, true, '请选择') : null}
-                {this.state.open ? NextView.getSettingImgItemS(() => Actions.inputPage({
-                    event: eventType, eventName: 'jiuzheng', text: this.state.jiuzheng
-                }), "就诊医院", this.state.jiuzheng, true, true, "请输入") : null}
+                {this.state.open ? NextView.getSettingImgItemS(() => {
+                    Actions.inputPage({event: eventType, eventName: 'jiuzheng', text: this.state.jiuzheng})//获取就诊医院
+                }, "就诊医院", this.state.jiuzheng, true, true, "请输入") : null}
                 <CheckView title={"上传病历以及相关材料"} style={{padding: 10, marginTop: 2}}
                            ref={ref => this.checkFiles = ref}
                            changeCheck={(check) => this.setState({picture: check})}/>
@@ -180,9 +161,9 @@ export default class Leave extends BasePage {
                 <CheckView title={"是否住院"} style={{padding: 10, marginTop: 2}}
                            ref={ref => this.checkInpatient = ref}
                            changeCheck={(check) => this.setState({inpatient: check})}/>
-                {this.state.inpatient ? NextView.getSettingImgItemS(() => Actions.inputPage({
-                    event: eventType, eventName: 'hospital', text: this.state.hospital
-                }), "住院医院", this.state.hospital, true, true, "请输入") : null}
+                {this.state.inpatient ? NextView.getSettingImgItemS(() => {
+                    Actions.inputPage({event: eventType, eventName: 'hospital', text: this.state.hospital})//获取住院信息
+                }, "住院医院", this.state.hospital, true, true, "请输入") : null}
             </View>
             <Button onPress={() => {
                 this.commitSickLeave();
@@ -202,14 +183,10 @@ export default class Leave extends BasePage {
         </ScrollView>
     }
 
-    setPic() {
-        setTimeout(() => {
-        }, 100)
-    }
-
+    /**提交事假假资料*/
     commitLeave() {
         var param = {}
-        if (this.props.item != undefined && this.props.item.lb != undefined){
+        if (this.props.item != undefined && this.props.item.lb != undefined) {
             param.id = this.props.item.id;
         }
         param.targetId = _token.t;
@@ -233,11 +210,11 @@ export default class Leave extends BasePage {
                 endBTime: tailoringTime(data.fallTime),
                 inpatient: data.inHospital == 1,
                 open: data.seeDoctor == 1,
-                bState: data.zyzz,
+                bState: data.zyzz,//症状信息
                 hospital: data.inpatientHospital,
-                jiuzheng:data.visitHospital,
-                bName:data.jbmc,
-                picture:data.fileList.length == 0 ? 0:1,
+                jiuzheng: data.visitHospital,
+                bName: data.jbmc,
+                picture: data.fileList.length == 0 ? 0 : 1,
             })
         } else {//事假
             console.log('time========' + tailoringTime(data.startTime))
@@ -245,24 +222,41 @@ export default class Leave extends BasePage {
         }
     }
 
-    /**初始化组件view*/
+    /**初始化组件view状态数据*/
     creatViewData() {
+        this.zyzzIds = ''//症状ID
+        this.jbmcIds = ''//疾病ID
         if (this.props.item != undefined && this.props.item.lb != undefined) {//获取当前传入的数据
             this.textBar.clock()
             if (this.props.item.lb != 1) {//属于病假
                 this.textBar.tab(1)//跟新标题
-                this.checkInpatient.check(this.state.inpatient)
-                this.checkHosptail.check(this.state.open)
-                this.checkFiles.check(this.state.picture)
+                this.checkInpatient.check(this.state.inpatient)////是否住院
+                this.checkHosptail.check(this.state.open)//是否就医
+                this.checkFiles.check(this.state.picture)//是否有图片
+                this.checkCwj.check(false)//是否通知家长知晓
+                if (this.imgsView) this.imgsView.setPic(this.props.item.fileList)//设置网络图片
+                //设置症状和疾病名称
+                if (this.props.item.diseaseList != undefined && this.props.item.diseaseList.length > 0)
+                    for (var i = 0; i < this.props.item.diseaseList.length; i++) {
+                        if (this.props.item.diseaseList[i].diseaselb == 1) {//症状，获取他的ID
+                            if (!isNotEmpty(this.props.item.diseaseList[i].id))
+                                this.zyzzIds = this.zyzzIds != '' ? (',' + this.props.item.diseaseList[i].id) : this.props.item.diseaseList[i].id
+                        } else if (this.props.item.diseaseList[i].diseaselb == 2) {//疾病名称，获取他的ID
+                            if (!isNotEmpty(this.props.item.diseaseList[i].id)) {
+                                this.jbmcIds = this.jbmcIds != '' ? (',' + this.props.item.diseaseList[i].id) : this.props.item.diseaseList[i].id
+                            }
+                        }
+                    }
             } else {
                 this.mContent.text(this.props.item.remk)
             }
         }
     }
 
+    /**整合病假参数*/
     commitSickLeave() {
         var param = {}
-        if (this.props.item != undefined && this.props.item.lb != undefined){
+        if (this.props.item != undefined && this.props.item.lb != undefined) {
             param.id = this.props.item.id;
         }
         param.targetId = _token.t;
@@ -301,14 +295,20 @@ export default class Leave extends BasePage {
                 this.loadKey = showMsg('上传中...', 3);
             var arr = this.imgsView.getPic();
             var pic = arr[times].img.uri;
-            upload(URL_UPLOAD, pic, (data) => {
-                showMsg('', this.loadKey);
-                this.uploadImg.push(data.fileUrl);
+            if (pic.indexOf('http') != -1) {//已经是网络图片了，就不需要上传机制
+                this.uploadImg.push(pic);
+                showMsg('', this.loadKey);//清理对话框
                 if (this.isNotFinish)
                     this._upload(times + 1, param);
-            }, (error) => {
-                showMsg('', this.loadKey, error);
-            })
+            } else
+                upload(URL_UPLOAD, pic, (data) => {
+                    showMsg('', this.loadKey);
+                    this.uploadImg.push(data.fileUrl);
+                    if (this.isNotFinish)
+                        this._upload(times + 1, param);
+                }, (error) => {
+                    showMsg('', this.loadKey, error);
+                })
         } else {
             if (param.seeDoctor == 1 && this.uploadImg.length > 0)
                 param.urls = getArrStr(this.uploadImg)
@@ -317,6 +317,7 @@ export default class Leave extends BasePage {
         }
     }
 
+    /**发起请求*/
     request(url, param) {
         this.loadKey = showMsg("正在提交假条...", 3)
         postCache(url, param, (data) => {
@@ -348,6 +349,7 @@ export default class Leave extends BasePage {
     componentWillMount() {
         super.componentWillMount()
         if (this.props.item != undefined && this.props.item.lb != undefined) {//获取当前传入的数据
+            console.log(JSON.stringify(this.props.item))
             if (this.props.item.lb != 1) {//属于病假
                 this.setState({tab: 1, pageTitle: '修改申请', commitText: '确认'})//设定显示内容
             } else this.setState({pageTitle: '修改申请', commitText: '确认'})
@@ -356,11 +358,11 @@ export default class Leave extends BasePage {
         this.listener = DeviceEventEmitter.addListener(eventType, (item) => {
             var param = {};
             console.log(JSON.stringify(item))
-            if (item.key == 'bState') {//症状
-                this.zyzzIds = this.zyzzIds ? `${this.zyzzIds},${item.text}` : `${item.text}`
+            if (item.key == 'bState') {//症状，在后面添加
+                this.zyzzIds = ''//this.zyzzIds ? `${this.zyzzIds},${item.text}` : `${item.text}`
                 param[item.key] = this.state.bState ? `${this.state.bState},${item.text}` : `${item.text}`
-            } else if (item.key == 'bName') {//疾病名称
-                this.jbmcIds = this.jbmcIds ? `${this.jbmcIds},${item.text}` : `${item.text}`
+            } else if (item.key == 'bName') {//疾病名称，在后面添加信息
+                this.jbmcIds = ''//this.jbmcIds ? `${this.jbmcIds},${item.text}` : `${item.text}`
                 param[item.key] = this.state.bName ? `${this.state.bName},${item.text}` : `${item.text}`
             } else
                 param[item.key] = item.text;
@@ -368,13 +370,14 @@ export default class Leave extends BasePage {
         });
     }
 
-
     componentWillUnmount() {
         super.componentWillUnmount()
         this.isNotFinish = false
         this.listener && this.listener.remove();
+        showMsg('', this.loadKey);//清理对话框
     }
 
+    /**获取配置参数*/
     requestList() {
         //症状
         postCache(URL_QUERY_DISEASE, {lb: 1}, (data) => {
@@ -389,17 +392,6 @@ export default class Leave extends BasePage {
 
 var disease1 = [];
 var disease2 = [];
-const list1 = [{name: '发热'}, {name: '咳嗽'}, {name: '头痛'}, {name: '脚痛'}, {name: '屁股痛'}, {name: '鸡冻'}, {name: '自定义'}]
-const list2 = [{name: '医院'}, {name: '医院2'}, {name: '医院'}, {name: '医院4'}, {name: '医院5'}, {name: '医院6'}, {name: '医院7'}, {name: '医院8'}]
-const list3 = [{name: '感冒'}, {name: '扁桃体发炎'}, {name: '手足口病'}, {name: '水痘'}, {name: '风疹'}, {name: '麻疹'}, {name: '腮腺炎'}
-    , {name: '猩红热'}
-    , {name: '肺结核'}
-    , {name: '甲肝'}
-    , {name: '其他传染病'}
-    , {name: '其他非传染病'}
-    , {name: '原因不明疾病'}
-    , {name: '自定义'}
-]
 
 const eventType = 'userInfo'
 const eventName = 'userName'

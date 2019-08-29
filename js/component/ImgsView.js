@@ -1,9 +1,6 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import {
-    View, ActivityIndicator, Text, Image, TouchableOpacity
-} from 'react-native';
-import {size, isIos, showMsg} from '../utils/Util'
+import {Image, TouchableOpacity, View} from 'react-native';
+import {showMsg, size} from '../utils/Util'
 import src from '../constant/Src'
 import Button from "./Button";
 import ImagePicker from 'react-native-image-picker';
@@ -94,8 +91,7 @@ export default class ImgsView extends Component<Props> {
                 showMsg('请开启拍照权限');
             } else if (response.customButton) {
                 console.log('User tapped custom button: ', response.customButton);
-            }
-            else {
+            } else {
                 let source = {uri: response.uri};
                 var arr = this.state.arr;
                 arr.push({img: source});
@@ -109,6 +105,13 @@ export default class ImgsView extends Component<Props> {
     }
 
     setPic(list) {
-        this.setState({arr: list})
+        if (list != undefined && list.length > 0) {
+            for (var i = 0; i < list.length; i++) {
+                if (list[i].img == undefined && list[i].fileUrl != undefined) {
+                    list[i].img = {uri: list[i].fileUrl}
+                }
+            }
+            this.setState({arr: list})
+        }
     }
 }

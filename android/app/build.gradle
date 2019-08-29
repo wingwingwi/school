@@ -111,6 +111,8 @@ android {
             keyAlias "key0"
             keyPassword "5668475"
         }
+
+
     }
     splits {
         abi {

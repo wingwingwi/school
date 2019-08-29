@@ -163,17 +163,25 @@ export default class LeaveList extends BasePage {
                                       numberOfLines={1}>{item.remk}</Text>}
                         </View>
 
-                        <View
-                            style={{
+                        {this.state.tab == 2 ?<View style={{alignItems: 'center', flexDirection: 'row'}}>
+                            <Text style={{color: '#888888', fontSize: 12, marginTop: 6}}>
+                                复课时间：
+                            </Text>
+                            <Text style={{color: '#333333', fontSize: 12, marginTop: 6}}
+                                  numberOfLines={1}>{item.resumeTime}</Text>
+                        </View>:null}
+
+                        {this.state.tab == 1 ? <View
+                                style={{
                                 flexDirection: 'row',
-                                marginTop: 6,
+                                marginTop: 3,
                                 justifyContent: 'flex-end',
                                 width: size.width - 20
                             }}>
 
-                            <Button style={{
+                                <Button style={{
                                 width: 75,
-                                height: 25,
+                                height: 20,
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 borderRadius: 16,
@@ -181,17 +189,15 @@ export default class LeaveList extends BasePage {
                                 borderColor: '#0099FF',
                                 borderWidth: 1,
                             }} onPress={() => {
-
+                                Actions.leave({item: item})
                             }}><Text style={{
                                 color: '#0099FF',
                                 fontSize: 12,
-                            }} onPress={() => {
-                                Actions.leave({item: item})
                             }}>{"修改申请"}</Text></Button>
 
-                            <Button style={{
+                                <Button style={{
                                 width: 75,
-                                height: 25,
+                                height: 20,
                                 marginRight: 10,
                                 alignItems: 'center',
                                 justifyContent: 'center',
@@ -205,10 +211,11 @@ export default class LeaveList extends BasePage {
                                 color: '#fff',
                                 fontSize: 12,
                             }}>{"我要复课"}</Text></Button>
-                        </View>
+                            </View>:null}
                     </View>
                 </Button>
             </View>
+            <View style={{width: size.width, height: 6, backgroundColor: '#fff'}}/>
             <View style={{width: size.width, height: 1, backgroundColor: '#eee'}}/>
         </View>);
     }

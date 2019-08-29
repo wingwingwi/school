@@ -32,6 +32,7 @@ module.exports = {
         }
         return -1;
     },
+
     /**快速弹出*/
     showMsg(msg, type, defaultMsg) {
         if (msg != undefined && msg != "") {
@@ -47,12 +48,14 @@ module.exports = {
                 return Toast.fail(msg, 2);
             } else if (type == 3) {
                 //loading提示，需要主动关闭
-                return Toast.loading(msg, 0);
+                return Toast.loading(msg, 15);
             }
         } else if (type != undefined) {
             Portal.remove(type)
             if (defaultMsg)
                 Toast.show(defaultMsg, 1.5);
+        }else {
+            Portal.remove(0)
         }
     },
     /**裁剪时间*/

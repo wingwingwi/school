@@ -169,8 +169,8 @@ export default class ResumeStudy extends BasePage {
     }
 
     matterResume() {
-        if (!isNotEmpty(this.state.resumeTime) || !isNotEmpty(this.mContent.text())) {
-            showMsg('请输入时间和备注信息')
+        if (!isNotEmpty(this.state.resumeTime)) {
+            showMsg('请输入时间')
             return
         }
         var param = {endTime: this.state.resumeTime , remk: this.mContent.text()};
