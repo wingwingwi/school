@@ -34,6 +34,8 @@ module.exports = {
     URL_QUERY_SCHOOL: BDBaseUrl + "/dic/querySchool",
     /**2.省市区街道级联查询 POST*/
     URL_QUERY_AREA: BDBaseUrl + "/dic/selectArea",
+    /**版本跟新https://a1.hflxkj.top/campusApi/dic/version*/
+    URL_VERSION:BDBaseUrl+"/dic/version",
 
 // 用户管理
 // 个人中心/学生认证/短信/登陆/注册/意见反馈等

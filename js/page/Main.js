@@ -19,7 +19,7 @@ import NarBar from '../component/Narbar';
 import BListView from "../component/BListView";
 import Swiper from 'react-native-swiper'
 import src from '../constant/Src'
-import {URL_BANNERS, URL_QUERY_PAGE} from "../constant/Url";
+import {URL_BANNERS, URL_QUERY_PAGE, URL_VERSION} from "../constant/Url";
 import BasePage from "./BasePage";
 import {version_name} from "../constant/Constants";
 
@@ -55,7 +55,7 @@ export default class Main extends BasePage {
                 this.request();
                 this.requestList(true, 1)
             }
-            //this.checkVersion()
+            this.checkVersion()
             this.checkAndroidPermission()
         }, 100)
     }
@@ -244,8 +244,10 @@ export default class Main extends BasePage {
 
     /**检查版本号*/
     checkVersion() {
-        postCache(URL_BANNERS, {versionName: version_name}, (data) => {
-            if (data.flag && 1 == data.flag) {
+        postCache(URL_VERSION, {versionName: version_name}, (data) => {
+            var info = isIos ? data["ios"] : data["android"]
+            var vno = info["vno"]
+            if (vno != undefined && version_name != vno) {
                 Alert.alert(data.title, data.content, [
                     {text: '取消', onPress: () => BackHandler.exitApp()},
                     {text: '升级', onPress: () => this.openLink(data.link)},], {cancelable: false})
@@ -279,7 +281,9 @@ export default class Main extends BasePage {
                 PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
                 {
                     'title': '必要授权',
-                    'message': '应用需要访问手机储存设备，需要你同意授权'
+                    'message': '应用需要访问手机储存设备，需要你同意授权',
+                    'buttonNegative': '取消',
+                    'buttonPositive': '确认'
                 }
             )
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
