@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 
 import {
     BackHandler,
-    default as Alert,
-    default as Linking,
+    Alert,
+    Linking,
     Image,
     PermissionsAndroid,
     Text,
@@ -248,9 +248,10 @@ export default class Main extends BasePage {
             var info = isIos ? data["ios"] : data["android"]
             var vno = info["vno"]
             if (vno != undefined && version_name != vno) {
-                Alert.alert(data.title, data.content, [
+                Alert.alert("版本升级", info["remk"], [
                     {text: '取消', onPress: () => BackHandler.exitApp()},
-                    {text: '升级', onPress: () => this.openLink(data.link)},], {cancelable: false})
+                    {text: '升级', onPress: () => this.openLink(info['downUrl'])},], {cancelable: false})
+
             }
         }, true)
     }
