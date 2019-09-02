@@ -108,7 +108,7 @@ export default class ResumeStudy extends BasePage {
                 <CheckView title={"是否有医院证明"} style={{padding: 10, paddingTop: 0, marginTop: 5}}
                            changeCheck={(check) => this.setState({inpatient: check})} ref={ref => this.check2 = ref}/>
                 {this.state.inpatient ?
-                    <Text style={{backgroundColor: '#fff', padding: 10, width: size.width}}>上传病例以及相关材料</Text> : null}
+                    <Text style={{backgroundColor: '#fff', padding: 10, width: size.width}}>上传病历以及相关材料</Text> : null}
                 {this.state.inpatient ? <ImgsView ref={ref => this.imgsView = ref}/> : null}
                 <Text style={{color: '#E64340', fontSize: 12, padding: 10, lineHeight: 18}}>{notice}</Text>
                 {NextView.getSettingImgItemL(() => {

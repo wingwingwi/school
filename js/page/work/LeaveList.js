@@ -61,7 +61,7 @@ export default class LeaveList extends BasePage {
 
     componentWillMount() {
         this.setState({tab: 1})
-        DeviceEventEmitter.addListener('leaveList', (data) => {
+        DeviceEventEmitter.addListener('leavelist', (data) => {
             this.listView.setRefreshing(true);
             this.requestList(this.state.tab);
         })

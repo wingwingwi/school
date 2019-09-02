@@ -1,11 +1,17 @@
 import React, {Component} from 'react';
 
 import {
-    View, Text, StyleSheet, ScrollView, RefreshControl, Image,
-    TouchableOpacity, ImageBackground, NativeModules, StatusBar, DeviceEventEmitter, InteractionManager
+    BackHandler,
+    default as Alert,
+    default as Linking,
+    Image,
+    PermissionsAndroid,
+    Text,
+    TouchableOpacity,
+    View
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
-import {post, showMsg} from '../utils/Util'
+import {isIos, showMsg, size} from '../utils/Util'
 import {postCache} from '../utils/Resquest'
 
 import Button from '../component/Button';
@@ -13,9 +19,9 @@ import NarBar from '../component/Narbar';
 import BListView from "../component/BListView";
 import Swiper from 'react-native-swiper'
 import src from '../constant/Src'
-import {size} from '../utils/Util'
-import {URL_LIST, URL_BANNERS, URL_QUERY_PAGE} from "../constant/Url";
+import {URL_BANNERS, URL_QUERY_PAGE} from "../constant/Url";
 import BasePage from "./BasePage";
+import {version_name} from "../constant/Constants";
 
 /**
  *
@@ -49,6 +55,8 @@ export default class Main extends BasePage {
                 this.request();
                 this.requestList(true, 1)
             }
+            //this.checkVersion()
+            this.checkAndroidPermission()
         }, 100)
     }
 
@@ -234,6 +242,58 @@ export default class Main extends BasePage {
         };
     }
 
+    /**检查版本号*/
+    checkVersion() {
+        postCache(URL_BANNERS, {versionName: version_name}, (data) => {
+            if (data.flag && 1 == data.flag) {
+                Alert.alert(data.title, data.content, [
+                    {text: '取消', onPress: () => BackHandler.exitApp()},
+                    {text: '升级', onPress: () => this.openLink(data.link)},], {cancelable: false})
+            }
+        }, true)
+    }
+
+    /**升级*/
+    openLink(link) {
+        var url = link
+        if (isIos) {
+            url = "https://itunes.apple.com/cn/app/cryptomator-open-source-cloud/id"
+        }
+        Linking.openURL(url).catch((e) => {
+            showMsg("跳转失败")
+        });
+    }
+
+    /**检查Android的权限*/
+    checkAndroidPermission() {
+        if (isIos) return;
+        setTimeout(() => {
+            this.requestCameraPermission()
+        }, 150)
+    }
+
+    /**发起权限认同*/
+    async requestCameraPermission() {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+                {
+                    'title': '必要授权',
+                    'message': '应用需要访问手机储存设备，需要你同意授权'
+                }
+            )
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                console.log("验证通过")
+            } else {
+                Alert.alert("授权失败，请退出应用", "再次授权请到设置授权", [
+                    {text: '退出', onPress: () => BackHandler.exitApp()},
+                    {text: '确认', onPress: () => BackHandler.exitApp()},], {cancelable: false})
+                console.log("授权失败")
+            }
+        } catch (err) {
+            console.warn(err)
+        }
+    }
 }
 
 const content = '所谓安全教育就是指孩子解决各种安全问题的能力，良好的安全教育可以让孩子在没有大人帮助的情况下也能自己保护好自己。'

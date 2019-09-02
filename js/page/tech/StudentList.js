@@ -89,7 +89,7 @@ export default class StudentList extends BasePage {
             <View style={{width: size.width, padding: 10, flexDirection: 'row', backgroundColor: '#fff'}}>
                 <Image style={{width: 55, height: 55, borderRadius: 28}} source={avatar}/>
                 <Button onPress={() => Actions.leaveInfo({item: item, isType: item.lb})}>
-                    <View style={{height: 55, flex: 1, marginLeft: 10, justifyContent: 'center'}}>
+                    <View style={{height: 63, flex: 1, marginLeft: 10, justifyContent: 'center'}}>
                         <Text style={{color: '#111', fontSize: 15, marginTop: 6}}>{item.title}<Text
                             style={{color: '#888', fontSize: 14}}>{'请假时间：' + item.startTime}</Text></Text>
                         {item.lb != 1 ? <Text style={{color: '#82868B', fontSize: 12, marginTop: 6}}
@@ -98,8 +98,12 @@ export default class StudentList extends BasePage {
                                   numberOfLines={1}>{item.remk}</Text>}
                         {item.lb != 1 ? <Text style={{color: '#12b7f5', fontSize: 13, marginTop: 6}}
                                               numberOfLines={1}>{item.jbmc}</Text> : null}
+                        {item.resumeStatus != 1 ? <Text style={{color: '#888', fontSize: 13, marginTop: 2}}
+                                              numberOfLines={1}>{'已复课'}</Text> : <Text style={{color: '#E64340', fontSize: 13, marginTop: 2}}
+                                                                                       numberOfLines={1}>{'未复课'}</Text>}
                     </View>
                 </Button>
+
             </View>
             <View style={{width: size.width, height: 1, backgroundColor: '#eee'}}/>
         </View>);
