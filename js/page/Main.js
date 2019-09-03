@@ -56,7 +56,7 @@ export default class Main extends BasePage {
                 this.requestList(true, 1)
             }
             this.checkVersion()
-            this.checkAndroidPermission()
+            //this.checkAndroidPermission()
         }, 100)
     }
 
