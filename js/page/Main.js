@@ -260,7 +260,7 @@ export default class Main extends BasePage {
     openLink(link) {
         var url = link
         if (isIos) {
-            url = "https://itunes.apple.com/cn/app/cryptomator-open-source-cloud/id"
+            url = "https://itunes.apple.com/cn/app/cryptomator-open-source-cloud/id1456719810"
         }
         Linking.openURL(url).catch((e) => {
             showMsg("跳转失败")

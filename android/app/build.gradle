@@ -112,7 +112,6 @@ android {
             keyPassword "5668475"
         }
 
-
     }
     splits {
         abi {

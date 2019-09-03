@@ -98,9 +98,9 @@ export default class StudentList extends BasePage {
                                   numberOfLines={1}>{item.remk}</Text>}
                         {item.lb != 1 ? <Text style={{color: '#12b7f5', fontSize: 13, marginTop: 6}}
                                               numberOfLines={1}>{item.jbmc}</Text> : null}
-                        {item.resumeStatus != 1 ? <Text style={{color: '#888', fontSize: 13, marginTop: 2}}
-                                              numberOfLines={1}>{'已复课'}</Text> : <Text style={{color: '#E64340', fontSize: 13, marginTop: 2}}
-                                                                                       numberOfLines={1}>{'未复课'}</Text>}
+                        {item.resumeStatus != 1 ? <Text style={{color: '#E64340', fontSize: 13, marginTop: 2}}
+                                                        numberOfLines={1}>{'未复课'}</Text> : <Text style={{color: '#888', fontSize: 13, marginTop: 2}}
+                                                                                                  numberOfLines={1}>{'已复课'}</Text>}
                     </View>
                 </Button>
 

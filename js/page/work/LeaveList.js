@@ -55,14 +55,12 @@ export default class LeaveList extends BasePage {
 
     componentDidMount() {
         if (this.props.isType) this.textBar.tab(1)
-        this.listView.setRefreshing(true);
         this.requestList(1, true)
     }
 
     componentWillMount() {
         this.setState({tab: 1})
-        DeviceEventEmitter.addListener('leavelist', (data) => {
-            this.listView.setRefreshing(true);
+        DeviceEventEmitter.addListener('leaveList', (data) => {
             this.requestList(this.state.tab);
         })
     }
@@ -97,7 +95,6 @@ export default class LeaveList extends BasePage {
             if (this.state.tab == 1) {
                 this.setState({list: [].concat(this.leftList)})
             } else this.setState({list: [].concat(this.rightList)})
-            this.listView.setRefreshing(false);
             if (isShow)
                 showMsg('', this.loadKey)
         }, false, err => {
@@ -105,7 +102,6 @@ export default class LeaveList extends BasePage {
                 showMsg('', this.loadKey, err)
             else
                 showMsg(err)
-            this.listView.setRefreshing(false);
         })
     }
 
@@ -226,4 +222,4 @@ export default class LeaveList extends BasePage {
     }
 }
 
-const eventType = 'leavelist'
+const eventType = 'leaveList'
